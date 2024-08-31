@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="" />
+  <link id="favicon" rel="icon" type="image/svg+xml" href="./src/images/logo-light.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,6 +12,26 @@
     rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
   <title>Golden Root</title>
+
+  <script>
+    // Function to update the favicon based on the user's color scheme
+    function updateFavicon() {
+      const favicon = document.getElementById('favicon');
+      const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      if (darkMode) {
+        favicon.href = './src/images/logo-light.png'; // Path to your dark mode favicon
+      } else {
+        favicon.href = './src/images/logo-dark.png'; // Path to your light mode favicon
+      }
+    }
+
+    // Update favicon when the page loads
+    updateFavicon();
+
+    // Listen for changes in the color scheme
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateFavicon);
+  </script>
 </head>
 
 <body>
