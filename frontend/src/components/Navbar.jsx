@@ -23,7 +23,7 @@ const Navbar = () => {
                             </ul>
                         </div>
                         <div className="flex items-center">
-                            <button className="font-medium text-sm text-white bg-[#108a00] hover:bg-[#14a800] py-2 px-3 rounded">
+                            <button className="font-medium text-sm text-white bg-[#108a00] active:bg-[#14a800] py-2 px-3 rounded">
                                 Post a Job
                             </button>
                             <ul className="hidden md:flex ml-10 text-sm space-x-4">
