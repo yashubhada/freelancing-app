@@ -13,13 +13,13 @@ const Navbar = () => {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center justify-center">
                             <h1 className="text-[#555] mr-2 text-3xl md:hidden" onClick={toggleMenu}><i className="ri-menu-line"></i></h1>
-                            <h1 className="text-xl md:text-2xl font-semibold text-[#14a800] select-none">PROFLEXA</h1>
+                            <h1 className="text-xl md:text-2xl font-semibold text-[#14a800] select-none">PROFLEX</h1>
                             <ul className="hidden absolute w-full top-[61px] bg-white right-0 space-y-5 p-4 md:static md:flex ml-10 text-sm md:space-x-5 md:space-y-0 md:p-0 menu-items">
-                                <li className="cursor-pointer font-medium hover:text-[#108a00]">Find Freelancers</li>
-                                <li className="cursor-pointer font-medium hover:text-[#108a00]">Find Jobs</li>
-                                <li className="cursor-pointer font-medium hover:text-[#108a00]">About</li>
-                                <li className="md:hidden cursor-pointer font-medium hover:text-[#108a00]">Sign up</li>
-                                <li className="md:hidden cursor-pointer font-medium hover:text-[#108a00]">Log in</li>
+                                <li className="font-medium"><a href="#" className="hover:text-[#108a00]">Find Freelancers</a></li>
+                                <li className="font-medium"><a href="#" className="hover:text-[#108a00]">Find Jobs</a></li>
+                                <li className="font-medium"><a href="#" className="hover:text-[#108a00]">About</a></li>
+                                <li className="md:hidden font-medium"><a href="#" className="hover:text-[#108a00]">Sign up</a></li>
+                                <li className="md:hidden font-medium"><a href="#" className="hover:text-[#108a00]">Log in</a></li>
                             </ul>
                         </div>
                         <div className="flex items-center">
@@ -27,8 +27,8 @@ const Navbar = () => {
                                 Post a Job
                             </button>
                             <ul className="hidden md:flex ml-10 text-sm space-x-4">
-                                <li className="cursor-pointer font-medium hover:text-[#108a00]">Sign up</li>
-                                <li className="cursor-pointer font-medium hover:text-[#108a00]">Log in</li>
+                                <li className="font-medium"><a href="#" className="hover:text-[#108a00]">Sign up</a></li>
+                                <li className="font-medium"><a href="#" className="hover:text-[#108a00]">Log in</a></li>
                             </ul>
                         </div>
                     </div>
