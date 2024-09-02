@@ -3,35 +3,13 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link id="favicon" rel="icon" type="image/svg+xml" href="./src/images/logo-dark.png" />
+  <link id="favicon" rel="icon" type="image/svg+xml" href="" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
-  <title>Golden Root</title>
-
-  <script>
-    // Function to update the favicon based on the user's color scheme
-    function updateFavicon() {
-      const favicon = document.getElementById('favicon');
-      const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-      if (darkMode) {
-        favicon.href = './src/images/logo-light.png'; // Path to your dark mode favicon
-      } else {
-        favicon.href = './src/images/logo-dark.png'; // Path to your light mode favicon
-      }
-    }
-
-    // Update favicon when the page loads
-    updateFavicon();
-
-    // Listen for changes in the color scheme
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateFavicon);
-  </script>
+  <title>Proflexa | Find and hire expert freelancers</title>
 </head>
 
 <body>
