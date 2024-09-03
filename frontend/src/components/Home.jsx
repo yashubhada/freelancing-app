@@ -35,7 +35,7 @@ const Home = () => {
                                 <span className="cursor-pointer border rounded p-1 text-sm font-medium text-[#555] hover:text-black border-[#ccc] hover:border-black">Web design</span>
                             </div>
                         </div>
-                        <img src={HeroImg} alt="hero-image" className="w-[800px] pl-24 hidden md:block" />
+                        <img src={HeroImg} draggable={false} alt="hero-image" className="w-[800px] pl-24 hidden md:block" />
                     </div>
                 </div>
             </section>
@@ -45,26 +45,31 @@ const Home = () => {
 
             <section className="px-3 md:px-0">
                 <div className="container mx-auto mt-5 mb-10 md:mb-20">
-                    <h1 className="text-lg text-center md:text-left font-medium text-slate-700 mb-3">Trusted by</h1>
+                    <h1 className="block md:hidden text-lg text-center md:text-left font-medium text-slate-700 mb-3">Trusted by</h1>
                     <div className="flex flex-wrap items-center justify-center">
-                        <div className="w-1/2 md:w-1/4 mb-5 md:mb-0">
+                        <div className="w-1/2 md:w-1/5 mb-5 md:mb-0 hidden md:block">
                             <div className="w-[150px] h-10 mx-auto md:mx-0">
-                                <img src={GoogleImg} alt="Google" className="w-full h-full object-contain" />
+                                <h1 className="text-lg text-center md:text-left font-medium text-slate-700 mb-3">Trusted by</h1>
                             </div>
                         </div>
-                        <div className="w-1/2 md:w-1/4 mb-5 md:mb-0">
+                        <div className="w-1/2 md:w-1/5 mb-5 md:mb-0">
                             <div className="w-[150px] h-10 mx-auto md:mx-0">
-                                <img src={TcsImg} alt="TCS" className="w-full h-full object-contain" />
+                                <img src={GoogleImg} draggable={false} alt="Google" className="w-full h-full object-contain" />
                             </div>
                         </div>
-                        <div className="w-1/2 md:w-1/4">
+                        <div className="w-1/2 md:w-1/5 mb-5 md:mb-0">
                             <div className="w-[150px] h-10 mx-auto md:mx-0">
-                                <img src={MicrosoftImg} alt="Microsoft" className="w-full h-full object-contain" />
+                                <img src={TcsImg} draggable={false} alt="TCS" className="w-full h-full object-contain" />
                             </div>
                         </div>
-                        <div className="w-1/2 md:w-1/4">
+                        <div className="w-1/2 md:w-1/5">
                             <div className="w-[150px] h-10 mx-auto md:mx-0">
-                                <img src={SpacexImg} alt="Spacex" className="w-full h-full object-contain" />
+                                <img src={MicrosoftImg} draggable={false} alt="Microsoft" className="w-full h-full object-contain" />
+                            </div>
+                        </div>
+                        <div className="w-1/2 md:w-1/5">
+                            <div className="w-[150px] h-10 mx-auto md:mx-0">
+                                <img src={SpacexImg} draggable={false} alt="Spacex" className="w-full h-full object-contain" />
                             </div>
                         </div>
                     </div>
@@ -74,10 +79,10 @@ const Home = () => {
             {/* Work */}
 
             <section className="px-3 md:px-0">
-                <div className="container mx-auto mb-5">
+                <div className="container mx-auto mb-10">
                     <div className="block md:flex items-center">
                         <div className="bg-[#f2f7f2] w-full md:w-1/3 rounded-lg py-10 mb-5 md:mb-0">
-                            <img src={EasyWorkImg} alt="EasyWorkImg" className="w-[250px] md:w-[300px] mx-auto" />
+                            <img src={EasyWorkImg} draggable={false} alt="EasyWorkImg" className="w-[250px] md:w-[300px] mx-auto" />
                         </div>
                         <div className="md:pl-5">
                             <h1 className="text-2xl md:text-4xl text-slate-800 font-medium mb-4">Up your work game, it’s easy</h1>
@@ -105,6 +110,44 @@ const Home = () => {
                             <button className="w-full md:w-fit font-medium text-sm text-white bg-[#108a00] active:bg-[#14a800] py-2 px-3 rounded">
                                 Sign up for free
                             </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Category */}
+
+            <section className="px-3 md:px-0">
+                <div className="container mx-auto mb-10">
+                    <h1 className="text-2xl text-center md:text-left md:text-4xl mb-5 text-slate-900 font-medium">Browse talent by category</h1>
+                    <div className="flex items-center justify-between">
+                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
+                            <h1 className="font-medium text-xl mb-3">Development & IT</h1>
+                            <div className="flex items-center justify-between">
+                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
+                                <p className="text-base font-medium text-slate-700">1000 skills</p>
+                            </div>
+                        </div>
+                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
+                            <h1 className="font-medium text-xl mb-3">Development & IT</h1>
+                            <div className="flex items-center justify-between">
+                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
+                                <p className="text-base font-medium text-slate-700">1000 skills</p>
+                            </div>
+                        </div>
+                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
+                            <h1 className="font-medium text-xl mb-3">Development & IT</h1>
+                            <div className="flex items-center justify-between">
+                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
+                                <p className="text-base font-medium text-slate-700">1000 skills</p>
+                            </div>
+                        </div>
+                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
+                            <h1 className="font-medium text-xl mb-3">Development & IT</h1>
+                            <div className="flex items-center justify-between">
+                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
+                                <p className="text-base font-medium text-slate-700">1000 skills</p>
+                            </div>
                         </div>
                     </div>
                 </div>
