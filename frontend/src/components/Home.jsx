@@ -120,30 +120,58 @@ const Home = () => {
             <section className="px-3 md:px-0">
                 <div className="container mx-auto mb-10">
                     <h1 className="text-2xl text-center md:text-left md:text-4xl mb-5 text-slate-900 font-medium">Browse talent by category</h1>
-                    <div className="flex items-center justify-between">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-6">
                         <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
-                            <h1 className="font-medium text-xl mb-3">Development & IT</h1>
+                            <h1 className="font-medium text-xl mb-3">Front-End Developer</h1>
                             <div className="flex items-center justify-between">
                                 <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
                                 <p className="text-base font-medium text-slate-700">1000 skills</p>
                             </div>
                         </div>
                         <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
-                            <h1 className="font-medium text-xl mb-3">Development & IT</h1>
+                            <h1 className="font-medium text-xl mb-3">Game Developer</h1>
                             <div className="flex items-center justify-between">
                                 <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
                                 <p className="text-base font-medium text-slate-700">1000 skills</p>
                             </div>
                         </div>
                         <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
-                            <h1 className="font-medium text-xl mb-3">Development & IT</h1>
+                            <h1 className="font-medium text-xl mb-3">Graphic Designer</h1>
                             <div className="flex items-center justify-between">
                                 <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
                                 <p className="text-base font-medium text-slate-700">1000 skills</p>
                             </div>
                         </div>
                         <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
-                            <h1 className="font-medium text-xl mb-3">Development & IT</h1>
+                            <h1 className="font-medium text-xl mb-3">MERN Stack Developer</h1>
+                            <div className="flex items-center justify-between">
+                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
+                                <p className="text-base font-medium text-slate-700">1000 skills</p>
+                            </div>
+                        </div>
+                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
+                            <h1 className="font-medium text-xl mb-3">Python Developer</h1>
+                            <div className="flex items-center justify-between">
+                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
+                                <p className="text-base font-medium text-slate-700">1000 skills</p>
+                            </div>
+                        </div>
+                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
+                            <h1 className="font-medium text-xl mb-3">JavaScript Developer</h1>
+                            <div className="flex items-center justify-between">
+                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
+                                <p className="text-base font-medium text-slate-700">1000 skills</p>
+                            </div>
+                        </div>
+                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
+                            <h1 className="font-medium text-xl mb-3">Data Analytics</h1>
+                            <div className="flex items-center justify-between">
+                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
+                                <p className="text-base font-medium text-slate-700">1000 skills</p>
+                            </div>
+                        </div>
+                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
+                            <h1 className="font-medium text-xl mb-3">Mobile App Developer</h1>
                             <div className="flex items-center justify-between">
                                 <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
                                 <p className="text-base font-medium text-slate-700">1000 skills</p>
@@ -152,6 +180,7 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+
 
         </>
     );
