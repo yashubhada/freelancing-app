@@ -31,7 +31,7 @@ const Home = () => {
                                 </div>
                                 <h1 className="font-medium my-3 text-center md:my-0 md:mx-3">Or</h1>
                                 <div className="flex justify-center md:block">
-                                    <button className="w-full md:w-fit font-medium text-sm text-white bg-[#108a00] active:bg-[#14a800] py-3 px-4 rounded">
+                                    <button className="w-full md:w-fit font-medium text-sm text-white bg-[#108a00] hover:bg-[#14a800] py-3 px-4 rounded">
                                         Post a Job
                                     </button>
                                 </div>
@@ -114,7 +114,7 @@ const Home = () => {
                                     <p className="text-sm font-medium text-slate-600">Upwork makes it affordable to up your work and take advantage of low transaction rates.</p>
                                 </div>
                             </div>
-                            <button className="w-full md:w-fit font-medium text-sm text-white bg-[#108a00] active:bg-[#14a800] py-2 px-3 rounded">
+                            <button className="w-full md:w-fit font-medium text-sm text-white bg-[#108a00] hover:bg-[#14a800] py-2 px-3 rounded">
                                 Sign up for free
                             </button>
                         </div>

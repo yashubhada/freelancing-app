@@ -19,17 +19,17 @@ const Navbar = () => {
                                 <li className="font-medium"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>Find Freelancers</a></li>
                                 <li className="font-medium"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>Find Jobs</a></li>
                                 <li className="font-medium"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>About</a></li>
-                                <li className="md:hidden font-medium"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>Sign up</a></li>
-                                <li className="md:hidden font-medium"><NavLink to='signin' className="hover:text-[#108a00]" onClick={toggleMenu}>Log in</NavLink></li>
+                                <li className="md:hidden font-medium"><NavLink to='/signup' className="hover:text-[#108a00]" onClick={toggleMenu}>Sign up</NavLink></li>
+                                <li className="md:hidden font-medium"><NavLink to='/signin' className="hover:text-[#108a00]" onClick={toggleMenu}>Log in</NavLink></li>
                             </ul>
                         </div>
                         <div className="flex items-center">
-                            <button className="font-medium text-sm text-white bg-[#108a00] active:bg-[#14a800] py-2 px-3 rounded">
+                            <button className="font-medium text-sm text-white bg-[#108a00] hover:bg-[#14a800] py-2 px-3 rounded">
                                 Post a Job
                             </button>
                             <ul className="hidden md:flex ml-10 text-sm space-x-4">
-                                <li className="font-medium"><a href="#" className="hover:text-[#108a00]">Sign up</a></li>
-                                <li className="font-medium"><NavLink to='signin' className="hover:text-[#108a00]">Log in</NavLink></li>
+                                <li className="font-medium"><NavLink to='/signup' className="hover:text-[#108a00]">Sign up</NavLink></li>
+                                <li className="font-medium"><NavLink to='/signin' className="hover:text-[#108a00]">Log in</NavLink></li>
                             </ul>
                         </div>
                     </div>
