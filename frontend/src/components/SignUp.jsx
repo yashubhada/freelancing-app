@@ -17,7 +17,7 @@ const SignupForm = () => {
                 <div>
                     <h1 className='text-center font-medium text-xl md:text-2xl mb-10'>
                         {
-                            userRole === 'client' ? 'Sign up to hire talent' : 'Sign up to find work you love'
+                            userRole === 'employer' ? 'Sign up to hire talent' : 'Sign up to find work you love'
                         }
                     </h1>
                     <form className='w-full md:w-[520px]'>

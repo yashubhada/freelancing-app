@@ -22,8 +22,8 @@ const Home = () => {
                 <div className="container mx-auto py-5 md:py-10">
                     <div className="flex justify-between items-center">
                         <div>
-                            <h1 className="text-3xl md:text-6xl font-medium mb-5">Find & Hire <br />Expert Freelancers</h1>
-                            <p className="text-base md:text-lg font-medium text-slate-600 mb-5">Work with the best freelance talent from around the world on our secure, flexible and cost-effective platform.</p>
+                            <h1 className="text-3xl md:text-6xl font-medium mb-5">Find & Hire <br />Expert Jobbers</h1>
+                            <p className="text-base md:text-lg font-medium text-slate-600 mb-5">Work with the best job talent from around the world on our secure, flexible and cost-effective platform.</p>
                             <div className="block md:flex items-center mb-5">
                                 <div className="border-2 rounded p-2 border-[#ccc] md:w-[350px] relative">
                                     <input type="text" className="text-[#555] outline-none w-full" placeholder="What skill are you looking for?" autoComplete="off" />
