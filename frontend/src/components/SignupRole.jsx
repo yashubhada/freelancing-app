@@ -22,8 +22,8 @@ const SignupRole = () => {
                 <div className='h-screen w-full flex items-center justify-center'>
                     <div>
                         <h1 className='text-center font-medium text-xl md:text-2xl mb-10'>Join as a client or freelancer</h1>
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-5 justify-items-center">
-                            <div></div>
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 justify-items-center">
+                            <div className='hidden md:block'></div>
                             <label
                                 className="relative flex items-center justify-between p-6 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-all w-[300px]"
                                 onClick={() => handleRoleChange('client')}
@@ -63,15 +63,17 @@ const SignupRole = () => {
                                 </span>
                                 <div className="absolute inset-0 border-2 rounded-lg border-transparent peer-checked:border-[#14a800] transition-all"></div>
                             </label>
-                            <div></div>
+                            <div className='hidden md:block'></div>
                         </div>
                         <div className="flex justify-center my-10">
-                            <button
-                                className='bg-[#108a00] text-white rounded-lg px-5 py-2 font-medium cursor-pointer hover:bg-[#14a800] focus:outline-none disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed'
-                                disabled={disabledBtn}
-                            >
-                                {selectedRole === 'client' ? 'Join as a client' : selectedRole === 'freelancer' ? 'Apply as a freelancer' : 'Create Account'}
-                            </button>
+                            <NavLink to={`/signup/${selectedRole}`}>
+                                <button
+                                    className='bg-[#108a00] text-white rounded-lg px-5 py-2 font-medium cursor-pointer hover:bg-[#14a800] focus:outline-none disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed'
+                                    disabled={disabledBtn}
+                                >
+                                    {selectedRole === 'client' ? 'Join as a client' : selectedRole === 'freelancer' ? 'Apply as a freelancer' : 'Create Account'}
+                                </button>
+                            </NavLink>
                         </div>
 
                         <p className='text-center font-medium text-sm'>

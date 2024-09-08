@@ -25,7 +25,7 @@ const Signin = () => {
                             <p className='bg-white w-fit absolute left-1/2 transform -translate-x-1/2 top-[-10px] px-2'>Or</p>
                         </div>
                         <p className='text-center font-medium text-sm'>
-                            Don't have an account? Let's <NavLink to='/signup' className='text-[#14a800] hover:underline'>Sign up</NavLink>
+                            Don't have an account? Let's <NavLink to='/signuprole' className='text-[#14a800] hover:underline'>Sign up</NavLink>
                         </p>
                     </div>
                 </div>
