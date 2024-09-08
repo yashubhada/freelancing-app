@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from './Navbar';
-import HeroImg from "../images/hero-img.png";
+import HeroImg from "../images/work_from_anywhere.svg";
 import EasyWorkImg from "../images/easyWork-img.png";
 import GoogleImg from "../images/google.png";
 import TcsImg from "../images/tcs.png";
@@ -42,7 +42,7 @@ const Home = () => {
                                 <span className="cursor-pointer border rounded p-1 text-sm font-medium text-[#555] hover:text-black border-[#ccc] hover:border-black">Web design</span>
                             </div>
                         </div>
-                        <img src={HeroImg} draggable={false} alt="hero-image" className="w-[800px] pl-24 hidden md:block" />
+                        <img src={HeroImg} draggable={false} alt="hero-image" className="w-[400px] hidden md:block" />
                     </div>
                 </div>
             </section>

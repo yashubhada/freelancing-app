@@ -5,3 +5,7 @@
 body {
     font-family: "Montserrat", sans-serif;
 }
+
+.menu-link .active {
+    color: #108a00;
+}

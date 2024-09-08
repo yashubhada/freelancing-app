@@ -15,12 +15,12 @@ const Navbar = () => {
                         <div className="flex items-center justify-center">
                             <h1 className="text-[#555] mr-2 text-3xl md:hidden" onClick={toggleMenu}><i className="ri-menu-line"></i></h1>
                             <NavLink to='/'><h1 className="text-xl md:text-2xl font-semibold text-[#14a800] select-none">PROFLEX</h1></NavLink>
-                            <ul className="hidden absolute w-full top-[61px] bg-white right-0 space-y-5 p-4 md:static md:flex ml-10 text-sm md:space-x-5 md:space-y-0 md:p-0 menu-items">
-                                <li className="font-medium"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>Find Freelancers</a></li>
-                                <li className="font-medium"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>Find Jobs</a></li>
-                                <li className="font-medium"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>About</a></li>
-                                <li className="md:hidden font-medium"><NavLink to='/signuprole' className="hover:text-[#108a00]" onClick={toggleMenu}>Sign up</NavLink></li>
-                                <li className="md:hidden font-medium"><NavLink to='/signin' className="hover:text-[#108a00]" onClick={toggleMenu}>Log in</NavLink></li>
+                            <ul className="hidden absolute w-full top-[61px] bg-white z-10 right-0 space-y-5 p-4 md:static md:flex ml-10 text-sm md:space-x-5 md:space-y-0 md:p-0 menu-items">
+                                <li className="font-medium menu-link"><NavLink to='/find-freelancers' className="hover:text-[#108a00]" onClick={toggleMenu}>Find Freelancers</NavLink></li>
+                                <li className="font-medium menu-link"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>Find Jobs</a></li>
+                                <li className="font-medium menu-link"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>About</a></li>
+                                <li className="md:hidden font-medium menu-link"><NavLink to='/signuprole' className="hover:text-[#108a00]" onClick={toggleMenu}>Sign up</NavLink></li>
+                                <li className="md:hidden font-medium menu-link"><NavLink to='/signin' className="hover:text-[#108a00]" onClick={toggleMenu}>Log in</NavLink></li>
                             </ul>
                         </div>
                         <div className="flex items-center">
@@ -28,8 +28,8 @@ const Navbar = () => {
                                 Post a Job
                             </button>
                             <ul className="hidden md:flex ml-10 text-sm space-x-4">
-                                <li className="font-medium"><NavLink to='/signuprole' className="hover:text-[#108a00]">Sign up</NavLink></li>
-                                <li className="font-medium"><NavLink to='/signin' className="hover:text-[#108a00]">Log in</NavLink></li>
+                                <li className="font-medium menu-link"><NavLink to='/signuprole' className="hover:text-[#108a00]">Sign up</NavLink></li>
+                                <li className="font-medium menu-link"><NavLink to='/signin' className="hover:text-[#108a00]">Log in</NavLink></li>
                             </ul>
                         </div>
                     </div>
