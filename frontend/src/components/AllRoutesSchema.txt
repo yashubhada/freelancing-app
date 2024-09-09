@@ -1,0 +1,134 @@
+job seeker
+
+{
+  "_id": "6489b8706f28d2c4b8b9e123",
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "hashed_password",
+  "role": "Job Seeker",
+  "profileImage" : "img.jpg",
+  "profile": {
+    "headline": "Full Stack Developer",
+    "bio": "I am a full stack developer with experience in JavaScript, React, Node.js, and MongoDB.",
+    "skills": ["JavaScript", "React", "Node.js", "MongoDB"],
+    "experience": [
+      {
+        "jobTitle": "Software Engineer",
+        "company": "Tech Solutions",
+        "startDate": "2021-01-01",
+        "endDate": "Present",
+        "description": "Developed and maintained web applications."
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of XYZ",
+        "degree": "Bachelor of Computer Science",
+        "year": "2020"
+      }
+    ],
+    "resumeUrl": "https://example.com/john-resume.pdf"
+  },
+  "connections": [
+    "6489b8706f28d2c4b8b9e456", // Another user ID
+    "6489b8706f28d2c4b8b9e789"  // Another user ID
+  ]
+}
+
+Employer
+
+{
+  "_id": "6489b8706f28d2c4b8b9e456",
+  "name": "ACME Corp",
+  "email": "recruiter@acmecorp.com",
+  "password": "hashed_password",
+  "role": "Employer",
+  "profileImage" : "img.jpg",
+  "profile": {
+    "companyName": "ACME Corp",
+    "bio": "Leading provider of innovative tech solutions.",
+    "industry": "Technology",
+    "website": "https://acmecorp.com",
+    "location": "San Francisco, CA",
+    "jobsPosted": [
+      {
+        "jobId": "6489b8706f28d2c4b8b9e123",
+        "title": "Frontend Developer",
+        "status": "Active"
+      }
+    ]
+  },
+  "connections": [
+    "6489b8706f28d2c4b8b9e123" // Another user ID (Job Seeker)
+  ]
+}
+
+Job post
+
+{
+  "_id": "6489b8706f28d2c4b8b9e789",
+  "title": "Frontend Developer",
+  "description": "We are looking for a frontend developer proficient in React and CSS.",
+  "requirements": ["React", "JavaScript", "CSS", "HTML"],
+  "location": "Remote",
+  "employmentType": "Full-Time",
+  "salaryRange": "$70,000 - $90,000",
+  "postedBy": {
+    "employerId": "6489b8706f28d2c4b8b9e456",
+    "companyLogo": "img.jpg",
+    "companyName": "ACME Corp"
+  },
+  "datePosted": "2024-09-01",
+  "status": "Active",
+  "applicants": [
+    {
+      "userId": "6489b8706f28d2c4b8b9e123", // Job Seeker ID
+      "status": "Under Review"
+    }
+  ]
+}
+
+Message
+
+{
+  "_id": "6489b8706f28d2c4b8b9e456",
+  "participants": [
+    "6489b8706f28d2c4b8b9e123", // Job Seeker
+    "6489b8706f28d2c4b8b9e789"  // Employer
+  ],
+  "messages": [
+    {
+      "senderId": "6489b8706f28d2c4b8b9e123",
+      "message": "Hi, I'm interested in the Frontend Developer role.",
+      "timestamp": "2024-09-01T12:00:00Z"
+    },
+    {
+      "senderId": "6489b8706f28d2c4b8b9e789",
+      "message": "Thanks for reaching out. Can you share your portfolio?",
+      "timestamp": "2024-09-01T12:10:00Z"
+    }
+  ]
+}
+
+Job application
+
+{
+  "_id": "6489b8706f28d2c4b8b9e123",
+  "jobId": "6489b8706f28d2c4b8b9e789", 
+  "jobSeekerId": "6489b8706f28d2c4b8b9e123",
+  "resumeUrl": "https://example.com/john-resume.pdf",
+  "coverLetter": "I am very excited about this opportunity and would love to discuss my qualifications in more detail.",
+  "status": "Under Review",
+  "appliedOn": "2024-09-01"
+}
+
+Notification 
+
+{
+  "_id": "6489b8706f28d2c4b8b9e999",
+  "userId": "6489b8706f28d2c4b8b9e123", // Notification for Job Seeker
+  "type": "Job Application Update",
+  "message": "Your application for Frontend Developer at ACME Corp has been updated to Under Review.",
+  "read": false,
+  "createdOn": "2024-09-01T13:00:00Z"
+}

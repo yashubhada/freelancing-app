@@ -9,6 +9,7 @@ import Signin from './components/Signin';
 import SignupRole from './components/SignupRole';
 import SignUp from './components/SignUp';
 import FindJobbers from './components/FindJobbers';
+import FindJob from './components/FindJob';
 
 const App = () => {
     return (
@@ -19,6 +20,7 @@ const App = () => {
                 <Route path="/signuprole" element={<SignupRole />} />
                 <Route path="/signup/:userRole" element={<SignUp />} />
                 <Route path="/find-talent" element={<FindJobbers />} />
+                <Route path="/find-job" element={<FindJob />} />
             </Routes>
         </BrowserRouter>
     )

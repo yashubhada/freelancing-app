@@ -17,7 +17,7 @@ const Navbar = () => {
                             <NavLink to='/'><h1 className="text-xl md:text-2xl font-semibold text-[#14a800] select-none">PROFLEX</h1></NavLink>
                             <ul className="hidden absolute w-full top-[61px] bg-white z-10 right-0 space-y-5 p-4 md:static md:flex ml-10 text-sm md:space-x-5 md:space-y-0 md:p-0 menu-items">
                                 <li className="font-medium menu-link"><NavLink to='/find-talent' className="hover:text-[#108a00]" onClick={toggleMenu}>Find talent</NavLink></li>
-                                <li className="font-medium menu-link"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>Find Jobs</a></li>
+                                <li className="font-medium menu-link"><NavLink to='/find-job' className="hover:text-[#108a00]" onClick={toggleMenu}>Find Jobs</NavLink></li>
                                 <li className="font-medium menu-link"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>About</a></li>
                                 <li className="md:hidden font-medium menu-link"><NavLink to='/signuprole' className="hover:text-[#108a00]" onClick={toggleMenu}>Sign up</NavLink></li>
                                 <li className="md:hidden font-medium menu-link"><NavLink to='/signin' className="hover:text-[#108a00]" onClick={toggleMenu}>Log in</NavLink></li>

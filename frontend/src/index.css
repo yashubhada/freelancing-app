@@ -9,3 +9,22 @@ body {
 .menu-link .active {
     color: #108a00;
 }
+
+
+/* Scroll Bar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #FFF; /* Track color */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #f1f1f1; /* Scrollbar color */
+    border-radius: 8px; /* Rounded corners */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color on hover */
+}
