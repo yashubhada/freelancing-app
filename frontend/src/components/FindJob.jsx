@@ -15,19 +15,140 @@ const FindJob = () => {
         'bootsrap'
     ];
 
+    const jobPosts = [
+        {
+            "_id": "6489b8706f28d2c4b8b9e782",
+            "title": "Backend Developer",
+            "description": "Seeking a backend developer with experience in Node.js and MongoDB.",
+            "requirements": ["Node.js", "MongoDB", "Express.js", "JavaScript"],
+            "location": "New York, NY",
+            "employmentType": "Part-Time",
+            "salaryRange": "$50,000 - $70,000",
+            "postedBy": {
+                "employerId": "6489b8706f28d2c4b8b9e457",
+                "companyLogo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Amazon_Web_Services_Logo.svg/1200px-Amazon_Web_Services_Logo.svg.png",
+                "companyName": "Backend Corp"
+            },
+            "datePosted": "2024-09-02",
+            "status": "Active",
+            "applicants": [
+                {
+                    "userId": "6489b8706f28d2c4b8b9e124",
+                    "status": "Applied"
+                }
+            ]
+        },
+        {
+            "_id": "6489b8706f28d2c4b8b9e783",
+            "title": "Data Scientist",
+            "description": "Hiring a data scientist with Python and machine learning experience.",
+            "requirements": ["Python", "Machine Learning", "Data Analysis", "SQL"],
+            "location": "Remote",
+            "employmentType": "Full-Time",
+            "salaryRange": "$80,000 - $100,000",
+            "postedBy": {
+                "employerId": "6489b8706f28d2c4b8b9e458",
+                "companyLogo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Google_2015_logo.svg/512px-Google_2015_logo.svg.png",
+                "companyName": "Data Solutions"
+            },
+            "datePosted": "2024-09-03",
+            "status": "Active",
+            "applicants": [
+                {
+                    "userId": "6489b8706f28d2c4b8b9e125",
+                    "status": "Interview Scheduled"
+                }
+            ]
+        },
+        {
+            "_id": "6489b8706f28d2c4b8b9e784",
+            "title": "UI/UX Designer",
+            "description": "Looking for a creative UI/UX designer with Figma experience.",
+            "requirements": ["Figma", "Adobe XD", "User Research", "Prototyping"],
+            "location": "San Francisco, CA",
+            "employmentType": "Contract",
+            "salaryRange": "$60,000 - $80,000",
+            "postedBy": {
+                "employerId": "6489b8706f28d2c4b8b9e459",
+                "companyLogo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Netflix_2015_N_logo.svg/1024px-Netflix_2015_N_logo.svg.png",
+                "companyName": "Creative Designs"
+            },
+            "datePosted": "2024-09-04",
+            "status": "Active",
+            "applicants": [
+                {
+                    "userId": "6489b8706f28d2c4b8b9e126",
+                    "status": "Rejected"
+                }
+            ]
+        },
+        {
+            "_id": "6489b8706f28d2c4b8b9e785",
+            "title": "Full-Stack Developer",
+            "description": "We need a full-stack developer skilled in both frontend and backend technologies.",
+            "requirements": ["React", "Node.js", "JavaScript", "MongoDB"],
+            "location": "Austin, TX",
+            "employmentType": "Full-Time",
+            "salaryRange": "$90,000 - $110,000",
+            "postedBy": {
+                "employerId": "6489b8706f28d2c4b8b9e460",
+                "companyLogo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Instagram_logo_2016.svg/1200px-Instagram_logo_2016.svg.png",
+                "companyName": "Tech Innovators"
+            },
+            "datePosted": "2024-09-05",
+            "status": "Active",
+            "applicants": [
+                {
+                    "userId": "6489b8706f28d2c4b8b9e127",
+                    "status": "Hired"
+                }
+            ]
+        },
+        {
+            "_id": "6489b8706f28d2c4b8b9e786",
+            "title": "DevOps Engineer",
+            "description": "We are searching for a DevOps engineer with AWS and CI/CD pipeline experience.",
+            "requirements": ["AWS", "CI/CD", "Docker", "Kubernetes"],
+            "location": "Remote",
+            "employmentType": "Full-Time",
+            "salaryRange": "$85,000 - $105,000",
+            "postedBy": {
+                "employerId": "6489b8706f28d2c4b8b9e461",
+                "companyLogo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/SpaceX-Logo.svg/512px-SpaceX-Logo.svg.png",
+                "companyName": "Cloud Experts"
+            },
+            "datePosted": "2024-09-11",
+            "status": "Active",
+            "applicants": [
+                {
+                    "userId": "6489b8706f28d2c4b8b9e128",
+                    "status": "Under Review"
+                }
+            ]
+        }
+    ];
+
+
+
     const [userSkill, setUerSkill] = useState([]);
     const [showSkillSearch, setShowSkillSearch] = useState(true);
+    const [selectedJob, setSelectedJob] = useState(null);
 
     const handleChnageSearch = (e) => {
         let word = e.target.value;
-        if (word.length != 0) {
-            let filteredData = skils.filter(data => data.toLocaleLowerCase().includes(word.toLocaleLowerCase()))
+        if (word.length !== 0) {
+            let filteredData = skils.filter((data) => data.toLocaleLowerCase().includes(word.toLocaleLowerCase()));
             setUerSkill(filteredData);
-            setShowSkillSearch(false)
+            setShowSkillSearch(false);
         } else {
-            setShowSkillSearch(true)
+            setShowSkillSearch(true);
         }
-    }
+    };
+
+    const handleJobClick = (job) => {
+        setSelectedJob(job); // Update selected job
+        console.log('Selected Job:', job); // Debugging line
+    };
 
     return (
         <>
@@ -41,19 +162,26 @@ const FindJob = () => {
             </section>
 
             {/* Searchbar */}
-
             <section className='px-3 md:px-0'>
                 <div className='container mx-auto'>
-                    <div className="flex justify-center">
+                    <div className='flex justify-center'>
                         <div className='flex items-center w-full md:w-[500px] border-2 border-gray-300 px-3 py-2 rounded-md relative'>
-                            <p className='mr-2 text-lg text-[#14a800]'><i className="ri-search-line"></i></p>
-                            <input type="text" placeholder='Search job skill' className='outline-none w-full' onChange={handleChnageSearch} />
+                            <p className='mr-2 text-lg text-[#14a800]'>
+                                <i className='ri-search-line'></i>
+                            </p>
+                            <input
+                                type='text'
+                                placeholder='Search job skill'
+                                className='outline-none w-full'
+                                onChange={handleChnageSearch}
+                            />
                             <ul className={`absolute top-[47px] left-0 bg-white w-full shadow ${showSkillSearch && 'hidden'}`}>
-                                {
-                                    userSkill.map((ary, i) => {
-                                        return <li className='p-3 hover:bg-gray-50 cursor-pointer font-medium' key={i}><i className="ri-search-line mr-2"></i>{ary}</li>
-                                    })
-                                }
+                                {userSkill.map((ary, i) => (
+                                    <li className='p-3 hover:bg-gray-50 cursor-pointer font-medium' key={i}>
+                                        <i className='ri-search-line mr-2'></i>
+                                        {ary}
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     </div>
@@ -61,36 +189,30 @@ const FindJob = () => {
             </section>
 
             {/* job post */}
-
             <section className='px-3 md:px-0'>
-    <div className='container mx-auto'>
-        <h1 className='font-semibold text-xl md:text-3xl text-gray-800 mt-14 mb-10 text-center md:text-left'>Your profile matches this job</h1>
-        <div className="grid md:grid-cols-2 gap-5">
-            <div className='space-y-5 overflow-y-auto max-h-[calc(100vh-4rem)] custom-scrollbar'>
-                <JobCard />
-                <JobCard />
-                <JobCard />
-                <JobCard />
-                <JobCard />
-                <JobCard />
-                <JobCard />
-                <JobCard />
-                <JobCard />
-                <JobCard />
-                <JobCard />
-                <JobCard />
-                <JobCard />
-                <JobCard />
-                <JobCard />
-                <JobCard />
-                <JobCard />
-            </div>
-            <div className='overflow-y-auto max-h-[calc(100vh-4rem)] custom-scrollbar'>
-                <SingleJobCard />
-            </div>
-        </div>
-    </div>
-</section>
+                <div className='container mx-auto'>
+                    <h1 className='font-semibold text-xl md:text-3xl text-gray-800 mt-14 mb-10 text-center md:text-left'>
+                        Your profile matches this job
+                    </h1>
+                    <div className='grid md:grid-cols-2 gap-5'>
+                        {/* Left column for job cards */}
+                        <div className='space-y-5 overflow-y-auto max-h-[calc(100vh-4rem)] custom-scrollbar'>
+                            {jobPosts.map((job) => (
+                                <JobCard key={job._id} job={job} onClick={() => handleJobClick(job)} />
+                            ))}
+                        </div>
+
+                        {/* Right column for single job card */}
+                        <div className='overflow-y-auto max-h-[calc(100vh-4rem)] custom-scrollbar'>
+                            {selectedJob ? (
+                                <SingleJobCard job={selectedJob} />
+                            ) : (
+                                <p className='text-center text-gray-600'>Select a job to see details</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </section>
 
         </>
     )
