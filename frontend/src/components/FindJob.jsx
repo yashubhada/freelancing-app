@@ -26,8 +26,8 @@ const FindJob = () => {
             "salaryRange": "$50,000 - $70,000",
             "postedBy": {
                 "employerId": "6489b8706f28d2c4b8b9e457",
-                "companyLogo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Amazon_Web_Services_Logo.svg/1200px-Amazon_Web_Services_Logo.svg.png",
-                "companyName": "Backend Corp"
+                "companyLogo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdtGo3vo5G5raby3TIK2JGEegEdAYoUMRBag&s",
+                "companyName": "Appsforce"
             },
             "datePosted": "2024-09-02",
             "status": "Active",
@@ -48,7 +48,7 @@ const FindJob = () => {
             "salaryRange": "$80,000 - $100,000",
             "postedBy": {
                 "employerId": "6489b8706f28d2c4b8b9e458",
-                "companyLogo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Google_2015_logo.svg/512px-Google_2015_logo.svg.png",
+                "companyLogo": "https://images.squarespace-cdn.com/content/v1/5eab3148a60be427b8a4a09c/67af43ac-7eca-4ed8-a7f8-cbf8efd5d963/DataSolutions+Climb+Logo+2+Colour+RGB.png?format=1500w",
                 "companyName": "Data Solutions"
             },
             "datePosted": "2024-09-03",
@@ -70,7 +70,7 @@ const FindJob = () => {
             "salaryRange": "$60,000 - $80,000",
             "postedBy": {
                 "employerId": "6489b8706f28d2c4b8b9e459",
-                "companyLogo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Netflix_2015_N_logo.svg/1024px-Netflix_2015_N_logo.svg.png",
+                "companyLogo": "https://seeklogo.com/images/R/rounded-design-company-logo-58FEBA6563-seeklogo.com.png",
                 "companyName": "Creative Designs"
             },
             "datePosted": "2024-09-04",
@@ -92,7 +92,7 @@ const FindJob = () => {
             "salaryRange": "$90,000 - $110,000",
             "postedBy": {
                 "employerId": "6489b8706f28d2c4b8b9e460",
-                "companyLogo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Instagram_logo_2016.svg/1200px-Instagram_logo_2016.svg.png",
+                "companyLogo": "https://media.licdn.com/dms/image/v2/C561BAQGfdzdjV4rIOg/company-background_10000/company-background_10000/0/1611995751406/techinnovators_cover?e=2147483647&v=beta&t=GA7_zMyKhAx-NhwWG-_POyNM44xxosf-qU7q-At3bas",
                 "companyName": "Tech Innovators"
             },
             "datePosted": "2024-09-05",
@@ -114,7 +114,7 @@ const FindJob = () => {
             "salaryRange": "$85,000 - $105,000",
             "postedBy": {
                 "employerId": "6489b8706f28d2c4b8b9e461",
-                "companyLogo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/SpaceX-Logo.svg/512px-SpaceX-Logo.svg.png",
+                "companyLogo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbZ-S1pdOHsg73DsIPoa_r9_aTLRY1N1kq6g&s",
                 "companyName": "Cloud Experts"
             },
             "datePosted": "2024-09-11",
@@ -132,7 +132,7 @@ const FindJob = () => {
 
     const [userSkill, setUerSkill] = useState([]);
     const [showSkillSearch, setShowSkillSearch] = useState(true);
-    const [selectedJob, setSelectedJob] = useState(null);
+    const [selectedJob, setSelectedJob] = useState(jobPosts[0]);
 
     const handleChnageSearch = (e) => {
         let word = e.target.value;
@@ -147,7 +147,6 @@ const FindJob = () => {
 
     const handleJobClick = (job) => {
         setSelectedJob(job); // Update selected job
-        console.log('Selected Job:', job); // Debugging line
     };
 
     return (
@@ -204,11 +203,7 @@ const FindJob = () => {
 
                         {/* Right column for single job card */}
                         <div className='overflow-y-auto max-h-[calc(100vh-4rem)] custom-scrollbar'>
-                            {selectedJob ? (
-                                <SingleJobCard job={selectedJob} />
-                            ) : (
-                                <p className='text-center text-gray-600'>Select a job to see details</p>
-                            )}
+                            {selectedJob && <SingleJobCard job={selectedJob} />}
                         </div>
                     </div>
                 </div>

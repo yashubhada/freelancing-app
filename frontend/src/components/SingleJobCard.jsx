@@ -5,11 +5,6 @@ const SingleJobCard = ({ job }) => {
     // Convert job.datePosted to a readable "time ago" format
     const formattedDate = formatDistanceToNow(new Date(job.datePosted), { addSuffix: true });
 
-    // Ensure the job prop is available before rendering
-    if (!job) {
-        return <p className="text-center text-gray-600">No job selected. Please select a job to see details.</p>;
-    }
-
     return (
         <div className='p-4 border border-gray-200 rounded-lg bg-white mb-5'>
             <div className='flex items-center'>
