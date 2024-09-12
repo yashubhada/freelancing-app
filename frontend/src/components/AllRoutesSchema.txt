@@ -28,11 +28,7 @@ job seeker
       }
     ],
     "resumeUrl": "https://example.com/john-resume.pdf"
-  },
-  "connections": [
-    "6489b8706f28d2c4b8b9e456", // Another user ID
-    "6489b8706f28d2c4b8b9e789"  // Another user ID
-  ]
+  }
 }
 
 Employer
@@ -57,10 +53,7 @@ Employer
         "status": "Active"
       }
     ]
-  },
-  "connections": [
-    "6489b8706f28d2c4b8b9e123" // Another user ID (Job Seeker)
-  ]
+  }
 }
 
 Job post
