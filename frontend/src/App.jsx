@@ -11,6 +11,8 @@ import SignUp from './components/SignUp';
 import FindJobbers from './components/FindJobbers';
 import FindJob from './components/FindJob';
 import JobSeekerProfile from './components/JobSeekerProfile';
+import EmployerDashboard from './components/EmployerDashboard';
+import EmployeJobs from './components/EmployeJobs';
 
 const App = () => {
     const profileData = {
@@ -51,6 +53,8 @@ const App = () => {
                 <Route path="/find-talent" element={<FindJobbers />} />
                 <Route path="/find-job" element={<FindJob />} />
                 <Route path="/profile" element={<JobSeekerProfile profileData={profileData} />} />
+                <Route path="/employe-dashboard" element={<EmployerDashboard />} />
+                <Route path="/employe-jobs" element={<EmployeJobs />} />
             </Routes>
         </BrowserRouter>
     )

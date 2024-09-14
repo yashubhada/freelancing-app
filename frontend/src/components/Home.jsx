@@ -6,12 +6,9 @@ import GoogleImg from "../images/google.png";
 import TcsImg from "../images/tcs.png";
 import MicrosoftImg from "../images/microsoft.png";
 import SpacexImg from "../images/spacex.png";
+import Footer from "./Footer";
 
 const Home = () => {
-
-    const date = new Date;
-    const currentYear = date.getFullYear();
-
     return (
         <>
             <Navbar />
@@ -189,11 +186,7 @@ const Home = () => {
             </section>
 
 
-            <footer className="px-3 md:px-0 bg-[#181818]">
-                <div className="container mx-auto mt-10">
-                    <p className="text-center text-gray-300 font-medium text-base p-5">© {currentYear} PROFLEX Global Inc.</p>
-                </div>
-            </footer>
+            <Footer />
         </>
     );
 }

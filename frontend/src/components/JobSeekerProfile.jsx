@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from './Navbar';
 import UserDefaultProfile from '../images/userProfileImage.png';
+import Footer from './Footer';
 
 const JobSeekerProfile = ({ profileData }) => {
     const { name, email, profileImage, profile } = profileData;
@@ -96,6 +97,8 @@ const JobSeekerProfile = ({ profileData }) => {
                     </a>
                 </div>
             </div>
+
+            <Footer />
         </>
     );
 }
