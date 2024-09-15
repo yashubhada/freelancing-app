@@ -2,6 +2,9 @@ import React from 'react'
 import NavbarEmp from './NavbarEmp'
 
 const EmployerDashboard = () => {
+
+    document.title = "Employer dashboard | Home";
+
     return (
         <>
             <NavbarEmp />
