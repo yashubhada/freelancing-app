@@ -20,7 +20,7 @@ const Home = () => {
                     <div className="flex justify-between items-center">
                         <div>
                             <h1 className="text-3xl md:text-6xl font-medium mb-5">Find & Hire <br />Expert Jobbers</h1>
-                            <p className="text-base md:text-lg font-medium text-slate-600 mb-5">Work with the best job talent from around the world on our secure, flexible and cost-effective platform.</p>
+                            <p className="text-base text-balance md:text-lg font-medium text-slate-600 mb-5">Work with the best job talent from around the world on our secure, flexible and cost-effective platform.</p>
                             <div className="block md:flex items-center mb-5">
                                 <div className="border-2 rounded p-2 border-[#ccc] md:w-[350px] relative">
                                     <input type="text" className="text-[#555] outline-none w-full" placeholder="What skill are you looking for?" autoComplete="off" />
@@ -39,7 +39,7 @@ const Home = () => {
                                 <span className="cursor-pointer border rounded p-1 text-sm font-medium text-[#555] hover:text-black border-[#ccc] hover:border-black">Web design</span>
                             </div>
                         </div>
-                        <img src={HeroImg} draggable={false} alt="hero-image" className="w-[400px] hidden md:block" />
+                        <img src={HeroImg} draggable={false} alt="hero-image" className="w-[700px] hidden md:block" />
                     </div>
                 </div>
             </section>
