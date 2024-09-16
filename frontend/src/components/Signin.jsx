@@ -3,9 +3,9 @@ import { NavLink } from 'react-router-dom'
 
 const Signin = () => {
 
-    useEffect(()=>{
+    useEffect(() => {
         document.title = "PROFLEX Login - Log in to your PROFLEX account";
-    },[]);
+    }, []);
 
     return (
         <>
@@ -13,12 +13,18 @@ const Signin = () => {
                 <div className='flex items-center justify-center h-full'>
                     <div className='border rounded-lg p-5 w-[400px]'>
                         <h1 className="text-center text-xl md:text-2xl font-semibold mb-5">Log in to <span className='text-[#14a800] select-none'>PROFLEX</span></h1>
-                        <form action="">
+                        <form>
                             <div className='flex items-center border-2 rounded px-2 py-1 mb-5'>
                                 <p className='pr-2'><i className="ri-mail-line"></i></p>
-                                <input type="text" className='outline-none w-full' placeholder='Email' />
+                                <input type="email" className='outline-none w-full' placeholder='Email' required />
                             </div>
-                            <button className='text-base w-full bg-[#108a00] hover:bg-[#14a800] py-2 rounded-lg font-medium text-white'>Continue</button>
+                            <div className='flex items-center border-2 rounded px-2 py-1 mb-5'>
+                                <p className='pr-2'><i className="ri-lock-line"></i></p>
+                                <input type="password" className='outline-none w-full' placeholder='password' required />
+                            </div>
+                            <button type='submit' className='text-base w-full bg-[#108a00] hover:bg-[#14a800] py-2 rounded-lg font-medium text-white'>
+                                Continue
+                            </button>
                         </form>
                         <div className='my-5 relative'>
                             <hr />

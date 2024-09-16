@@ -132,6 +132,7 @@ const FindJob = () => {
 
     const [userSkill, setUerSkill] = useState([]);
     const [showSkillSearch, setShowSkillSearch] = useState(true);
+    const [toggleShowSelectedJob, setToggleShowSelectedJob] = useState(false);
     const [selectedJob, setSelectedJob] = useState(jobPosts[0]);
 
     const handleChnageSearch = (e) => {
@@ -147,6 +148,7 @@ const FindJob = () => {
 
     const handleJobClick = (job) => {
         setSelectedJob(job); // Update selected job
+        setToggleShowSelectedJob(true); // Show selected job in small screen perfectly
     };
 
     return (
@@ -202,7 +204,8 @@ const FindJob = () => {
                         </div>
 
                         {/* Right column for single job card */}
-                        <div className='overflow-y-auto max-h-[calc(100vh-4rem)] custom-scrollbar'>
+                        <div className={`${toggleShowSelectedJob ? 'block' : 'hidden'} fixed top-0 right-0 px-3 pt-5 h-screen bg-white overflow-y-hidden md:block md:px-0 md:pt-0 md:static md:overflow-y-auto md:max-h-[calc(100vh-4rem)] custom-scrollbar`}>
+                            <p className='md:hidden mb-5 text-2xl h-7 w-7 flex items-center justify-center bg-gray-300 rounded-full' onClick={() => setToggleShowSelectedJob(false)}><i className="ri-arrow-left-s-line"></i></p>
                             {selectedJob && <SingleJobCard job={selectedJob} />}
                         </div>
                     </div>
