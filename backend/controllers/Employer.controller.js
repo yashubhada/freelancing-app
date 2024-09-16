@@ -1,10 +1,17 @@
-import Jobber from "../models/Jobber.model.js";
 import Employer from "../models/employer.model.js";
+import Jobber from "../models/Jobber.model.js";
 
-export const jobberSignup = async (req, res) => {
+export const employerSignUp = async (req, res) => {
     const { name, email, password } = req.body;
-
     try {
+        // Check if the email is already in use
+        const existingEmployer = await Employer.findOne({ email });
+        if (existingEmployer) {
+            return res.status(400).json({
+                success: false,
+                msg: "Email is already in use"
+            })
+        }
         // Check if the email is already in use
         const existingJobber = await Jobber.findOne({ email });
         if (existingJobber) {
@@ -14,36 +21,21 @@ export const jobberSignup = async (req, res) => {
             });
         }
 
-        // Check if the email is already in use
-        const existingEmployer = await Employer.findOne({ email });
-        if (existingEmployer) {
-            return res.status(400).json({
-                success: false,
-                msg: "Email is already in use"
-            })
-        }
-
-        // Create a new jobber if the email doesn't exist
-        const jobber = new Jobber({
+        const employer = new Employer({
             name,
             email,
-            password,
+            password
         });
-
-        // Save the jobber to the database
-        await jobber.save();
-
-        // Send a success response
+        await employer.save();
         return res.status(201).json({
             success: true,
-            jobber
-        });
+            employer
+        })
     } catch (err) {
-        // Send a failure response with error message
         res.status(500).json({
             success: false,
             msg: "Failed to sign up. Please try again later",
             error: err.message,
         });
     }
-};
+}

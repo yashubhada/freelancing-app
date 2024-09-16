@@ -2,31 +2,83 @@ import mongoose from "mongoose";
 import bcrypt from 'bcryptjs';
 
 const jobberSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    profileImage: { type: String, default: null },
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    profileImage: {
+        type: String,
+        default: "https://res.cloudinary.com/dfcfncp2q/image/upload/v1726488767/proflex/userProfileImage_fpkypd.png"
+    },
+    role: {
+        type: String,
+        default: 'JobSeeker'
+    },
     profile: {
-        headline: { type: String, default: null },
-        bio: { type: String, default: null },
-        skills: { type: [String], required: true },
+        headline: {
+            type: String,
+            default: null
+        },
+        bio: {
+            type: String,
+            default: null
+        },
+        skills: {
+            type: [String],
+            required: true
+        },
         experience: [
             {
-                jobTitle: { type: String, required: true },
-                company: { type: String, required: true },
-                startDate: { type: Date, required: true },
-                endDate: { type: Date, default: null }, // null for ongoing jobs
-                description: { type: String, required: true }
+                jobTitle: {
+                    type: String,
+                    required: true
+                },
+                company: {
+                    type: String,
+                    required: true
+                },
+                startDate: {
+                    type: Date,
+                    required: true
+                },
+                endDate: {
+                    type: Date,
+                    default: null
+                }, // null for ongoing jobs
+                description: {
+                    type: String,
+                    required: true
+                }
             }
         ],
         education: [
             {
-                institution: { type: String },
-                degree: { type: String, required: true },
-                year: { type: String, required: true }
+                institution: {
+                    type: String
+                },
+                degree: {
+                    type: String,
+                    required: true
+                },
+                year: {
+                    type: String,
+                    required: true
+                }
             }
         ],
-        resumeUrl: { type: String, default: null }
+        resumeUrl: {
+            type: String,
+            default: null
+        }
     }
 });
 

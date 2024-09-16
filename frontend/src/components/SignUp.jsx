@@ -5,12 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 
 const SignupForm = () => {
-
-    const { userRole } = useParams(); // Get the user role (e.g., 'Jobber' or 'employer')
+    const { userRole } = useParams(); // Get the user role (e.g., 'Jobber' or 'Employer')
     const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = useState(false); // Toggle for password visibility
-    const [jobberDetails, setJobberDetails] = useState({ name: "", email: "", password: "" });
+    const [userDetails, setUserDetails] = useState({ name: "", email: "", password: "" });
     const [btnLoading, setBtnLoading] = useState(false);
 
     const url = "http://localhost:9171"; // API URL
@@ -23,46 +22,44 @@ const SignupForm = () => {
         e.preventDefault();
         setBtnLoading(true);
 
-        if(jobberDetails.password.length < 8) {
-            toast.error("password length must be 8 characters or long");
+        if (userDetails.password.length < 8) {
+            toast.error("Password length must be 8 characters or longer");
             setBtnLoading(false);
             return;
         }
 
-        // Check if userRole is 'Jobber'
-        if (userRole === 'Jobber') {
-            try {
-                const response = await axios.post(`${url}/jobber/signup`,
-                    jobberDetails, // Form data being sent
-                    {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        validateStatus: function (status) {
-                            // Resolve only if the status code is less than 500
-                            // Allows 4xx responses to be handled in the "then or catch" block
-                            return status < 500;
-                        }
+        try {
+            // Check if userRole is 'Jobber' or 'Employer' and use the appropriate API endpoint
+            const response = await axios.post(
+                userRole === 'Jobber' ? `${url}/jobber/signup` : `${url}/employer/signup`,
+                userDetails, // Form data being sent
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    validateStatus: function (status) {
+                        // Resolve only if the status code is less than 500
+                        return status < 500;
                     }
-                );
-
-                if (response.status === 201 && response.data.success) {
-                    navigate('/signin');
-                } else {
-                    toast.error(response.data.msg || `Error: ${response.status}`);
-                    setBtnLoading(false)
                 }
-            } catch (err) {
-                console.log(err);
-                toast.error('An error occurred. Please try again later.');
+            );
+
+            if (response.status === 201 && response.data.success) {
+                navigate('/signin');
+            } else {
+                toast.error(response.data.msg || `Error: ${response.status}`);
                 setBtnLoading(false);
             }
+        } catch (err) {
+            console.log(err);
+            toast.error('An error occurred. Please try again later.');
+            setBtnLoading(false);
         }
     };
 
     const handleFormChange = (e) => {
         const { name, value } = e.target;
-        setJobberDetails((prev) => ({
+        setUserDetails((prev) => ({
             ...prev,
             [name]: value,
         }));
@@ -84,12 +81,25 @@ const SignupForm = () => {
                             {/* Name Input */}
                             <div className='mb-7'>
                                 <label className='block mb-2 font-medium text-base'>Full name</label>
-                                <input type="text" name='name' onChange={handleFormChange} autoFocus className='outline-none focus:border-gray-500 border-gray-300 border-2 py-2 px-3 rounded-lg w-full' required />
+                                <input
+                                    type="text"
+                                    name='name'
+                                    onChange={handleFormChange}
+                                    autoFocus
+                                    className='outline-none focus:border-gray-500 border-gray-300 border-2 py-2 px-3 rounded-lg w-full'
+                                    required
+                                />
                             </div>
                             {/* Email Input */}
                             <div className='mb-7'>
                                 <label className='block mb-2 font-medium text-base'>Email address</label>
-                                <input type="email" name='email' onChange={handleFormChange} className='outline-none focus:border-gray-500 border-gray-300 border-2 py-2 px-3 rounded-lg w-full' required />
+                                <input
+                                    type="email"
+                                    name='email'
+                                    onChange={handleFormChange}
+                                    className='outline-none focus:border-gray-500 border-gray-300 border-2 py-2 px-3 rounded-lg w-full'
+                                    required
+                                />
                             </div>
                             {/* Password Input */}
                             <div className='mb-7 relative'>
