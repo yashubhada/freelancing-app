@@ -15,7 +15,7 @@ export const jobberSignup = async (req, res) => {
         if (existingJobber) {
             return res.status(400).json({
                 success: false,
-                msg: "Email is already in use. Please use a different email.",
+                msg: "Email is already in use",
             });
         }
 
@@ -38,7 +38,7 @@ export const jobberSignup = async (req, res) => {
         // Send a failure response with error message
         res.status(500).json({
             success: false,
-            msg: "Failed to sign up. Please try again later.",
+            msg: "Failed to sign up. Please try again later",
             error: err.message,
         });
     }
