@@ -1,9 +1,34 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import NavbarEmp from './NavbarEmp'
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const EmployerDashboard = () => {
 
     document.title = "Employer dashboard | Home";
+    const navigate = useNavigate();
+
+    const url = "http://localhost:9171"; // API URL
+
+    const fetchDashboard = async () => {
+        try {
+            const response = await axios.get(`${url}/employer/employe-dashboard`, {
+                withCredentials: true,
+            });
+            console.log('Dashboard Data:', response.data);
+        } catch (error) {
+            if (error.response?.status === 401 || error.response?.status === 403) {
+                // Redirect to login if not authenticated
+                navigate('/signin');
+            } else {
+                console.error('Error fetching dashboard:', error.response?.data || error.message);
+            }
+        }
+    };
+
+    useEffect(() => {
+        fetchDashboard();
+    }, []);
 
     return (
         <>

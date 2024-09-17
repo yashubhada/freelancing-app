@@ -16,7 +16,7 @@ export const verifyToken = (req, res, next) => {
     try {
         // Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        req.jobber = decoded; // Attach the decoded data to the request object
+        req.user = decoded; // Attach the decoded data to the request object
         next(); // Continue to the protected route
     } catch (err) {
         return res.status(403).json({

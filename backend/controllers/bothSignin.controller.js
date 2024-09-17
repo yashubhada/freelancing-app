@@ -3,6 +3,7 @@ import Employer from "../models/employer.model.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 export const userSignin = async (req, res) => {
