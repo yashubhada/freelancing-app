@@ -1,10 +1,42 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import Navbar from './Navbar';
 import UserDefaultProfile from '../images/userProfileImage.png';
 import Footer from './Footer';
+import { AppContext } from './context/AppContext';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const JobSeekerProfile = ({ profileData }) => {
     const { name, email, profileImage, profile } = profileData;
+
+    const contextFunctions = useContext(AppContext);
+    const navigate = useNavigate();
+
+    const url = "http://localhost:9171"; // API URL
+
+    const isEmployeSignin = async () => {
+        try {
+            const response = await axios.get(`${url}/jobber/userTokenVerify`, {
+                withCredentials: true,
+            });
+            console.log('Dashboard Data:', response.data);
+            if(response.data.user.role !== "JobSeeker") {
+                navigate('/signin');
+            }
+        } catch (error) {
+            if (error.response?.status === 401 || error.response?.status === 403) {
+                // Redirect to login if not authenticated
+                navigate('/signin');
+            } else {
+                console.error('Error fetching dashboard:', error.response?.data || error.message);
+            }
+        }
+    };
+
+    useEffect(() => {
+        isEmployeSignin();
+    }, []);
+    
     return (
         <>
             <Navbar />

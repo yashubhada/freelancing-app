@@ -10,12 +10,15 @@ const EmployerDashboard = () => {
 
     const url = "http://localhost:9171"; // API URL
 
-    const fetchDashboard = async () => {
+    const isEmployeSignin = async () => {
         try {
-            const response = await axios.get(`${url}/employer/employe-dashboard`, {
+            const response = await axios.get(`${url}/employer/userTokenVerify`, {
                 withCredentials: true,
             });
             console.log('Dashboard Data:', response.data);
+            if(response.data.user.role !== "Employer") {
+                navigate('/signin');
+            }
         } catch (error) {
             if (error.response?.status === 401 || error.response?.status === 403) {
                 // Redirect to login if not authenticated
@@ -27,7 +30,7 @@ const EmployerDashboard = () => {
     };
 
     useEffect(() => {
-        fetchDashboard();
+        isEmployeSignin();
     }, []);
 
     return (
