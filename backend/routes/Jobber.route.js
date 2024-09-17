@@ -1,7 +1,11 @@
 import express from 'express';
 import {
     jobberSignup,
-    findSingleJobber
+    findSingleJobber,
+    updateBio,
+    updateSkills,
+    updateExperience,
+    updateEducation
 } from '../controllers/Jobber.controller.js';
 import { verifyToken } from '../middlewares/user.middelware.js';
 
@@ -15,5 +19,11 @@ router.get("/userTokenVerify", verifyToken, (req, res) => {
         user: req.user,  // User info extracted from the token
     });
 })
+
+// update profile info
+router.put('/updateProfile/bio', updateBio);
+router.put('/updateProfile/skills', updateSkills);
+router.put('/updateProfile/experience', updateExperience);
+router.put('/updateProfile/education', updateEducation);
 
 export default router;
