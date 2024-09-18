@@ -4,12 +4,14 @@ import Footer from './Footer';
 import { AppContext } from './context/AppContext';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
-const JobSeekerProfile = () => { 
+const JobSeekerProfile = () => {
     const { fetchJobberInfo, userProfileInfo } = useContext(AppContext);
     const navigate = useNavigate();
 
     const url = "http://localhost:9171"; // API URL
+    const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const isEmployeSignin = async () => {
@@ -17,6 +19,7 @@ const JobSeekerProfile = () => {
             const response = await axios.get(`${url}/jobber/userTokenVerify`, {
                 withCredentials: true,
             });
+            setUserId(response.data.user.userId);
             fetchJobberInfo(response.data.user.userId);
             if (response.data.user.role !== "JobSeeker") {
                 navigate('/signin');
@@ -36,8 +39,6 @@ const JobSeekerProfile = () => {
         isEmployeSignin();
     }, []);
 
-    if (loading) return <p>Loading...</p>;
-
     // Default values in case userProfileInfo is still empty
     const {
         name = "Name not available",
@@ -46,9 +47,73 @@ const JobSeekerProfile = () => {
         profile = { headline: "", bio: "", skills: [], experience: [], education: [] },
     } = userProfileInfo || {};
 
+    // States for editing bio
+    const [bio, setBio] = useState(profile.bio || "");
+    const [isEditingBio, setIsEditingBio] = useState(false);
+    const handleUpdateBio = async () => {
+        try {
+            const response = await axios.put(`${url}/jobber/updateProfile/bio`, {
+                userId,
+                bio, // new bio value
+            });
+            // Update local state with new bio
+            fetchJobberInfo(userId); // Refresh the user profile
+            setIsEditingBio(false);
+            toast.success(response.data.msg);
+        } catch (error) {
+            console.error("Error updating bio:", error);
+        }
+    };
+
+    // State for editing skills
+    const [existingSkills, setExistingSkills] = useState(profile.skills || []);
+    const [previewSkills, setPreviewSkills] = useState(profile.skills || []);
+    const [newSkill, setNewSkill] = useState('');
+    const [isEditingSkills, setIsEditingSkills] = useState(false);
+
+    // Ensure skills are fetched on component mount
+    useEffect(() => {
+        if (profile.skills) {
+            setExistingSkills(profile.skills);
+            setPreviewSkills(profile.skills);
+        }
+    }, [profile.skills]);
+
+    const handleAddSkill = () => {
+        if (newSkill === "") return toast.error('Please enter skill');
+        if (previewSkills.includes(newSkill)) return toast.error('Skill is already added');
+        if (newSkill.trim() && !previewSkills.includes(newSkill)) {
+            setPreviewSkills([...previewSkills, newSkill]);
+            setNewSkill(''); // Clear input after adding
+        }
+    };
+
+    const handleRemoveSkill = (indexToRemove) => {
+        const updatedSkills = [...previewSkills];
+        updatedSkills.splice(indexToRemove, 1); // Remove skill using index
+        setPreviewSkills(updatedSkills);
+    };
+
+    const handleSaveSkills = async () => {
+        try {
+            const response = await axios.put(`${url}/jobber/updateProfile/skills`, {
+                userId,
+                skills: previewSkills, // Send updated skills to backend
+            });
+            setExistingSkills(previewSkills); // Sync with backend data
+            setIsEditingSkills(false);
+            toast.success(response.data.msg);
+        } catch (error) {
+            console.error("Error updating skills:", error);
+        }
+    };
+
+    if (loading) return <p>Loading...</p>;
+
     return (
         <>
             <Navbar />
+            <Toaster />
             <div className="max-w-6xl mx-auto p-3 md:p-0 mt-5 md:mt-10">
                 {/* Profile Header */}
                 <div className="p-5 bg-white rounded-lg border relative">
@@ -71,28 +136,77 @@ const JobSeekerProfile = () => {
                     </div>
                 </div>
 
-                {/* Profile Bio */}
+                {/* Profile Bio Section */}
                 <div className="mt-6 p-5 bg-white rounded-lg border relative">
                     <h2 className="text-xl font-semibold mb-2">About</h2>
-                    <p className="text-gray-700">{profile.bio || "No bio available"}</p>
+                    {isEditingBio ? (
+                        <textarea
+                            value={bio}
+                            onChange={(e) => setBio(e.target.value)}
+                            placeholder='Enter your bio here'
+                            className="w-full p-2 border rounded focus:outline-indigo-500"
+                        />
+                    ) : (
+                        <p className="text-gray-700">{profile.bio || "No bio available"}</p>
+                    )}
                     <div className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
-                        <i className="ri-pencil-fill text-2xl leading-10"></i>
+                        <i
+                            className="ri-pencil-fill text-2xl leading-10"
+                            onClick={() => setIsEditingBio(!isEditingBio)}
+                        />
                     </div>
+                    {isEditingBio && (
+                        <button
+                            onClick={handleUpdateBio}
+                            className="font-medium text-sm mt-2 px-2 py-1 bg-blue-600 text-white rounded"
+                        >
+                            Save
+                        </button>
+                    )}
                 </div>
 
                 {/* Skills Section */}
                 <div className="mt-6 p-5 bg-white rounded-lg border relative">
                     <h2 className="text-xl font-semibold mb-2">Skills</h2>
-                    <div className="flex flex-wrap gap-2">
-                        {profile.skills.length > 0 ? (
-                            profile.skills.map((skill, index) => (
-                                <p key={index} className="bg-[#108a00] text-white px-2 py-1 rounded-lg text-sm">{skill}</p>
-                            ))
+                    {
+                        isEditingSkills ? (
+                            <div>
+                                <div className='flex items-center space-x-3'>
+                                    <input
+                                        type="text"
+                                        value={newSkill}
+                                        onChange={(e) => setNewSkill(e.target.value)}
+                                        className='w-full md:w-96 px-3 py-1 border rounded focus:outline-indigo-500'
+                                    />
+                                    <button onClick={handleAddSkill} className='bg-gray-500 text-white px-2 py-1 rounded text-sm'>Add</button>
+                                </div>
+                                <div className="flex flex-wrap gap-2 mt-3">
+                                    {previewSkills.map((skill, index) => (
+                                        <p key={index} className="bg-[#108a00] text-white px-2 py-1 rounded-lg text-sm flex items-center">
+                                            {skill}
+                                            <span className='ml-2 cursor-pointer' onClick={() => handleRemoveSkill(index)}>
+                                                <i className="text-base ri-close-line"></i>
+                                            </span>
+                                        </p>
+                                    ))}
+                                </div>
+                                <button onClick={handleSaveSkills} className="font-medium text-sm mt-3 px-2 py-1 bg-blue-600 text-white rounded">
+                                    Save
+                                </button>
+                            </div>
                         ) : (
-                            <p>No skills available</p>
-                        )}
-                    </div>
-                    <div className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
+                            <div className="flex flex-wrap gap-2">
+                                {existingSkills.length > 0 ? (
+                                    existingSkills.map((skill, index) => (
+                                        <p key={index} className="bg-[#108a00] text-white px-2 py-1 rounded-lg text-sm">{skill}</p>
+                                    ))
+                                ) : (
+                                    <p>No skills available</p>
+                                )}
+                            </div>
+                        )
+                    }
+                    <div onClick={() => setIsEditingSkills(!isEditingSkills)} className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
                         <i className="ri-pencil-fill text-2xl leading-10"></i>
                     </div>
                 </div>
@@ -106,17 +220,13 @@ const JobSeekerProfile = () => {
                                 <h3 className="text-lg font-semibold">{exp.jobTitle}</h3>
                                 <p className="text-gray-600">{exp.company}</p>
                                 <p className="text-gray-500">
-                                    {exp.startDate} - {exp.endDate || 'Present'}
+                                    {exp.startDate.split('T')[0]} - {exp.endDate.split('T')[0] || "Present"}
                                 </p>
-                                <p className="text-gray-700">{exp.description}</p>
                             </div>
                         ))
                     ) : (
-                        <p>No experience available</p>
+                        <p>No experience added</p>
                     )}
-                    <div className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
-                        <i className="ri-pencil-fill text-2xl leading-10"></i>
-                    </div>
                 </div>
 
                 {/* Education Section */}
@@ -125,39 +235,19 @@ const JobSeekerProfile = () => {
                     {profile.education.length > 0 ? (
                         profile.education.map((edu, index) => (
                             <div key={index} className="pl-5">
-                                <h3 className="text-lg font-semibold">{edu.institution}</h3>
-                                <p className="text-gray-600">{edu.degree}</p>
-                                <p className="text-gray-500">{edu.year}</p>
+                                <h3 className="text-lg font-semibold">{edu.degree}</h3>
+                                <p className="text-gray-600">{edu.institution}</p>
+                                <p className="text-gray-500">{edu.graduationDate}</p>
                             </div>
                         ))
                     ) : (
-                        <p>No education information available</p>
-                    )}
-                    <div className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
-                        <i className="ri-pencil-fill text-2xl leading-10"></i>
-                    </div>
-                </div>
-
-                {/* Resume Link */}
-                <div className="mt-6 p-5 bg-white rounded-lg border">
-                    {profile.resumeUrl ? (
-                        <a
-                            href={profile.resumeUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-500 font-semibold"
-                        >
-                            View Resume
-                        </a>
-                    ) : (
-                        <p>No resume available. <span className='text-blue-600 cursor-pointer hover:text-blue-700 hover:underline'>Add</span></p>
+                        <p>No education added</p>
                     )}
                 </div>
             </div>
-
             <Footer />
         </>
     );
-}
+};
 
 export default JobSeekerProfile;

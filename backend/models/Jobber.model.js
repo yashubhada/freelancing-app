@@ -52,7 +52,7 @@ const jobberSchema = new mongoose.Schema({
                 },
                 endDate: {
                     type: Date,
-                    default: null
+                    default: 'Present'
                 }, // null for ongoing jobs
                 description: {
                     type: String,
