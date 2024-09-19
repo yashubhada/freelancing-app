@@ -42,7 +42,7 @@ const Signin = () => {
 
             if (response.status === 201 && response.data.success) {
                 if (response.data.role === 'JobSeeker') {
-                    navigate('/');
+                    navigate('/profile');
                 } else if (response.data.role === 'Employer') {
                     navigate('/employe-dashboard');
                 }

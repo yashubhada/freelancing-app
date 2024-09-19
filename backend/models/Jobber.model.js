@@ -47,12 +47,12 @@ const jobberSchema = new mongoose.Schema({
                     required: true
                 },
                 startDate: {
-                    type: Date,
+                    type: String,
                     required: true
                 },
                 endDate: {
-                    type: Date,
-                    default: 'Present'
+                    type: String,
+                    default: null
                 }, // null for ongoing jobs
                 description: {
                     type: String,

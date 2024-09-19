@@ -10,6 +10,18 @@ const JobSeekerProfile = () => {
     const { fetchJobberInfo, userProfileInfo } = useContext(AppContext);
     const navigate = useNavigate();
 
+    // get 100 years
+    const currentYear = new Date().getFullYear();
+    const startYear = currentYear - 100;
+    const yearsArray = [];
+    for (let year = currentYear; year >= startYear; year--) {
+        yearsArray.push(year);
+    }
+    const monthsArray = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
     const url = "http://localhost:9171"; // API URL
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -118,15 +130,57 @@ const JobSeekerProfile = () => {
 
 
     // State for editing experience
+    const [isExperienceEndDate, setIsExperienceEndDate] = useState(true);
+    const [experienceCredentials, setExperienceCredentials] = useState({
+        jobTitle: "",
+        company: "",
+        startMonth: "",
+        startYear: "",
+        endMonth: "",
+        endYear: "",
+        description: "",
+    });
     const [existingExperience, setExistingExperience] = useState(profile.experience || []);
-    const [previewExperience, setPreviewExperience] = useState(profile.experience || []);
-    const [newExperience, setNewExperience] = useState({});
     const [isEditingExperience, setIsEditingExperience] = useState(false);
+
+    // Handle experience form changes
+    const handleExperienceInputChange = (e) => {
+        const { name, value } = e.target;
+        setExperienceCredentials((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    // Handle Experience Save
+    const handleExperienceSave = async (e) => {
+        e.preventDefault();
+        const newExperience = {
+            ...experienceCredentials,
+            startDate: `${experienceCredentials.startMonth} ${experienceCredentials.startYear}`,
+            endDate: isExperienceEndDate
+                ? null
+                : `${experienceCredentials.endMonth} ${experienceCredentials.endYear}`,
+        };
+
+        try {
+            const response = await axios.put(`${url}/jobber/updateProfile/experience`, {
+                userId,
+                experience: [...existingExperience, newExperience],
+            });
+            setExistingExperience([...existingExperience, newExperience]);
+            setIsEditingExperience(false);
+            fetchJobberInfo(userId);
+            toast.success(response.data.msg);
+        } catch (error) {
+            console.error("Error updating experience:", error);
+        }
+    };
 
     useEffect(() => {
         setExistingExperience(profile.experience);
-        setPreviewExperience(profile.experience);
     }, [profile.experience]);
+
 
     if (loading) return <p>Loading...</p>;
 
@@ -231,53 +285,112 @@ const JobSeekerProfile = () => {
                 {/* Experience Section */}
                 <div className="mt-6 p-5 bg-white rounded-lg border relative">
                     <h2 className="text-xl font-semibold mb-2">Experience</h2>
-                    {
-                        isEditingExperience ?
-                            <div>
-                                <form>
-                                    <div className='mb-5'>
-                                        <label className='mb-1 block'>Job title</label>
-                                        <input type="text" className='w-full px-3 py-1 border rounded focus:outline-indigo-500' />
-                                    </div>
-                                    <div className='mb-5'>
-                                        <label className='mb-1 block'>Company name</label>
-                                        <input type="text" className='w-full px-3 py-1 border rounded focus:outline-indigo-500' />
-                                    </div>
-                                    <div className='mb-5'>
-                                        <label className='mb-1 block'>Star date</label>
-                                        <input type="date" className='w-full px-3 py-1 border rounded focus:outline-indigo-500' />
-                                    </div>
-                                    <div className='mb-5'>
-                                        <label className='mb-1 block'>End date</label>
-                                        <input type="date" className='w-full px-3 py-1 border rounded focus:outline-indigo-500' />
-                                    </div>
-                                    <div className='mb-5'>
-                                        <label className='mb-1 block'>Description</label>
-                                        <textarea className='w-full px-3 py-1 border rounded focus:outline-indigo-500' />
-                                    </div>
-                                    <div>
-                                        <button type='submit' className='font-medium text-sm px-2 py-1 bg-blue-600 text-white rounded'>Add</button>
-                                    </div>
-                                </form>
-                            </div>
-                            :
-                            (
-                                profile.experience.length > 0 ? (
-                                    profile.experience.map((exp, index) => (
-                                        <div key={index} className="pl-2">
-                                            <h3 className="text-lg font-semibold">{exp.jobTitle}</h3>
-                                            <p className="text-gray-600">{exp.company}</p>
-                                            <p className="text-gray-500">
-                                                {exp.startDate.split('T')[0]} - {exp.endDate.split('T')[0] || "Present"}
-                                            </p>
-                                            <p className="text-gray-500">{exp.description}</p>
+                    <div className='space-y-3'>
+                        {
+                            isEditingExperience ?
+                                <div>
+                                    <form onSubmit={handleExperienceSave} autoComplete='off'>
+                                        <div className='mb-5'>
+                                            <label className='mb-1 block'>Job title</label>
+                                            <input type="text" name='jobTitle' onChange={handleExperienceInputChange} className='w-full px-3 py-1 border rounded focus:outline-indigo-500' required />
                                         </div>
-                                    ))
-                                ) : (
-                                    <p>No experience added</p>
+                                        <div className='mb-5'>
+                                            <label className='mb-1 block'>Company name</label>
+                                            <input type="text" name='company' onChange={handleExperienceInputChange} className='w-full px-3 py-1 border rounded focus:outline-indigo-500' required />
+                                        </div>
+                                        <div className='mb-5 flex items-center space-x-3 md:space-x-10'>
+                                            <div className='w-full'>
+                                                <label className='mb-1 block'>Start month</label>
+                                                <select name='startMonth' onChange={handleExperienceInputChange} className='w-full px-2 py-1 border rounded focus:outline-indigo-500' required>
+                                                    {
+                                                        monthsArray.map((ary, i) => {
+                                                            return <option value={ary} key={i}>{ary}</option>
+                                                        })
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div className='w-full'>
+                                                <label className='mb-1 block'>Start year</label>
+                                                <select name='startYear' onChange={handleExperienceInputChange} className='w-full px-2 py-1 border rounded focus:outline-indigo-500' required>
+                                                    {
+                                                        yearsArray.map((ary, i) => {
+                                                            return <option value={ary} key={i}>{ary}</option>
+                                                        })
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className='mb-5'>
+                                            <label className="flex items-center">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={isExperienceEndDate}
+                                                    onChange={() => setIsExperienceEndDate(!isExperienceEndDate)}
+                                                    className="hidden"
+                                                />
+                                                <span
+                                                    className={`w-5 h-5 rounded mr-3 border border-[#108a00] ${isExperienceEndDate ? 'bg-[#108a00]' : 'bg-white'
+                                                        } flex items-center justify-center`}
+                                                >
+                                                    {isExperienceEndDate && (
+                                                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                    )}
+                                                </span>
+                                                I am currently working in this role
+                                            </label>
+                                        </div>
+                                        <div className='mb-5 flex items-center space-x-3 md:space-x-10'>
+                                            <div className='w-full'>
+                                                <label className='mb-1 block'>End month</label>
+                                                <select name='endMonth' onChange={handleExperienceInputChange} disabled={isExperienceEndDate} className='w-full px-2 py-1 border rounded focus:outline-indigo-500' required>
+                                                    {
+                                                        monthsArray.map((ary, i) => {
+                                                            return <option value={ary} key={i}>{ary}</option>
+                                                        })
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div className='w-full'>
+                                                <label className='mb-1 block'>End year</label>
+                                                <select name='endYear' onChange={handleExperienceInputChange} disabled={isExperienceEndDate} className='w-full px-2 py-1 border rounded focus:outline-indigo-500' required>
+                                                    {
+                                                        yearsArray.map((ary, i) => {
+                                                            return <option value={ary} key={i}>{ary}</option>
+                                                        })
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className='mb-5'>
+                                            <label className='mb-1 block'>Description</label>
+                                            <textarea name='description' onChange={handleExperienceInputChange} className='w-full px-3 py-1 border rounded focus:outline-indigo-500' required />
+                                        </div>
+                                        <div>
+                                            <button type='submit' className='font-medium text-sm px-2 py-1 bg-blue-600 text-white rounded'>Add</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                :
+                                (
+                                    profile.experience.length > 0 ? (
+                                        profile.experience.map((exp, index) => (
+                                            <div key={index} className="pl-2">
+                                                <h3 className="text-base text-gray-800 font-semibold">{exp.jobTitle}</h3>
+                                                <p className="text-sm text-gray-600">{exp.company}</p>
+                                                <p className="text-sm text-gray-500">
+                                                    {exp.startDate} {exp.endDate === null ? "Present" : exp.endDate}
+                                                </p>
+                                                <p className="text-sm text-gray-500">{exp.description}</p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No experience added</p>
+                                    )
                                 )
-                            )
-                    }
+                        }
+                    </div>
                     <div onClick={() => setIsEditingExperience(!isEditingExperience)} className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
                         <i className="ri-pencil-fill text-2xl leading-10"></i>
                     </div>
