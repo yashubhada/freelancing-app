@@ -50,6 +50,13 @@ const JobSeekerProfile = () => {
     // States for editing bio
     const [bio, setBio] = useState(profile.bio || "");
     const [isEditingBio, setIsEditingBio] = useState(false);
+    // Ensure skills are fetched on component mount
+    useEffect(() => {
+        if (profile.bio) {
+            setBio(profile.bio);
+        }
+    }, [profile.bio]);
+    // Update Bio
     const handleUpdateBio = async () => {
         try {
             const response = await axios.put(`${url}/jobber/updateProfile/bio`, {
@@ -65,6 +72,7 @@ const JobSeekerProfile = () => {
         }
     };
 
+
     // State for editing skills
     const [existingSkills, setExistingSkills] = useState(profile.skills || []);
     const [previewSkills, setPreviewSkills] = useState(profile.skills || []);
@@ -78,7 +86,7 @@ const JobSeekerProfile = () => {
             setPreviewSkills(profile.skills);
         }
     }, [profile.skills]);
-
+    // Add skill
     const handleAddSkill = () => {
         if (newSkill === "") return toast.error('Please enter skill');
         if (previewSkills.includes(newSkill)) return toast.error('Skill is already added');
@@ -87,13 +95,13 @@ const JobSeekerProfile = () => {
             setNewSkill(''); // Clear input after adding
         }
     };
-
+    // Remove skill
     const handleRemoveSkill = (indexToRemove) => {
         const updatedSkills = [...previewSkills];
         updatedSkills.splice(indexToRemove, 1); // Remove skill using index
         setPreviewSkills(updatedSkills);
     };
-
+    // Save skill into DB
     const handleSaveSkills = async () => {
         try {
             const response = await axios.put(`${url}/jobber/updateProfile/skills`, {
@@ -107,6 +115,18 @@ const JobSeekerProfile = () => {
             console.error("Error updating skills:", error);
         }
     };
+
+
+    // State for editing experience
+    const [existingExperience, setExistingExperience] = useState(profile.experience || []);
+    const [previewExperience, setPreviewExperience] = useState(profile.experience || []);
+    const [newExperience, setNewExperience] = useState({});
+    const [isEditingExperience, setIsEditingExperience] = useState(false);
+
+    useEffect(() => {
+        setExistingExperience(profile.experience);
+        setPreviewExperience(profile.experience);
+    }, [profile.experience]);
 
     if (loading) return <p>Loading...</p>;
 
@@ -149,11 +169,8 @@ const JobSeekerProfile = () => {
                     ) : (
                         <p className="text-gray-700">{profile.bio || "No bio available"}</p>
                     )}
-                    <div className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
-                        <i
-                            className="ri-pencil-fill text-2xl leading-10"
-                            onClick={() => setIsEditingBio(!isEditingBio)}
-                        />
+                    <div onClick={() => setIsEditingBio(!isEditingBio)} className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
+                        <i className="ri-pencil-fill text-2xl leading-10" />
                     </div>
                     {isEditingBio && (
                         <button
@@ -214,19 +231,56 @@ const JobSeekerProfile = () => {
                 {/* Experience Section */}
                 <div className="mt-6 p-5 bg-white rounded-lg border relative">
                     <h2 className="text-xl font-semibold mb-2">Experience</h2>
-                    {profile.experience.length > 0 ? (
-                        profile.experience.map((exp, index) => (
-                            <div key={index} className="pl-5">
-                                <h3 className="text-lg font-semibold">{exp.jobTitle}</h3>
-                                <p className="text-gray-600">{exp.company}</p>
-                                <p className="text-gray-500">
-                                    {exp.startDate.split('T')[0]} - {exp.endDate.split('T')[0] || "Present"}
-                                </p>
+                    {
+                        isEditingExperience ?
+                            <div>
+                                <form>
+                                    <div className='mb-5'>
+                                        <label className='mb-1 block'>Job title</label>
+                                        <input type="text" className='w-full px-3 py-1 border rounded focus:outline-indigo-500' />
+                                    </div>
+                                    <div className='mb-5'>
+                                        <label className='mb-1 block'>Company name</label>
+                                        <input type="text" className='w-full px-3 py-1 border rounded focus:outline-indigo-500' />
+                                    </div>
+                                    <div className='mb-5'>
+                                        <label className='mb-1 block'>Star date</label>
+                                        <input type="date" className='w-full px-3 py-1 border rounded focus:outline-indigo-500' />
+                                    </div>
+                                    <div className='mb-5'>
+                                        <label className='mb-1 block'>End date</label>
+                                        <input type="date" className='w-full px-3 py-1 border rounded focus:outline-indigo-500' />
+                                    </div>
+                                    <div className='mb-5'>
+                                        <label className='mb-1 block'>Description</label>
+                                        <textarea className='w-full px-3 py-1 border rounded focus:outline-indigo-500' />
+                                    </div>
+                                    <div>
+                                        <button type='submit' className='font-medium text-sm px-2 py-1 bg-blue-600 text-white rounded'>Add</button>
+                                    </div>
+                                </form>
                             </div>
-                        ))
-                    ) : (
-                        <p>No experience added</p>
-                    )}
+                            :
+                            (
+                                profile.experience.length > 0 ? (
+                                    profile.experience.map((exp, index) => (
+                                        <div key={index} className="pl-2">
+                                            <h3 className="text-lg font-semibold">{exp.jobTitle}</h3>
+                                            <p className="text-gray-600">{exp.company}</p>
+                                            <p className="text-gray-500">
+                                                {exp.startDate.split('T')[0]} - {exp.endDate.split('T')[0] || "Present"}
+                                            </p>
+                                            <p className="text-gray-500">{exp.description}</p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No experience added</p>
+                                )
+                            )
+                    }
+                    <div onClick={() => setIsEditingExperience(!isEditingExperience)} className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
+                        <i className="ri-pencil-fill text-2xl leading-10"></i>
+                    </div>
                 </div>
 
                 {/* Education Section */}
@@ -234,7 +288,7 @@ const JobSeekerProfile = () => {
                     <h2 className="text-xl font-semibold mb-2">Education</h2>
                     {profile.education.length > 0 ? (
                         profile.education.map((edu, index) => (
-                            <div key={index} className="pl-5">
+                            <div key={index} className="pl-2">
                                 <h3 className="text-lg font-semibold">{edu.degree}</h3>
                                 <p className="text-gray-600">{edu.institution}</p>
                                 <p className="text-gray-500">{edu.graduationDate}</p>
@@ -244,7 +298,7 @@ const JobSeekerProfile = () => {
                         <p>No education added</p>
                     )}
                 </div>
-            </div>
+            </div >
             <Footer />
         </>
     );
