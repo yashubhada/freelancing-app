@@ -19,12 +19,6 @@ const Signin = () => {
         setBtnLoading(true);
         e.preventDefault();
 
-        if (userDetails.password.length < 8) {
-            toast.error("Password length must be 8 characters or longer");
-            setBtnLoading(false);
-            return;
-        }
-
         try {
             const response = await axios.post(`${url}/userSignin/signin`,
                 userDetails, // Form data being sent

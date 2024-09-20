@@ -1,11 +1,29 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 const Navbar = () => {
 
     const toggleMenu = () => {
         document.querySelector(".menu-items").classList.toggle("hidden");
     }
+
+    const navigate = useNavigate();
+
+    const [isLogin, setIsLogin] = useState(false);
+    const token = Cookies.get('token', { path: '/' });
+
+    const handleLogout = () => {
+        if (token) {
+            Cookies.remove('token', { path: '/' });
+            setIsLogin(false);
+            navigate("/signin");
+        }
+    }
+
+    useEffect(() => {
+        if (token) setIsLogin(true);
+    }, [isLogin]);
 
     return (
         <>
@@ -19,8 +37,16 @@ const Navbar = () => {
                                 <li className="font-medium menu-link"><NavLink to='/find-talent' className="hover:text-[#108a00]" onClick={toggleMenu}>Find talent</NavLink></li>
                                 <li className="font-medium menu-link"><NavLink to='/find-job' className="hover:text-[#108a00]" onClick={toggleMenu}>Find Jobs</NavLink></li>
                                 <li className="font-medium menu-link"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>About</a></li>
-                                <li className="md:hidden font-medium menu-link"><NavLink to='/signuprole' className="hover:text-[#108a00]" onClick={toggleMenu}>Sign up</NavLink></li>
-                                <li className="md:hidden font-medium menu-link"><NavLink to='/signin' className="hover:text-[#108a00]" onClick={toggleMenu}>Log in</NavLink></li>
+                                {
+                                    isLogin
+                                        ?
+                                        <li onClick={handleLogout} className="md:hidden font-medium menu-link"><span className="hover:text-[#108a00] cursor-pointer">Logout</span></li>
+                                        :
+                                        <>
+                                            <li className="md:hidden font-medium menu-link"><NavLink to='/signuprole' className="hover:text-[#108a00]">Sign up</NavLink></li>
+                                            <li className="md:hidden font-medium menu-link"><NavLink to='/signin' className="hover:text-[#108a00]">Log in</NavLink></li>
+                                        </>
+                                }
                             </ul>
                         </div>
                         <div className="flex items-center">
@@ -28,8 +54,16 @@ const Navbar = () => {
                                 Post a Job
                             </button>
                             <ul className="hidden md:flex ml-10 text-sm space-x-4">
-                                <li className="font-medium menu-link"><NavLink to='/signuprole' className="hover:text-[#108a00]">Sign up</NavLink></li>
-                                <li className="font-medium menu-link"><NavLink to='/signin' className="hover:text-[#108a00]">Log in</NavLink></li>
+                                {
+                                    isLogin
+                                        ?
+                                        <li onClick={handleLogout} className="font-medium menu-link"><span className="hover:text-[#108a00] cursor-pointer">Logout</span></li>
+                                        :
+                                        <>
+                                            <li className="font-medium menu-link"><NavLink to='/signuprole' className="hover:text-[#108a00]">Sign up</NavLink></li>
+                                            <li className="font-medium menu-link"><NavLink to='/signin' className="hover:text-[#108a00]">Log in</NavLink></li>
+                                        </>
+                                }
                             </ul>
                         </div>
                     </div>

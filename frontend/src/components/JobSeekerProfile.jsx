@@ -22,6 +22,44 @@ const JobSeekerProfile = () => {
         "July", "August", "September", "October", "November", "December"
     ];
 
+    const itCourses = [
+        'BCA - Bachelor of Computer Applications',
+        'BTech - Bachelor of Technology',
+        'MCA - Master of Computer Applications',
+        'MTech - Master of Technology',
+        'BSc CS - Bachelor of Science in Computer Science',
+        'MSc CS - Master of Science in Computer Science',
+        'BE - Bachelor of Engineering',
+        'ME - Master of Engineering',
+        'BSc IT - Bachelor of Science in Information Technology',
+        'MSc IT - Master of Science in Information Technology',
+        'Diploma in IT - Diploma in Information Technology',
+        'PhD in CS - Doctor of Philosophy in Computer Science',
+        'PhD in IT - Doctor of Philosophy in Information Technology',
+        'BSc Software Engineering - Bachelor of Science in Software Engineering',
+        'MSc Software Engineering - Master of Science in Software Engineering',
+        'BSc Data Science - Bachelor of Science in Data Science',
+        'MSc Data Science - Master of Science in Data Science',
+        'BSc Artificial Intelligence - Bachelor of Science in Artificial Intelligence',
+        'MSc Artificial Intelligence - Master of Science in Artificial Intelligence',
+        'BSc Cyber Security - Bachelor of Science in Cyber Security',
+        'MSc Cyber Security - Master of Science in Cyber Security',
+        'BSc Information Systems - Bachelor of Science in Information Systems',
+        'MSc Information Systems - Master of Science in Information Systems',
+        'BSc Cloud Computing - Bachelor of Science in Cloud Computing',
+        'MSc Cloud Computing - Master of Science in Cloud Computing',
+        'BSc Blockchain - Bachelor of Science in Blockchain Technology',
+        'MSc Blockchain - Master of Science in Blockchain Technology',
+        'BSc Network Engineering - Bachelor of Science in Network Engineering',
+        'MSc Network Engineering - Master of Science in Network Engineering',
+        'BSc Game Development - Bachelor of Science in Game Development',
+        'MSc Game Development - Master of Science in Game Development',
+        'BSc IT Management - Bachelor of Science in IT Management',
+        'MSc IT Management - Master of Science in IT Management',
+        'BSc Web Development - Bachelor of Science in Web Development',
+        'MSc Web Development - Master of Science in Web Development'
+    ];
+
     const url = "http://localhost:9171"; // API URL
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -134,10 +172,10 @@ const JobSeekerProfile = () => {
     const [experienceCredentials, setExperienceCredentials] = useState({
         jobTitle: "",
         company: "",
-        startMonth: "",
-        startYear: "",
-        endMonth: "",
-        endYear: "",
+        startMonth: "January",
+        startYear: currentYear,
+        endMonth: "January",
+        endYear: currentYear,
         description: "",
     });
     const [existingExperience, setExistingExperience] = useState(profile.experience || []);
@@ -162,7 +200,6 @@ const JobSeekerProfile = () => {
                 ? null
                 : `${experienceCredentials.endMonth} ${experienceCredentials.endYear}`,
         };
-
         try {
             const response = await axios.put(`${url}/jobber/updateProfile/experience`, {
                 userId,
@@ -181,6 +218,45 @@ const JobSeekerProfile = () => {
         setExistingExperience(profile.experience);
     }, [profile.experience]);
 
+
+
+    // State for editing Education
+    const [isEditEducation, setIsEditEducation] = useState(false);
+    const [existingEducation, setExistingEducation] = useState(profile.education || []);
+    const [educationCredentials, setEducationCredentials] = useState({
+        institution: "",
+        degree: itCourses[0],
+        year: currentYear
+    });
+
+    const handleChangeEducation = (e) => {
+        const { name, value } = e.target;
+        setEducationCredentials((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    }
+
+    const handleEducationSave = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.put(`${url}/jobber/updateProfile/education`, {
+                userId,
+                education: [...existingEducation, educationCredentials],
+            });
+            setExistingEducation([...existingEducation, educationCredentials]);
+            setIsEditEducation(false);
+            fetchJobberInfo(userId);
+            toast.success(response.data.msg);
+        } catch (error) {
+            console.error("Error updating education:", error);
+        }
+    }
+
+    useEffect(() => {
+        setExistingEducation(profile.education);
+    }, [profile.education])
 
     if (loading) return <p>Loading...</p>;
 
@@ -367,9 +443,7 @@ const JobSeekerProfile = () => {
                                             <label className='mb-1 block'>Description</label>
                                             <textarea name='description' onChange={handleExperienceInputChange} className='w-full px-3 py-1 border rounded focus:outline-indigo-500' required />
                                         </div>
-                                        <div>
-                                            <button type='submit' className='font-medium text-sm px-2 py-1 bg-blue-600 text-white rounded'>Add</button>
-                                        </div>
+                                        <button type='submit' className='font-medium text-sm px-2 py-1 bg-blue-600 text-white rounded'>Add</button>
                                     </form>
                                 </div>
                                 :
@@ -378,11 +452,11 @@ const JobSeekerProfile = () => {
                                         profile.experience.map((exp, index) => (
                                             <div key={index} className="pl-2">
                                                 <h3 className="text-base text-gray-800 font-semibold">{exp.jobTitle}</h3>
-                                                <p className="text-sm text-gray-600">{exp.company}</p>
-                                                <p className="text-sm text-gray-500">
-                                                    {exp.startDate} {exp.endDate === null ? "Present" : exp.endDate}
-                                                </p>
-                                                <p className="text-sm text-gray-500">{exp.description}</p>
+                                                <ul className='list-disc ml-4'>
+                                                    <li className="text-sm text-gray-600">{exp.company}</li>
+                                                    <li className="text-sm text-gray-600">{exp.startDate} -- {exp.endDate === null ? "Present" : exp.endDate}</li>
+                                                    <li className="text-sm text-gray-600">{exp.description}</li>
+                                                </ul>
                                             </div>
                                         ))
                                     ) : (
@@ -399,17 +473,59 @@ const JobSeekerProfile = () => {
                 {/* Education Section */}
                 <div className="mt-6 p-5 bg-white rounded-lg border relative">
                     <h2 className="text-xl font-semibold mb-2">Education</h2>
-                    {profile.education.length > 0 ? (
-                        profile.education.map((edu, index) => (
-                            <div key={index} className="pl-2">
-                                <h3 className="text-lg font-semibold">{edu.degree}</h3>
-                                <p className="text-gray-600">{edu.institution}</p>
-                                <p className="text-gray-500">{edu.graduationDate}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <p>No education added</p>
-                    )}
+                    <div className='space-y-3'>
+                        {
+                            isEditEducation ?
+                                <form onSubmit={handleEducationSave} autoComplete='off'>
+                                    <div className='mb-5'>
+                                        <label className='mb-1 block'>Institution</label>
+                                        <input type="text" name='institution' onChange={handleChangeEducation} className='w-full px-3 py-1 border rounded focus:outline-indigo-500' required />
+                                    </div>
+                                    <div className='mb-5 flex items-center space-x-3 md:space-x-10'>
+                                        <div className='w-full'>
+                                            <label className='mb-1 block'>Degree</label>
+                                            <select name='degree' onChange={handleChangeEducation} className='w-full px-2 py-1 border rounded focus:outline-indigo-500' required>
+                                                {
+                                                    itCourses.map((ary, i) => {
+                                                        return <option value={ary} key={i}>{ary}</option>
+                                                    })
+                                                }
+                                            </select>
+                                        </div>
+                                        <div className='w-full'>
+                                            <label className='mb-1 block'>Year</label>
+                                            <select name='year' onChange={handleChangeEducation} className='w-full px-2 py-1 border rounded focus:outline-indigo-500' required>
+                                                {
+                                                    yearsArray.map((ary, i) => {
+                                                        return <option value={ary} key={i}>{ary}</option>
+                                                    })
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type='submit' className='font-medium text-sm px-2 py-1 bg-blue-600 text-white rounded'>Add</button>
+                                </form>
+                                :
+                                (
+                                    profile.education.length > 0 ? (
+                                        profile.education.map((edu, index) => (
+                                            <div key={index} className="pl-2">
+                                                <h3 className="text-base text-gray-800 font-semibold">{edu.degree}</h3>
+                                                <ul className='list-disc ml-4'>
+                                                    <li className="text-sm text-gray-600">{edu.institution}</li>
+                                                    <li className="text-sm text-gray-600">{edu.year}</li>
+                                                </ul>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No education added</p>
+                                    )
+                                )
+                        }
+                    </div>
+                    <div onClick={() => setIsEditEducation(!isEditEducation)} className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
+                        <i className="ri-pencil-fill text-2xl leading-10"></i>
+                    </div>
                 </div>
             </div >
             <Footer />

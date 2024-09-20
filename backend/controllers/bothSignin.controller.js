@@ -64,7 +64,7 @@ export const userSignin = async (req, res) => {
 
         // Store token in a cookie
         res.cookie('token', token, {
-            httpOnly: true,
+            // httpOnly: true,      // True when cookie store sensitive data
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Strict',
             maxAge: 3600000, // 1 hour
