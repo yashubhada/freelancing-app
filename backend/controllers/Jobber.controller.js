@@ -151,26 +151,61 @@ export const updateEducation = async (req, res) => {
 export const UpdateProfile = (req, res) => {
     try {
         const { userId, name, headline } = req.body;
+        if (!req.file) {
+            return res.status(400).json({ success: false, msg: 'No file uploaded' });
+        }
         cloudinary.uploader.upload(req.file.path,
-            { folder: 'proflex' },
+            { folder: 'proflex/UserProfileImages' },
             async (err, result) => {
                 if (err) {
                     return res.status(500).json({ success: false, msg: err.message });
                 }
-                const jobber = await Jobber.findByIdAndUpdate(
+                await Jobber.findByIdAndUpdate(
                     userId,
                     {
                         name,
                         profileImage: result.secure_url,
                         'profile.headline': headline,
                     },
-
+                    { new: true }
                 );
-                res.status(200).json({ success: true, msg: 'Profile updated successfully', jobber });
+                res.status(200).json({ success: true, msg: 'Profile updated successfully' });
             }
         );
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error uploading image to Cloudinary' });
+    }
+};
+
+// Controller to update Profile
+export const updateResume = (req, res) => {
+    try {
+        const { userId } = req.body;
+        if (!req.file) {
+            return res.status(400).json({ success: false, msg: 'No file uploaded' });
+        }
+        cloudinary.uploader.upload(req.file.path,
+            {
+                resource_type: 'raw',
+                folder: 'proflex/UserResume'
+            },
+            async (err, result) => {
+                if (err) {
+                    return res.status(500).json({ success: false, msg: err.message });
+                }
+                await Jobber.findByIdAndUpdate(
+                    userId,
+                    {
+                        'profile.resumeUrl': result.secure_url,
+                    },
+                    { new: true }
+                );
+                res.status(200).json({ success: true, msg: 'Resume updated successfully', url: result.secure_url });
+            }
+        );
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error uploading resume to Cloudinary' });
     }
 };

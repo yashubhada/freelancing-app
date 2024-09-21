@@ -97,6 +97,62 @@ const JobSeekerProfile = () => {
         profile = { headline: "", bio: "", skills: [], experience: [], education: [] },
     } = userProfileInfo || {};
 
+    // State for edit profile
+    const [isEditProfile, setIsEditProfile] = useState(false);
+    const [profileUpdateBtnLoading, setProfileUpdateBtnLoading] = useState(false);
+    const [profileCredentials, setProfileCredentials] = useState({
+        name: "",
+        headline: "",
+    });
+    const [previewImage, setPreviewImage] = useState(null);
+    const [fileImage, setFileImage] = useState(null);
+
+    // Handle input changes
+    const handleProfileChangeInput = (e) => {
+        const { name, value } = e.target;
+        const file = e.target.files?.[0];
+        if (file && name === 'profileImage') {
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+            if (!validTypes.includes(file.type)) {
+                toast.error('Please upload a valid image file (jpg, jpeg, png)');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+            return setFileImage(file);
+        }
+        // For text inputs
+        setProfileCredentials((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    // Handle form submission
+    const handleProfileSave = async (e) => {
+        e.preventDefault();
+        setProfileUpdateBtnLoading(true);
+        const data = new FormData();
+        data.append('userId', userId);
+        data.append('profileImage', fileImage);
+        data.append('name', profileCredentials.name);
+        data.append('headline', profileCredentials.headline);
+
+        try {
+            let response = await axios.put(`${url}/jobber/updateProfile/profile`, data);
+            toast.success(response.data.msg);
+            setIsEditProfile(false);
+            fetchJobberInfo(userId);
+        } catch (err) {
+            console.error(err.message);
+        } finally {
+            setProfileUpdateBtnLoading(false);
+        }
+    };
+
     // States for editing bio
     const [bio, setBio] = useState(profile.bio || "");
     const [isEditingBio, setIsEditingBio] = useState(false);
@@ -239,7 +295,6 @@ const JobSeekerProfile = () => {
 
     const handleEducationSave = async (e) => {
         e.preventDefault();
-
         try {
             const response = await axios.put(`${url}/jobber/updateProfile/education`, {
                 userId,
@@ -267,21 +322,83 @@ const JobSeekerProfile = () => {
             <div className="max-w-6xl mx-auto p-3 md:p-0 mt-5 md:mt-10">
                 {/* Profile Header */}
                 <div className="p-5 bg-white rounded-lg border relative">
-                    <div className="block md:flex items-center">
-                        <div className='flex justify-center mb-5 md:mb-0 md:block'>
-                            <img
-                                src={profileImage}
-                                alt={`${name}'s profile`}
-                                className="w-32 h-32 rounded-full object-cover border border-gray-200"
-                            />
-                        </div>
-                        <div className="md:ml-6 text-center md:text-left">
-                            <h1 className="text-2xl font-bold">{name}</h1>
-                            <p className="text-gray-600">{profile.headline || "No headline availale"}</p>
-                            <p className="text-gray-500">{email}</p>
-                        </div>
-                    </div>
-                    <div className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
+                    {
+                        isEditProfile
+                            ?
+                            <div>
+                                <form onSubmit={handleProfileSave} autoComplete='off'>
+                                    <div className='mb-5'>
+                                        <label className='mb-1 block'>Name</label>
+                                        <input type="text" name='name' onChange={handleProfileChangeInput} className='w-full px-3 py-1 border rounded focus:outline-indigo-500' required />
+                                    </div>
+                                    <div className='mb-5'>
+                                        <label className='mb-1 block'>Headline</label>
+                                        <input type="text" name='headline' onChange={handleProfileChangeInput} className='w-full px-3 py-1 border rounded focus:outline-indigo-500' required />
+                                    </div>
+                                    <div className='mb-5'>
+                                        <label className="mb-2 block text-sm font-medium text-gray-700">Profile Image</label>
+                                        <div className="relative w-full">
+                                            <input
+                                                type="file"
+                                                name="profileImage"  // Correct file input name
+                                                onChange={handleProfileChangeInput}
+                                                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 focus:outline-none"
+                                                required
+                                            />
+                                        </div>
+                                        {/* Image preview */}
+                                        {previewImage && (
+                                            <div className="flex justify-center mt-5 md:mb-0 md:block w-32 h-32 rounded-full overflow-hidden">
+                                                <img
+                                                    src={previewImage}
+                                                    alt={`${profileCredentials.name}'s profile`}  // Fixed name reference
+                                                    className="w-full h-full object-cover border border-gray-200"
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                    <button type='submit' className='flex justify-center font-medium text-sm w-20 py-2 bg-indigo-600 text-white rounded disabled:opacity-70' disabled={profileUpdateBtnLoading}>
+                                        {
+                                            profileUpdateBtnLoading
+                                                ?
+                                                <svg className="animate-spin h-5 w-5 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle
+                                                        className="opacity-25"
+                                                        cx="12"
+                                                        cy="12"
+                                                        r="10"
+                                                        stroke="currentColor"
+                                                        strokeWidth="4"
+                                                    ></circle>
+                                                    <path
+                                                        className="opacity-75"
+                                                        fill="currentColor"
+                                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                                                    ></path>
+                                                </svg>
+                                                :
+                                                "Update"
+                                        }
+                                    </button>
+                                </form>
+                            </div>
+                            :
+                            <div className="block md:flex items-center">
+                                <div className='flex justify-center mb-5 md:mb-0 md:block'>
+                                    <img
+                                        src={profileImage}
+                                        alt={`${name}'s profile`}
+                                        className="w-32 h-32 rounded-full object-cover border border-gray-200"
+                                    />
+                                </div>
+                                <div className="md:ml-6 text-center md:text-left">
+                                    <h1 className="text-2xl font-bold">{name}</h1>
+                                    <p className="text-gray-600">{profile.headline || "No headline availale"}</p>
+                                    <p className="text-gray-500">{email}</p>
+                                </div>
+                            </div>
+                    }
+                    <div onClick={() => setIsEditProfile(!isEditProfile)} className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
                         <i className="ri-pencil-fill text-2xl leading-10"></i>
                     </div>
                 </div>
@@ -524,6 +641,15 @@ const JobSeekerProfile = () => {
                         }
                     </div>
                     <div onClick={() => setIsEditEducation(!isEditEducation)} className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
+                        <i className="ri-pencil-fill text-2xl leading-10"></i>
+                    </div>
+                </div>
+
+                {/* Update Resume */}
+                <div className="mt-6 p-5 bg-white rounded-lg border relative">
+                    <h2 className="text-xl font-semibold mb-2">Resume</h2>
+                    <p><a href="" target='_blank' className='text-base text-indigo-600 hover:underline'>View</a> resume</p>
+                    <div className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
                         <i className="ri-pencil-fill text-2xl leading-10"></i>
                     </div>
                 </div>

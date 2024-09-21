@@ -7,6 +7,7 @@ import {
     updateExperience,
     updateEducation,
     UpdateProfile,
+    updateResume,
 } from '../controllers/Jobber.controller.js';
 import { verifyToken } from '../middlewares/user.middelware.js';
 
@@ -35,5 +36,6 @@ router.put('/updateProfile/skills', updateSkills);
 router.put('/updateProfile/experience', updateExperience);
 router.put('/updateProfile/education', updateEducation);
 router.put('/updateProfile/profile', upload.single('profileImage'), UpdateProfile);
+router.put('/updateProfile/resume', upload.single('jobberResume'), updateResume);
 
 export default router;
