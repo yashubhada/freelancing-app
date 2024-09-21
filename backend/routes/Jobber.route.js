@@ -5,9 +5,18 @@ import {
     updateBio,
     updateSkills,
     updateExperience,
-    updateEducation
+    updateEducation,
+    UpdateProfile,
 } from '../controllers/Jobber.controller.js';
 import { verifyToken } from '../middlewares/user.middelware.js';
+
+import multer from 'multer';
+const storage = multer.diskStorage({
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+const upload = multer({ storage: storage })
 
 const router = express.Router();
 
@@ -25,5 +34,6 @@ router.put('/updateProfile/bio', updateBio);
 router.put('/updateProfile/skills', updateSkills);
 router.put('/updateProfile/experience', updateExperience);
 router.put('/updateProfile/education', updateEducation);
+router.put('/updateProfile/profile', upload.single('profileImage'), UpdateProfile);
 
 export default router;

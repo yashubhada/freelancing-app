@@ -1,5 +1,15 @@
 import Jobber from "../models/Jobber.model.js";
 import Employer from "../models/employer.model.js";
+import { v2 as cloudinary } from 'cloudinary';
+import dotenv from 'dotenv';
+import path from 'path';
+dotenv.config();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // Controller to sign up jobber
 export const jobberSignup = async (req, res) => {
@@ -134,5 +144,33 @@ export const updateEducation = async (req, res) => {
         return res.status(200).json({ success: true, msg: "Education updated successfully", jobber });
     } catch (err) {
         return res.status(500).json({ success: false, msg: "Server error", error: err.message });
+    }
+};
+
+// Controller to update Profile
+export const UpdateProfile = (req, res) => {
+    try {
+        const { userId, name, headline } = req.body;
+        cloudinary.uploader.upload(req.file.path,
+            { folder: 'proflex' },
+            async (err, result) => {
+                if (err) {
+                    return res.status(500).json({ success: false, msg: err.message });
+                }
+                const jobber = await Jobber.findByIdAndUpdate(
+                    userId,
+                    {
+                        name,
+                        profileImage: result.secure_url,
+                        'profile.headline': headline,
+                    },
+
+                );
+                res.status(200).json({ success: true, msg: 'Profile updated successfully', jobber });
+            }
+        );
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error uploading image to Cloudinary' });
     }
 };
