@@ -1,38 +1,74 @@
-import React from "react";
+import React, { useContext, useMemo } from "react";
 import Navbar from './Navbar';
+import Footer from "./Footer";
 import HeroImg from "../images/work_from_anywhere.svg";
 import EasyWorkImg from "../images/easyWork-img.png";
 import GoogleImg from "../images/google.png";
 import TcsImg from "../images/tcs.png";
 import MicrosoftImg from "../images/microsoft.png";
 import SpacexImg from "../images/spacex.png";
-import Footer from "./Footer";
+import { AppContext } from "./context/AppContext";
+
+const MemoizedNavbar = React.memo(Navbar);
+const MemoizedFooter = React.memo(Footer);
 
 const Home = () => {
+    const { ItSkillsArray } = useContext(AppContext);
+
+    const trustedCompanies = useMemo(() => [
+        { name: "Google", img: GoogleImg },
+        { name: "TCS", img: TcsImg },
+        { name: "Microsoft", img: MicrosoftImg },
+        { name: "Spacex", img: SpacexImg }
+    ], []);
+
+    const jobSeekerSteps = useMemo(() => [
+        { title: 'Search', description: 'Find opportunities that match your skills.', icon: '🔍' },
+        { title: 'Apply', description: 'Submit your application to potential employers.', icon: '📝' },
+        { title: 'Grow', description: 'Advance your career with the right opportunities.', icon: '📈' },
+    ], []);
+
+    const employerSteps = useMemo(() => [
+        { title: 'Post', description: 'Share your job openings with candidates.', icon: '📢' },
+        { title: 'Shortlist', description: 'Select candidates that fit your requirements.', icon: '✅' },
+        { title: 'Hire', description: 'Make the right choice and bring talent on board.', icon: '🤝' },
+    ], []);
+
+    const renderTrustedCompanies = useMemo(() => (
+        <section className="px-3 md:px-0">
+            <div className="container mx-auto mt-5 mb-10 md:mb-20">
+                <h1 className="block md:hidden text-lg text-center md:text-left font-medium text-slate-700 mb-3">Trusted by</h1>
+                <div className="flex flex-wrap items-center justify-center">
+                    <div className="w-1/2 md:w-1/5 mb-5 md:mb-0 hidden md:block">
+                        <div className="w-[150px] h-10 mx-auto md:mx-0">
+                            <h1 className="text-lg text-center md:text-left font-medium text-slate-700 mb-3">Trusted by</h1>
+                        </div>
+                    </div>
+                    {trustedCompanies.map((company, index) => (
+                        <div key={index} className="w-1/2 md:w-1/5 mb-5 md:mb-0">
+                            <div className="w-[150px] h-10 mx-auto md:mx-0">
+                                <img src={company.img} draggable={false} alt={company.name} className="w-full h-full object-contain" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    ), [trustedCompanies]);
+
     return (
         <>
-            <Navbar />
+            {/* Memoized Navbar */}
+            <MemoizedNavbar />
 
             {/* Hero section */}
-
             <section className="px-3 md:px-0">
                 <div className="container mx-auto py-5 md:py-10">
                     <div className="flex justify-between items-center">
                         <div>
-                            <h1 className="text-3xl md:text-6xl font-medium mb-5">Find & Hire <br />Expert Jobbers</h1>
-                            <p className="text-base text-balance md:text-lg font-medium text-slate-600 mb-5">Work with the best job talent from around the world on our secure, flexible and cost-effective platform.</p>
-                            <div className="block md:flex items-center mb-5">
-                                <div className="border-2 rounded p-2 border-[#ccc] md:w-[350px] relative">
-                                    <input type="text" className="text-[#555] outline-none w-full" placeholder="What skill are you looking for?" autoComplete="off" />
-                                    <span><i className="ri-search-line absolute right-0 pr-2 cursor-pointer text-base text-[#14a800]"></i></span>
-                                </div>
-                                <h1 className="font-medium my-3 text-center md:my-0 md:mx-3">Or</h1>
-                                <div className="flex justify-center md:block">
-                                    <button className="w-full md:w-fit font-medium text-sm text-white bg-[#108a00] hover:bg-[#14a800] py-3 px-4 rounded">
-                                        Post a Job
-                                    </button>
-                                </div>
-                            </div>
+                            <h1 className="text-3xl md:text-6xl font-semibold mb-5 text-balance">Find Jobs<br />Build Your Career</h1>
+                            <p className="text-base text-balance md:text-xl font-medium text-slate-800 mb-5">Connect with Top Talent and Career Opportunities.</p>
+                            <p className="text-sm text-balance md:text-base font-medium text-slate-600 mb-5">Work with the best job talent from around the world on our secure, flexible and cost-effective platform.</p>
                             <div className="flex-wrap space-x-3">
                                 <span className="cursor-pointer border rounded p-1 text-sm font-medium text-[#555] hover:text-black border-[#ccc] hover:border-black">Full stack</span>
                                 <span className="cursor-pointer border rounded p-1 text-sm font-medium text-[#555] hover:text-black border-[#ccc] hover:border-black">MERN stack</span>
@@ -44,44 +80,10 @@ const Home = () => {
                 </div>
             </section>
 
+            {/* Memoized Trusted by section */}
+            {renderTrustedCompanies}
 
-            {/* Trusted by */}
-
-            <section className="px-3 md:px-0">
-                <div className="container mx-auto mt-5 mb-10 md:mb-20">
-                    <h1 className="block md:hidden text-lg text-center md:text-left font-medium text-slate-700 mb-3">Trusted by</h1>
-                    <div className="flex flex-wrap items-center justify-center">
-                        <div className="w-1/2 md:w-1/5 mb-5 md:mb-0 hidden md:block">
-                            <div className="w-[150px] h-10 mx-auto md:mx-0">
-                                <h1 className="text-lg text-center md:text-left font-medium text-slate-700 mb-3">Trusted by</h1>
-                            </div>
-                        </div>
-                        <div className="w-1/2 md:w-1/5 mb-5 md:mb-0">
-                            <div className="w-[150px] h-10 mx-auto md:mx-0">
-                                <img src={GoogleImg} draggable={false} alt="Google" className="w-full h-full object-contain" />
-                            </div>
-                        </div>
-                        <div className="w-1/2 md:w-1/5 mb-5 md:mb-0">
-                            <div className="w-[150px] h-10 mx-auto md:mx-0">
-                                <img src={TcsImg} draggable={false} alt="TCS" className="w-full h-full object-contain" />
-                            </div>
-                        </div>
-                        <div className="w-1/2 md:w-1/5">
-                            <div className="w-[150px] h-10 mx-auto md:mx-0">
-                                <img src={MicrosoftImg} draggable={false} alt="Microsoft" className="w-full h-full object-contain" />
-                            </div>
-                        </div>
-                        <div className="w-1/2 md:w-1/5">
-                            <div className="w-[150px] h-10 mx-auto md:mx-0">
-                                <img src={SpacexImg} draggable={false} alt="Spacex" className="w-full h-full object-contain" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Work */}
-
+            {/* Work section */}
             <section className="px-3 md:px-0">
                 <div className="container mx-auto mb-10">
                     <div className="block md:flex items-center">
@@ -119,76 +121,133 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Category */}
+            <section className="py-10 bg-gradient-to-r from-gray-100 via-white to-gray-100">
+                <div className="container mx-auto px-4">
+                    {/* Heading */}
+                    <h1 className="text-xl md:text-3xl font-semibold text-center text-gray-900 mb-8">
+                        Key Features
+                    </h1>
 
-            <section className="px-3 md:px-0">
-                <div className="container mx-auto mb-10">
-                    <h1 className="text-2xl text-center md:text-left md:text-4xl mb-5 text-slate-900 font-medium">Browse talent by category</h1>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-6">
-                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
-                            <h1 className="font-medium text-xl mb-3">Front-End Developer</h1>
-                            <div className="flex items-center justify-between">
-                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
-                                <p className="text-base font-medium text-slate-700">1000 skills</p>
-                            </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {/* Job Seekers Section */}
+                        <div className="p-6 bg-white shadow-md rounded-lg">
+                            <i className="ri-user-line text-5xl text-[#108a00]"></i>
+                            <h2 className="text-lg md:text-2xl font-semibold mb-4 text-gray-900 mt-4">
+                                For Job Seekers
+                            </h2>
+                            <ul className="space-y-2 text-gray-700">
+                                <li className="flex items-center">
+                                    <i className="ri-profile-line mr-2 text-[#108a00]"></i>
+                                    <span className="text-sm md:text-base font-medium">Create your profile and showcase your skills</span>
+                                </li>
+                                <li className="flex items-center">
+                                    <i className="ri-send-plane-line mr-2 text-[#108a00]"></i>
+                                    <span className="text-sm md:text-base font-medium">Apply to jobs with a single click</span>
+                                </li>
+                                <li className="flex items-center">
+                                    <i className="ri-team-line mr-2 text-[#108a00]"></i>
+                                    <span className="text-sm md:text-base font-medium">Connect with top employers in your industry</span>
+                                </li>
+                            </ul>
                         </div>
-                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
-                            <h1 className="font-medium text-xl mb-3">Game Developer</h1>
-                            <div className="flex items-center justify-between">
-                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
-                                <p className="text-base font-medium text-slate-700">1000 skills</p>
-                            </div>
+
+                        {/* Job Providers Section */}
+                        <div className="p-6 bg-white shadow-md rounded-lg">
+                            <i className="ri-briefcase-line text-5xl text-[#108a00]"></i>
+                            <h2 className="text-lg md:text-2xl font-semibold mb-4 text-gray-900 mt-4">
+                                For Job Providers
+                            </h2>
+                            <ul className="space-y-2 text-gray-700">
+                                <li className="flex items-center">
+                                    <i className="ri-user-search-line mr-2 text-[#108a00]"></i>
+                                    <span className="text-sm md:text-base font-medium">Find and hire the best talent</span>
+                                </li>
+                                <li className="flex items-center">
+                                    <i className="ri-file-list-line mr-2 text-[#108a00]"></i>
+                                    <span className="text-sm md:text-base font-medium">Post job listings and manage applications easily</span>
+                                </li>
+                                <li className="flex items-center">
+                                    <i className="ri-database-2-line mr-2 text-[#108a00]"></i>
+                                    <span className="text-sm md:text-base font-medium">Search our talent database to hire quickly</span>
+                                </li>
+                            </ul>
                         </div>
-                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
-                            <h1 className="font-medium text-xl mb-3">Graphic Designer</h1>
-                            <div className="flex items-center justify-between">
-                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
-                                <p className="text-base font-medium text-slate-700">1000 skills</p>
-                            </div>
-                        </div>
-                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
-                            <h1 className="font-medium text-xl mb-3">MERN Stack Developer</h1>
-                            <div className="flex items-center justify-between">
-                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
-                                <p className="text-base font-medium text-slate-700">1000 skills</p>
-                            </div>
-                        </div>
-                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
-                            <h1 className="font-medium text-xl mb-3">Python Developer</h1>
-                            <div className="flex items-center justify-between">
-                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
-                                <p className="text-base font-medium text-slate-700">1000 skills</p>
-                            </div>
-                        </div>
-                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
-                            <h1 className="font-medium text-xl mb-3">JavaScript Developer</h1>
-                            <div className="flex items-center justify-between">
-                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
-                                <p className="text-base font-medium text-slate-700">1000 skills</p>
-                            </div>
-                        </div>
-                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
-                            <h1 className="font-medium text-xl mb-3">Data Analytics</h1>
-                            <div className="flex items-center justify-between">
-                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
-                                <p className="text-base font-medium text-slate-700">1000 skills</p>
-                            </div>
-                        </div>
-                        <div className="p-6 bg-[#f2f7f2] cursor-pointer hover:bg-slate-200 rounded">
-                            <h1 className="font-medium text-xl mb-3">Mobile App Developer</h1>
-                            <div className="flex items-center justify-between">
-                                <p className="text-base font-medium text-slate-700"><span><i className="ri-star-fill text-[#14a800]"></i></span>4.98/5</p>
-                                <p className="text-base font-medium text-slate-700">1000 skills</p>
-                            </div>
+
+                        {/* Common Benefits */}
+                        <div className="p-6 bg-white shadow-md rounded-lg">
+                            <i className="ri-star-line text-5xl text-[#108a00]"></i>
+                            <h2 className="text-lg md:text-2xl font-semibold mb-4 text-gray-900 mt-4">
+                                Why Choose Us
+                            </h2>
+                            <ul className="space-y-2 text-gray-700">
+                                <li className="flex items-center">
+                                    <i className="ri-shield-star-line mr-2 text-[#108a00]"></i>
+                                    <span className="text-sm md:text-base font-medium">Reliable and secure platform</span>
+                                </li>
+                                <li className="flex items-center">
+                                    <i className="ri-wallet-3-line mr-2 text-[#108a00]"></i>
+                                    <span className="text-sm md:text-base font-medium">Cost-effective for both seekers and providers</span>
+                                </li>
+                                <li className="flex items-center">
+                                    <i className="ri-global-line mr-2 text-[#108a00]"></i>
+                                    <span className="text-sm md:text-base font-medium">Global reach with local expertise</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </section>
 
+            <section className="py-10 bg-gradient-to-r from-gray-100 via-white to-gray-100">
+                <div className="container mx-auto px-4">
+                    <h1 className="text-3xl font-bold text-center">How It Works</h1>
+                    <p className="text-center mt-4">
+                        A simple and seamless process to connect talent with opportunities.
+                    </p>
+                    <div className="flex flex-col md:flex-row justify-around mt-10">
+                        {/* Job Seekers Section */}
+                        <div className="mb-6 md:mb-0">
+                            <h2 className="text-xl font-semibold text-center">For Job Seekers</h2>
+                            <ul className="mt-4">
+                                {jobSeekerSteps.map((step, index) => (
+                                    <li key={index} className="flex items-center mt-4">
+                                        <span className="w-10 h-10 flex items-center justify-center border text-white rounded-full">
+                                            {step.icon}
+                                        </span>
+                                        <div className="ml-4">
+                                            <h3 className="font-semibold">{step.title}</h3>
+                                            <p>{step.description}</p>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
 
-            <Footer />
+                        {/* Employers Section */}
+                        <div>
+                            <h2 className="text-xl font-semibold text-center">For Employers</h2>
+                            <ul className="mt-4">
+                                {employerSteps.map((step, index) => (
+                                    <li key={index} className="flex items-center mt-4">
+                                        <span className="w-10 h-10 flex items-center justify-center border text-white rounded-full">
+                                            {step.icon}
+                                        </span>
+                                        <div className="ml-4">
+                                            <h3 className="font-semibold">{step.title}</h3>
+                                            <p>{step.description}</p>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Memoized Footer */}
+            <MemoizedFooter />
         </>
     );
-}
+};
 
 export default Home;

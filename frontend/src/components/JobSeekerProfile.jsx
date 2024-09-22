@@ -8,7 +8,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import PageLoader from './PageLoader';
 
 const JobSeekerProfile = () => {
-    const { fetchJobberInfo, userProfileInfo } = useContext(AppContext);
+    const { fetchJobberInfo, userProfileInfo, ItSkillsArray } = useContext(AppContext);
     const navigate = useNavigate();
 
     // Memoized constants
@@ -184,6 +184,7 @@ const JobSeekerProfile = () => {
     const [previewSkills, setPreviewSkills] = useState(profile.skills || []);
     const [newSkill, setNewSkill] = useState('');
     const [isEditingSkills, setIsEditingSkills] = useState(false);
+    const [suggestions, setSuggestions] = useState([]); // State for skill suggestions
 
     // Ensure skills are fetched on component mount
     useEffect(() => {
@@ -192,22 +193,47 @@ const JobSeekerProfile = () => {
             setPreviewSkills(profile.skills);
         }
     }, [profile.skills]);
-    // Add skill
+
+    // Filter skills from itSkills array based on user input
+    const handleSkillInput = (e) => {
+        const value = e.target.value;
+        setNewSkill(value);
+
+        if (value) {
+            const filteredSuggestions = ItSkillsArray.filter(skill =>
+                skill.toLowerCase().includes(value.toLowerCase())
+            );
+            setSuggestions(filteredSuggestions);
+        } else {
+            setSuggestions([]); // Clear suggestions if input is empty
+        }
+    };
+
+    // Add selected skill
     const handleAddSkill = () => {
         if (newSkill === "") return toast.error('Please enter skill');
         if (previewSkills.includes(newSkill)) return toast.error('Skill is already added');
         if (newSkill.trim() && !previewSkills.includes(newSkill)) {
             setPreviewSkills([...previewSkills, newSkill]);
             setNewSkill(''); // Clear input after adding
+            setSuggestions([]); // Clear suggestions after adding
         }
     };
+
+    // Select suggestion
+    const handleSelectSuggestion = (suggestedSkill) => {
+        setNewSkill(suggestedSkill);
+        setSuggestions([]); // Hide suggestions after selecting one
+    };
+
     // Remove skill
     const handleRemoveSkill = (indexToRemove) => {
         const updatedSkills = [...previewSkills];
         updatedSkills.splice(indexToRemove, 1); // Remove skill using index
         setPreviewSkills(updatedSkills);
     };
-    // Save skill into DB
+
+    // Save skills to DB
     const handleSaveSkills = async () => {
         try {
             const response = await axios.put(`${url}/jobber/updateProfile/skills`, {
@@ -221,7 +247,6 @@ const JobSeekerProfile = () => {
             console.error("Error updating skills:", error);
         }
     };
-
 
     // State for editing experience
     const [isExperienceEndDate, setIsExperienceEndDate] = useState(true);
@@ -460,45 +485,65 @@ const JobSeekerProfile = () => {
                 {/* Skills Section */}
                 <div className="mt-6 p-5 bg-white rounded-lg border relative">
                     <h2 className="text-xl font-semibold mb-2">Skills</h2>
-                    {
-                        isEditingSkills ? (
-                            <div>
-                                <div className='flex items-center space-x-3'>
+                    {isEditingSkills ? (
+                        <div>
+                            <div className="flex items-center space-x-3">
+                                <div className='relative'>
                                     <input
                                         type="text"
                                         value={newSkill}
-                                        onChange={(e) => setNewSkill(e.target.value)}
-                                        className='w-full md:w-96 px-3 py-1 border rounded focus:outline-indigo-500'
+                                        onChange={handleSkillInput} // Update handler
+                                        className="w-full md:w-96 px-3 py-1 border rounded focus:outline-indigo-500"
+                                        placeholder="Type skill..."
                                     />
-                                    <button onClick={handleAddSkill} className='bg-gray-500 text-white px-2 py-1 rounded text-sm'>Add</button>
+                                    {/* Render skill suggestions */}
+                                    {suggestions.length > 0 && (
+                                        <div className="absolute z-10 bg-white border border-gray-200 rounded shadow-md w-full md:w-96 max-h-40 overflow-y-auto">
+                                            {suggestions.map((suggestedSkill, index) => (
+                                                <div
+                                                    key={index}
+                                                    onClick={() => handleSelectSuggestion(suggestedSkill)}
+                                                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                                >
+                                                    {suggestedSkill}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="flex flex-wrap gap-2 mt-3">
-                                    {previewSkills.map((skill, index) => (
-                                        <p key={index} className="bg-[#108a00] text-white px-2 py-1 rounded-lg text-sm flex items-center">
-                                            {skill}
-                                            <span className='ml-2 cursor-pointer' onClick={() => handleRemoveSkill(index)}>
-                                                <i className="text-base ri-close-line"></i>
-                                            </span>
-                                        </p>
-                                    ))}
-                                </div>
-                                <button onClick={handleSaveSkills} className="font-medium text-sm mt-3 px-2 py-1 bg-blue-600 text-white rounded">
-                                    Save
-                                </button>
+                                <button onClick={handleAddSkill} className="bg-gray-500 text-white px-2 py-1 rounded text-sm">Add</button>
                             </div>
-                        ) : (
-                            <div className="flex flex-wrap gap-2">
-                                {existingSkills.length > 0 ? (
-                                    existingSkills.map((skill, index) => (
-                                        <p key={index} className="bg-[#108a00] text-white px-2 py-1 rounded-lg text-sm">{skill}</p>
-                                    ))
-                                ) : (
-                                    <p>No skills available</p>
-                                )}
+
+                            <div className="flex flex-wrap gap-2 mt-3">
+                                {previewSkills.map((skill, index) => (
+                                    <p key={index} className="bg-[#108a00] text-white px-2 py-1 rounded-lg text-sm flex items-center">
+                                        {skill}
+                                        <span className="ml-2 cursor-pointer" onClick={() => handleRemoveSkill(index)}>
+                                            <i className="text-base ri-close-line"></i>
+                                        </span>
+                                    </p>
+                                ))}
                             </div>
-                        )
-                    }
-                    <div onClick={() => setIsEditingSkills(!isEditingSkills)} className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
+                            <button onClick={handleSaveSkills} className="font-medium text-sm mt-3 px-2 py-1 bg-blue-600 text-white rounded">
+                                Save
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="flex flex-wrap gap-2">
+                            {existingSkills.length > 0 ? (
+                                existingSkills.map((skill, index) => (
+                                    <p key={index} className="bg-[#108a00] text-white px-2 py-1 rounded-lg text-sm">{skill}</p>
+                                ))
+                            ) : (
+                                <p>No skills available</p>
+                            )}
+                        </div>
+                    )}
+
+                    <div
+                        onClick={() => setIsEditingSkills(!isEditingSkills)}
+                        className="absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer"
+                    >
                         <i className="ri-pencil-fill text-2xl leading-10"></i>
                     </div>
                 </div>
