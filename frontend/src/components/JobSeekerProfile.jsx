@@ -1,28 +1,28 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { AppContext } from './context/AppContext';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import PageLoader from './PageLoader';
 
 const JobSeekerProfile = () => {
     const { fetchJobberInfo, userProfileInfo } = useContext(AppContext);
     const navigate = useNavigate();
 
-    // get 100 years
+    // Memoized constants
     const currentYear = new Date().getFullYear();
-    const startYear = currentYear - 100;
-    const yearsArray = [];
-    for (let year = currentYear; year >= startYear; year--) {
-        yearsArray.push(year);
-    }
-    const monthsArray = [
+    const yearsArray = useMemo(() => {
+        return Array.from({ length: 101 }, (_, i) => currentYear - i);
+    }, []);
+
+    const monthsArray = useMemo(() => [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
-    ];
+    ], []);
 
-    const itCourses = [
+    const itCourses = useMemo(() => [
         'BCA - Bachelor of Computer Applications',
         'BTech - Bachelor of Technology',
         'MCA - Master of Computer Applications',
@@ -58,7 +58,7 @@ const JobSeekerProfile = () => {
         'MSc IT Management - Master of Science in IT Management',
         'BSc Web Development - Bachelor of Science in Web Development',
         'MSc Web Development - Master of Science in Web Development'
-    ];
+    ], []);
 
     const url = "http://localhost:9171"; // API URL
     const [userId, setUserId] = useState(null);
@@ -94,7 +94,7 @@ const JobSeekerProfile = () => {
         name = "Name not available",
         email = "Email not available",
         profileImage = "",
-        profile = { headline: "", bio: "", skills: [], experience: [], education: [] },
+        profile = { headline: "", bio: "", skills: [], experience: [], education: [], resumeUrl: "" },
     } = userProfileInfo || {};
 
     // State for edit profile
@@ -308,12 +308,40 @@ const JobSeekerProfile = () => {
             console.error("Error updating education:", error);
         }
     }
-
     useEffect(() => {
         setExistingEducation(profile.education);
-    }, [profile.education])
+    }, [profile.education]);
 
-    if (loading) return <p>Loading...</p>;
+    // Update resume state
+    const [isEditResume, setIsEditResume] = useState(false);
+    const [resumeBtnLoading, setResumeBtnLoading] = useState(false);
+    const [resume, setResume] = useState(profile.resumeUrl || "");
+
+    const handleResumeSave = async (e) => {
+        e.preventDefault();
+        setResumeBtnLoading(true);
+
+        const data = new FormData();
+        data.append('userId', userId);
+        data.append('jobberResume', resume);
+
+        try {
+            const response = await axios.put(`${url}/jobber/updateProfile/resume`, data);
+            toast.success(response.data.msg);
+            setIsEditResume(false);
+            fetchJobberInfo(userId);
+        } catch (err) {
+            console.error(err.message);
+        } finally {
+            setResumeBtnLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        setResume(profile.resumeUrl);
+    }, [profile.resumeUrl]);
+
+    if (loading) return <PageLoader />;
 
     return (
         <>
@@ -648,8 +676,50 @@ const JobSeekerProfile = () => {
                 {/* Update Resume */}
                 <div className="mt-6 p-5 bg-white rounded-lg border relative">
                     <h2 className="text-xl font-semibold mb-2">Resume</h2>
-                    <p><a href="" target='_blank' className='text-base text-indigo-600 hover:underline'>View</a> resume</p>
-                    <div className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
+                    {
+                        isEditResume
+                            ?
+                            <form onSubmit={handleResumeSave} autoComplete='off'>
+                                <div className='mb-5'>
+                                    <div className="relative w-full">
+                                        <input
+                                            type="file"
+                                            name="jobberResume"
+                                            onChange={(e) => setResume(e.target.files?.[0])}
+                                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 focus:outline-none"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <button type='submit' className='flex justify-center font-medium text-sm w-20 py-2 bg-indigo-600 text-white rounded disabled:opacity-70' disabled={resumeBtnLoading}>
+                                    {
+                                        resumeBtnLoading
+                                            ?
+                                            <svg className="animate-spin h-5 w-5 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle
+                                                    className="opacity-25"
+                                                    cx="12"
+                                                    cy="12"
+                                                    r="10"
+                                                    stroke="currentColor"
+                                                    strokeWidth="4"
+                                                ></circle>
+                                                <path
+                                                    className="opacity-75"
+                                                    fill="currentColor"
+                                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                                                ></path>
+                                            </svg>
+                                            :
+                                            "Update"
+                                    }
+                                </button>
+                            </form>
+                            :
+                            <p><a href={profile.resumeUrl} target='_blank' className='text-base text-indigo-600 hover:underline'>View</a> resume</p>
+
+                    }
+                    <div onClick={() => setIsEditResume(!isEditResume)} className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
                         <i className="ri-pencil-fill text-2xl leading-10"></i>
                     </div>
                 </div>
