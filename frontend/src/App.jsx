@@ -13,6 +13,7 @@ import FindJob from './components/FindJob';
 import JobSeekerProfile from './components/JobSeekerProfile';
 import EmployerDashboard from './components/employer-dashboard/EmployerDashboard';
 import EmployeJobs from './components/employer-dashboard/EmployeJobs';
+import EmployeProfile from './components/employer-dashboard/EmployeProfile';
 
 const App = () => {
     const profileData = {
@@ -56,6 +57,7 @@ const App = () => {
                 {/* Employer Routes */}
                 <Route path="/employe-dashboard" element={<EmployerDashboard />} />
                 <Route path="/employe-jobs" element={<EmployeJobs />} />
+                <Route path="/employe-profile" element={<EmployeProfile />} />
             </Routes>
         </BrowserRouter>
     )

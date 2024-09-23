@@ -18,7 +18,7 @@ const NavbarEmp = () => {
                             <li className="font-medium menu-link"><NavLink to='/employe-dashboard' className="hover:text-[#108a00]" onClick={toggleMenu}>Home</NavLink></li>
                             <li className="font-medium menu-link"><NavLink to='/employe-jobs' className="hover:text-[#108a00]" onClick={toggleMenu}>Jobs</NavLink></li>
                             <li className="font-medium menu-link"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>Applicants</a></li>
-                            <li className="font-medium menu-link"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>Profile</a></li>
+                            <li className="font-medium menu-link"><NavLink to="/employe-profile" className="hover:text-[#108a00]" onClick={toggleMenu}>Profile</NavLink></li>
                             <li className="font-medium menu-link"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>Logout</a></li>
                         </ul>
                     </div>

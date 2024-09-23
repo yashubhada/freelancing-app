@@ -1,6 +1,7 @@
 import express from 'express';
 import {
-    employerSignUp
+    employerSignUp,
+    fetchSingleEmploye
 } from '../controllers/Employer.controller.js';
 import { verifyToken } from '../middlewares/user.middelware.js';
 
@@ -13,5 +14,6 @@ router.get('/userTokenVerify', verifyToken, (req, res) => {
         user: req.user,  // User info extracted from the token
     });
 });
+router.post("/fetchSingleEmploye/:id", fetchSingleEmploye);
 
 export default router;

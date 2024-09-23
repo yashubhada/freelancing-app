@@ -8,7 +8,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import PageLoader from './PageLoader';
 
 const JobSeekerProfile = () => {
-    const { fetchJobberInfo, userProfileInfo, ItSkillsArray } = useContext(AppContext);
+    const { fetchJobberInfo, JobberProfileInfo, ItSkillsArray } = useContext(AppContext);
     const navigate = useNavigate();
 
     // Memoized constants
@@ -64,7 +64,7 @@ const JobSeekerProfile = () => {
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const isEmployeSignin = async () => {
+    const isJobberSignin = async () => {
         try {
             const response = await axios.get(`${url}/jobber/userTokenVerify`, {
                 withCredentials: true,
@@ -86,7 +86,7 @@ const JobSeekerProfile = () => {
     };
 
     useEffect(() => {
-        isEmployeSignin();
+        isJobberSignin();
     }, []);
 
     // Default values in case userProfileInfo is still empty
@@ -95,7 +95,7 @@ const JobSeekerProfile = () => {
         email = "Email not available",
         profileImage = "",
         profile = { headline: "", bio: "", skills: [], experience: [], education: [], resumeUrl: "" },
-    } = userProfileInfo || {};
+    } = JobberProfileInfo || {};
 
     // State for edit profile
     const [isEditProfile, setIsEditProfile] = useState(false);

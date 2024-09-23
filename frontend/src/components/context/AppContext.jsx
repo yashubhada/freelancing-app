@@ -7,12 +7,22 @@ export const AppContextProvider = (props) => {
 
     const url = "http://localhost:9171"; // API URL
 
-    const [userProfileInfo, setUserProfileInfo] = useState({});
+    const [JobberProfileInfo, setJobberProfileInfo] = useState({});
+    const [EmployerProfileInfo, setEmployerProfileInfo] = useState({});
 
     const fetchJobberInfo = async (id) => {
         try {
             const response = await axios.post(`${url}/jobber/findSingleJobber/${id}`);
-            setUserProfileInfo(response.data.jobber);
+            setJobberProfileInfo(response.data.jobber);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const fetchEmployerInfo = async (id) => {
+        try {
+            const response = await axios.post(`${url}/employer/fetchSingleEmploye/${id}`);
+            setEmployerProfileInfo(response.data.jobber);
         } catch (err) {
             console.log(err);
         }
@@ -111,8 +121,10 @@ export const AppContextProvider = (props) => {
 
     return (
         <AppContext.Provider value={{
-            userProfileInfo,
+            JobberProfileInfo,
+            EmployerProfileInfo,
             fetchJobberInfo,
+            fetchEmployerInfo,
             ItSkillsArray
         }}>
             {props.children}

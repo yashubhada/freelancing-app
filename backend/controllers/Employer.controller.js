@@ -39,3 +39,22 @@ export const employerSignUp = async (req, res) => {
         });
     }
 }
+
+export const fetchSingleEmploye = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const emp = await Employer.findById(id);
+        if (!emp) {
+            return res.status(404).json({
+                success: false,
+                msg: "Employer not found"
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            emp
+        });
+    } catch (err) {
+        console.log(err.message);
+    }
+}
