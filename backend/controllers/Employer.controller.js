@@ -97,3 +97,35 @@ export const updateEmpProfile = async (req, res) => {
         return res.status(500).json({ success: false, msg: "Internal server error" });
     }
 }
+
+export const updateEmpCompanyInfo = async (req, res) => {
+    const { userId, companyName, companyLogoImg, bio, industry, website, location } = req.body;
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, msg: 'No file uploaded' });
+        }
+        cloudinary.uploader.upload(req.file.path,
+            { folder: 'proflex/EmployerProfileImages' },
+            async (err, result) => {
+                if (err) {
+                    return res.status(500).json({ success: false, msg: err.message });
+                }
+                await Employer.findByIdAndUpdate(
+                    userId,
+                    {
+                        'profile.companyName': companyName,
+                        'profile.companyLogoImg': result.secure_url,
+                        'profile.bio': bio,
+                        'profile.industry': industry,
+                        'profile.website': website,
+                        'profile.location': location,
+                    },
+                    { new: true }
+                );
+                res.status(200).json({ success: true, msg: 'Company information updated successfully' });
+            }
+        );
+    } catch (err) {
+        return res.status(500).json({ success: false, msg: "Internal server error" });
+    }
+}

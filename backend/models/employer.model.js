@@ -28,6 +28,10 @@ const employerSchema = new mongoose.Schema({
             type: String,
             default: null
         },
+        companyLogoImg: {
+            type: String,
+            default: null
+        },
         bio: {
             type: String,
             default: null

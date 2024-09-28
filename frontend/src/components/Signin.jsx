@@ -11,7 +11,9 @@ const Signin = () => {
 
     const navigate = useNavigate();
 
-    const [userDetails, setUserDetails] = useState({ name: "", password: "" })
+    const [isShowPassword, setIsShowPassword] = useState(true);
+
+    const [userDetails, setUserDetails] = useState({ name: "", password: "" });
     const [btnLoading, setBtnLoading] = useState(false);
     const url = "http://localhost:9171"; // API URL
 
@@ -21,7 +23,7 @@ const Signin = () => {
 
         try {
             const response = await axios.post(`${url}/userSignin/signin`,
-                userDetails, // Form data being sent
+                userDetails,
                 {
                     withCredentials: true, // Include cookies with the request
                     headers: {
@@ -67,13 +69,21 @@ const Signin = () => {
                     <div className='border rounded-lg p-5 w-[400px]'>
                         <h1 className="text-center text-xl md:text-2xl font-semibold mb-5">Log in to <span className='text-[#14a800] select-none'>PROFLEX</span></h1>
                         <form onSubmit={handleSigninSubmit} autoComplete='off'>
-                            <div className='flex items-center border-2 rounded px-2 py-1 mb-5'>
+                            <div className='flex items-center border-2 rounded px-2 py-1 mb-5 focus-within:border-gray-500'>
                                 <p className='pr-2'><i className="ri-mail-line"></i></p>
                                 <input type="email" name='email' onChange={handleFormChange} className='outline-none w-full' placeholder='Email' required autoFocus />
                             </div>
-                            <div className='flex items-center border-2 rounded px-2 py-1 mb-5'>
+                            <div className='flex items-center border-2 rounded px-2 py-1 mb-5 focus-within:border-gray-500 relative'>
                                 <p className='pr-2'><i className="ri-lock-line"></i></p>
-                                <input type="password" name='password' onChange={handleFormChange} className='outline-none w-full' placeholder='password' required />
+                                <input type={isShowPassword ? 'password' : 'text'} name='password' onChange={handleFormChange} className='outline-none w-full' placeholder='password' required />
+                                <p className='absolute right-2 text-xl cursor-pointer bg-white' onClick={() => setIsShowPassword(!isShowPassword)}>
+                                    {
+                                        isShowPassword ?
+                                            <i className="ri-eye-line"></i>
+                                            :
+                                            <i className="ri-eye-off-line"></i>
+                                    }
+                                </p>
                             </div>
                             <button type='submit' className={`${btnLoading ? 'opacity-70 text-base w-full bg-[#108a00] py-2 rounded-lg font-medium text-white cursor-not-allowed' : 'hover:bg-[#14a800] text-base w-full bg-[#108a00] py-2 rounded-lg font-medium text-white'}`}>
                                 {btnLoading ? (

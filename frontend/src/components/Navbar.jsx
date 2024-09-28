@@ -19,7 +19,7 @@ const Navbar = () => {
             setIsLogin(false);
             navigate("/signin");
         }
-    }
+    };
 
     useEffect(() => {
         if (token) setIsLogin(true);
@@ -37,6 +37,7 @@ const Navbar = () => {
                                 <li className="font-medium menu-link"><NavLink to='/find-talent' className="hover:text-[#108a00]" onClick={toggleMenu}>Find talent</NavLink></li>
                                 <li className="font-medium menu-link"><NavLink to='/find-job' className="hover:text-[#108a00]" onClick={toggleMenu}>Find Jobs</NavLink></li>
                                 <li className="font-medium menu-link"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>About</a></li>
+                                <li className="font-medium menu-link"><NavLink to='/profile' className="hover:text-[#108a00]" onClick={toggleMenu}>Profile</NavLink></li>
                                 {
                                     isLogin
                                         ?

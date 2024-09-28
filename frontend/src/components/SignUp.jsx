@@ -115,7 +115,7 @@ const SignupForm = () => {
                                     className='absolute right-3 top-[37px] cursor-pointer text-gray-500'
                                     onClick={togglePasswordVisibility}
                                 >
-                                    {showPassword ? <i className="ri-eye-line text-[24px]"></i> : <i className="ri-eye-off-line text-[24px]"></i>}
+                                    {showPassword ?  <i className="ri-eye-off-line text-[24px]"></i> : <i className="ri-eye-line text-[24px]"></i>}
                                 </span>
                             </div>
                             {/* Submit Button */}

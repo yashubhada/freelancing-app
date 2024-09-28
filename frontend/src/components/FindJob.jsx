@@ -166,7 +166,7 @@ const FindJob = () => {
             <section className='px-3 md:px-0'>
                 <div className='container mx-auto'>
                     <div className='flex justify-center'>
-                        <div className='flex items-center w-full md:w-[500px] border-2 border-gray-300 px-3 py-2 rounded-md relative'>
+                        <div className='flex items-center w-full md:w-[500px] border-2 border-gray-300 px-3 py-2 rounded-md relative focus-within:border-gray-500'>
                             <p className='mr-2 text-lg text-[#14a800]'>
                                 <i className='ri-search-line'></i>
                             </p>

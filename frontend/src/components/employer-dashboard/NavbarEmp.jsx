@@ -1,11 +1,23 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import React from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const NavbarEmp = () => {
 
     const toggleMenu = () => {
         document.querySelector(".menu-items").classList.toggle("hidden");
     }
+
+    const navigate = useNavigate();
+
+    const token = Cookies.get('token', { path: '/' });
+
+    const handleLogout = () => {
+        if (token) {
+            Cookies.remove('token', { path: '/' });
+            navigate("/signin");
+        }
+    };
 
     return (
         <>
@@ -19,7 +31,7 @@ const NavbarEmp = () => {
                             <li className="font-medium menu-link"><NavLink to='/employe-jobs' className="hover:text-[#108a00]" onClick={toggleMenu}>Jobs</NavLink></li>
                             <li className="font-medium menu-link"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>Applicants</a></li>
                             <li className="font-medium menu-link"><NavLink to="/employe-profile" className="hover:text-[#108a00]" onClick={toggleMenu}>Profile</NavLink></li>
-                            <li className="font-medium menu-link"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>Logout</a></li>
+                            <li className="font-medium menu-link cursor-pointer hover:text-[#108a00]" onClick={handleLogout}>Logout</li>
                         </ul>
                     </div>
                 </div>

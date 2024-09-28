@@ -2,6 +2,7 @@ import express from 'express';
 import {
     employerSignUp,
     fetchSingleEmploye,
+    updateEmpCompanyInfo,
     updateEmpProfile
 } from '../controllers/Employer.controller.js';
 import { verifyToken } from '../middlewares/user.middelware.js';
@@ -23,5 +24,6 @@ router.get('/userTokenVerify', verifyToken, (req, res) => {
 });
 router.post("/fetchSingleEmploye/:id", fetchSingleEmploye);
 router.put("/updateEmpProfile/profile", upload.single("profileImage"), updateEmpProfile);
+router.put("/updateEmpProfile/companyInfo", upload.single("companyLogoImg"), updateEmpCompanyInfo);
 
 export default router;
