@@ -1,5 +1,16 @@
 import Employer from "../models/employer.model.js";
 import Jobber from "../models/Jobber.model.js";
+import { v2 as cloudinary } from 'cloudinary';
+import dotenv from 'dotenv';
+import path from 'path';
+
+dotenv.config();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export const employerSignUp = async (req, res) => {
     const { name, email, password } = req.body;
@@ -56,5 +67,33 @@ export const fetchSingleEmploye = async (req, res) => {
         });
     } catch (err) {
         console.log(err.message);
+    }
+}
+
+export const updateEmpProfile = async (req, res) => {
+    const { userId, name } = req.body;
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, msg: 'No file uploaded' });
+        }
+        cloudinary.uploader.upload(req.file.path,
+            { folder: 'proflex/EmployerProfileImages' },
+            async (err, result) => {
+                if (err) {
+                    return res.status(500).json({ success: false, msg: err.message });
+                }
+                await Employer.findByIdAndUpdate(
+                    userId,
+                    {
+                        name,
+                        profileImage: result.secure_url,
+                    },
+                    { new: true }
+                );
+                res.status(200).json({ success: true, msg: 'Profile updated successfully' });
+            }
+        );
+    } catch (err) {
+        return res.status(500).json({ success: false, msg: "Internal server error" });
     }
 }

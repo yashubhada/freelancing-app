@@ -10,14 +10,13 @@ import {
     updateResume,
 } from '../controllers/Jobber.controller.js';
 import { verifyToken } from '../middlewares/user.middelware.js';
-
 import multer from 'multer';
 const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}-${file.originalname}`);
     }
 });
-const upload = multer({ storage: storage })
+const upload = multer({ storage: storage });
 
 const router = express.Router();
 

@@ -22,7 +22,7 @@ export const AppContextProvider = (props) => {
     const fetchEmployerInfo = async (id) => {
         try {
             const response = await axios.post(`${url}/employer/fetchSingleEmploye/${id}`);
-            setEmployerProfileInfo(response.data.jobber);
+            setEmployerProfileInfo(response.data.emp);
         } catch (err) {
             console.log(err);
         }
