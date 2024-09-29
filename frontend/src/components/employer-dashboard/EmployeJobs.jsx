@@ -1,10 +1,36 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NavbarEmp from './NavbarEmp'
 import JobPostForm from './JobPostForm';
+import axios from 'axios';
 
 const EmployeJobs = () => {
 
     document.title = "Employer dashboard | Jobs";
+
+    const url = "http://localhost:9171"; // API URL
+
+    const isEmployeSignin = async () => {
+        try {
+            const response = await axios.get(`${url}/employer/userTokenVerify`, {
+                withCredentials: true,
+            });
+            // console.log('Dashboard Data:', response.data);
+            if (response.data.user.role !== "Employer") {
+                navigate('/signin');
+            }
+        } catch (error) {
+            if (error.response?.status === 401 || error.response?.status === 403) {
+                // Redirect to login if not authenticated
+                navigate('/signin');
+            } else {
+                console.error('Error fetching dashboard:', error.response?.data || error.message);
+            }
+        }
+    };
+
+    useEffect(() => {
+        isEmployeSignin();
+    }, []);
 
     const jobData = [
         { title: "Frontend Developer", status: "Active", applicants: 5, date: "2024-09-01" },

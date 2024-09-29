@@ -32,10 +32,20 @@ const JobSchema = new mongoose.Schema({
             required: true
         },
     },
-    employerId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'employer', // Reference to Employer collection
-        required: true
+    postedBy: {
+        employerId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'employer', // Reference to Employer collection
+            required: true
+        },
+        companyLogo: {
+            type: String,
+            required: true
+        },
+        companyName: {
+            type: String,
+            required: true
+        },
     },
     datePosted: {
         type: Date,

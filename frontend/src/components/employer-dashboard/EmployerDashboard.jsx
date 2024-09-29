@@ -15,7 +15,7 @@ const EmployerDashboard = () => {
             const response = await axios.get(`${url}/employer/userTokenVerify`, {
                 withCredentials: true,
             });
-            console.log('Dashboard Data:', response.data);
+            // console.log('Dashboard Data:', response.data);
             if(response.data.user.role !== "Employer") {
                 navigate('/signin');
             }

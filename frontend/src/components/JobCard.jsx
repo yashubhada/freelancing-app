@@ -1,12 +1,12 @@
 import React from 'react'
 import { formatDistanceToNow } from 'date-fns';
 
-const JobCard = ({ job, onClick }) => {
+const JobCard = ({ job, isSelected, onClick }) => {
     // Convert job.datePosted to a readable "time ago" format
     const formattedDate = formatDistanceToNow(new Date(job.datePosted), { addSuffix: true });
 
     return (
-        <div className='flex items-start p-4 border border-gray-200 rounded-lg bg-white hover:bg-gray-50 transition ease-in-out duration-150 cursor-pointer' onClick={onClick}>
+        <div className={`flex items-start p-4 border border-gray-200 rounded-lg ${isSelected ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-50 transition ease-in-out duration-150 cursor-pointer`} onClick={onClick}>
             <div className='w-12 mr-4'>
                 <img src={job.postedBy.companyLogo} alt="Company Logo" className='w-full h-full object-contain' />
             </div>
