@@ -195,9 +195,9 @@ const FindJob = () => {
                     <h1 className='font-semibold text-xl md:text-3xl text-gray-800 mt-14 mb-10 text-center md:text-left'>
                         Your profile matches this job
                     </h1>
-                    <div className='grid md:grid-cols-2 gap-5'>
+                    <div className='grid md:grid-cols-2 gap-2'>
                         {/* Left column for job cards */}
-                        <div className='space-y-5 overflow-y-auto max-h-[calc(100vh-4rem)] custom-scrollbar'>
+                        <div className='space-y-5 overflow-y-auto max-h-[calc(100vh-4rem)]'>
                             {jobPosts.map((job) => (
                                 <JobCard key={job._id} job={job} onClick={() => handleJobClick(job)} />
                             ))}

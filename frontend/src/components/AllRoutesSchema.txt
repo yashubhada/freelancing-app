@@ -66,11 +66,7 @@ Job post
   "location": "Remote",
   "employmentType": "Full-Time",
   "salaryRange": "$70,000 - $90,000",
-  "postedBy": {
-    "employerId": "6489b8706f28d2c4b8b9e456",
-    "companyLogo": "img.jpg",
-    "companyName": "ACME Corp"
-  },
+  "employerId": "6489b8706f28d2c4b8b9e456",
   "datePosted": "2024-09-01",
   "status": "Active",
   "applicants": [
