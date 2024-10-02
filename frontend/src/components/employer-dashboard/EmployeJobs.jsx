@@ -6,6 +6,7 @@ import axios from 'axios';
 const EmployeJobs = () => {
 
     document.title = "Employer dashboard | Jobs";
+    const [jobData, setJobData] = useState([]);
 
     const url = "http://localhost:9171"; // API URL
 
@@ -15,6 +16,10 @@ const EmployeJobs = () => {
                 withCredentials: true,
             });
             // console.log('Dashboard Data:', response.data);
+            if (response.data.user.userId) {
+                const jobs = await axios.post(`${url}/jobPost/fetchEmpJob/${response.data.user.userId}`);
+                setJobData(jobs.data);
+            }
             if (response.data.user.role !== "Employer") {
                 navigate('/signin');
             }
@@ -31,23 +36,6 @@ const EmployeJobs = () => {
     useEffect(() => {
         isEmployeSignin();
     }, []);
-
-    const jobData = [
-        { title: "Frontend Developer", status: "Active", applicants: 5, date: "2024-09-01" },
-        { title: "Backend Developer", status: "Inactive", applicants: 2, date: "2024-08-25" },
-        { title: "Full Stack Developer", status: "Active", applicants: 3, date: "2024-08-20" },
-        { title: "DevOps Engineer", status: "Inactive", applicants: 1, date: "2024-08-18" },
-        { title: "UI/UX Designer", status: "Active", applicants: 4, date: "2024-09-01" },
-        { title: "Data Scientist", status: "Active", applicants: 6, date: "2024-08-29" },
-        { title: "Mobile Developer", status: "Inactive", applicants: 2, date: "2024-08-15" },
-        { title: "Frontend Developer", status: "Active", applicants: 5, date: "2024-09-01" },
-        { title: "Backend Developer", status: "Inactive", applicants: 2, date: "2024-08-25" },
-        { title: "Full Stack Developer", status: "Active", applicants: 3, date: "2024-08-20" },
-        { title: "DevOps Engineer", status: "Inactive", applicants: 1, date: "2024-08-18" },
-        { title: "UI/UX Designer", status: "Active", applicants: 4, date: "2024-09-01" },
-        { title: "Data Scientist", status: "Active", applicants: 6, date: "2024-08-29" },
-        { title: "Mobile Developer", status: "Inactive", applicants: 2, date: "2024-08-15" },
-    ];
 
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 5;
@@ -121,10 +109,10 @@ const EmployeJobs = () => {
                                             {job.status}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
-                                            {job.applicants} Applicants
+                                            {job.applicants.length} Applicants
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
-                                            {job.date}
+                                            {job.datePosted.split('T')[0]}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium border border-gray-200">
                                             <button className="text-blue-600 hover:text-blue-900">Edit</button> |
@@ -176,7 +164,7 @@ const EmployeJobs = () => {
                 <section className="px-3 md:px-0 fixed top-0 w-full bg-[#afafaf44] z-20 h-screen flex items-center justify-center">
                     <div className="container relative max-h-full">
                         <div className="relative w-full max-w-xl mx-auto">
-                            <JobPostForm onClose={closeModal} />
+                            <JobPostForm onClose={closeModal} isEmployeSignin={isEmployeSignin} />
 
                             {/* Close Icon */}
                             <div

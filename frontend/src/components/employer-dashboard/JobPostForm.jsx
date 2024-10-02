@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import axios from "axios";
 
-const JobPostForm = ({ onClose }) => {
+const JobPostForm = ({ onClose, isEmployeSignin }) => {
 
     const [btnLoading, setBtnLoading] = useState(false);
     const [employerId, setEmployerId] = useState();
@@ -148,7 +148,8 @@ const JobPostForm = ({ onClose }) => {
                 employerId,
                 status: state.status,
             });
-            onClose();
+            onClose(); // props function
+            isEmployeSignin(); // props function
         } catch (err) {
             console.error(err.message);
         } finally {

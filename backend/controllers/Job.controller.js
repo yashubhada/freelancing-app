@@ -72,3 +72,19 @@ export const fetchActiveJobs = async (req, res) => {
         return res.status(500).json({ msg: 'Internal server error' });
     }
 }
+
+
+// fetch all job in particular employe
+export const fetchEmpAllJob = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const job = await Job.find({
+            'postedBy.employerId': id,
+        });
+        if (!job) return res.status(400).json("Jobs not found");
+        return res.status(200).json(job);
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ msg: 'Internal server error' });
+    }
+}
