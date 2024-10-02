@@ -88,3 +88,34 @@ export const fetchEmpAllJob = async (req, res) => {
         return res.status(500).json({ msg: 'Internal server error' });
     }
 }
+
+// Delete particular job
+export const deleteJobPost = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const job = await Job.findByIdAndDelete(id);
+        if (!job) return res.status(400).json({ msg: 'Jobs not found' });
+        return res.status(200).json({ msg: 'Job deleted successfully' });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ msg: 'Internal server error' });
+    }
+}
+
+// change job status
+export const changeJobPostStatus = async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+    try {
+        const job = await Job.findByIdAndUpdate(
+            id,
+            { status },
+            { new: true }
+        );
+        if (!job) return res.status(400).json({ msg: 'Jobs not found' });
+        return res.status(200).json({ msg: 'Status changed successfully' });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ msg: 'Internal server error' });
+    }
+}

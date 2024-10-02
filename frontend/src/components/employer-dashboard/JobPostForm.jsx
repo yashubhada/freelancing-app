@@ -349,7 +349,7 @@ const JobPostForm = ({ onClose, isEmployeSignin }) => {
                             className="appearance-none w-full px-3 py-2 border border-gray-300 rounded focus:outline-indigo-500"
                         >
                             <option value="Active">Active</option>
-                            <option value="Closed">Closed</option>
+                            <option value="Deactivate">Deactivate</option>
                         </select>
                         <span className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                             <i className="ri-arrow-down-s-line text-lg text-gray-400"></i>

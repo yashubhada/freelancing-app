@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react'
 import NavbarEmp from './NavbarEmp'
 import JobPostForm from './JobPostForm';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const EmployeJobs = () => {
 
     document.title = "Employer dashboard | Jobs";
     const [jobData, setJobData] = useState([]);
+
+    const navigate = useNavigate();
 
     const url = "http://localhost:9171"; // API URL
 
@@ -63,8 +67,35 @@ const EmployeJobs = () => {
     const closeModal = () => {
         setIsModalOpen(false);
     }
+
+    const deleteJobPost = async (id) => {
+        try {
+            const response = await axios.post(`${url}/jobPost/deleteJobPost/${id}`);
+            toast.success(response.data.msg);
+            isEmployeSignin();
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    const changeJobPostStatus = async (id, jobStatus) => {
+        let newStatus = "Active";
+        if (jobStatus === "Active") {
+            newStatus = "Deactivate";
+        }
+        try {
+            const response = await axios.put(`${url}/jobPost/changeJobPostStatus/${id}`, {
+                status: newStatus,
+            });
+            toast.success(response.data.msg);
+            isEmployeSignin();
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
     return (
         <>
+            <Toaster />
             <NavbarEmp />
 
             <section className="px-3 md:px-0 mt-10">
@@ -114,10 +145,17 @@ const EmployeJobs = () => {
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {job.datePosted.split('T')[0]}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium border border-gray-200">
-                                            <button className="text-blue-600 hover:text-blue-900">Edit</button> |
-                                            <button className="text-yellow-500 hover:text-yellow-900">View</button> |
-                                            <button className="text-red-600 hover:text-red-900">Deactivate</button>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium border text-white border-gray-200 space-x-2">
+                                            <button className="bg-yellow-500 px-2 py-1 rounded hover:bg-yellow-600">View</button>
+                                            <button
+                                                className="bg-blue-600 px-2 py-1 rounded hover:bg-blue-700"
+                                                onClick={() => changeJobPostStatus(job._id, job.status)}
+                                            >
+                                                {
+                                                    job.status === "Active" ? "Deactivate" : "Active"
+                                                }
+                                            </button>
+                                            <button className="bg-red-600 px-2 py-1 rounded hover:bg-red-700" onClick={() => deleteJobPost(job._id)}>Delete</button>
                                         </td>
                                     </tr>
                                 ))}
@@ -126,33 +164,40 @@ const EmployeJobs = () => {
                     </div>
 
                     {/* Pagination Controls */}
-                    <div className="flex justify-center mt-5">
-                        <div className="isolate inline-flex -space-x-px rounded-md shadow-sm">
-                            <button
-                                onClick={() => handlePageChange(currentPage - 1)}
-                                disabled={currentPage === 1}
-                                className={`relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-500 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${currentPage === 1 && "opacity-50 cursor-not-allowed"}`}
-                            >
-                                <i className="ri-arrow-left-s-line"></i>
-                            </button>
-                            {Array.from({ length: totalPages }, (_, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => handlePageChange(i + 1)}
-                                    className={`px-4 py-2 mx-1 ${currentPage === i + 1 ? "bg-indigo-600 px-4 py-1 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" : "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"}`}
-                                >
-                                    {i + 1}
-                                </button>
-                            ))}
-                            <button
-                                onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === totalPages}
-                                className={`relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-500 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${currentPage === totalPages && "opacity-50 cursor-not-allowed"}`}
-                            >
-                                <i className="ri-arrow-right-s-line"></i>
-                            </button>
-                        </div>
-                    </div>
+                    {
+                        totalPages !== 0
+                            ?
+                            <div className="flex justify-center mt-5">
+                                <div className="isolate inline-flex -space-x-px rounded-md shadow-sm">
+                                    <button
+                                        onClick={() => handlePageChange(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                        className={`relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-500 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${currentPage === 1 && "opacity-50 cursor-not-allowed"}`}
+                                    >
+                                        <i className="ri-arrow-left-s-line"></i>
+                                    </button>
+                                    {Array.from({ length: totalPages }, (_, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => handlePageChange(i + 1)}
+                                            className={`px-4 py-2 mx-1 ${currentPage === i + 1 ? "bg-indigo-600 px-4 py-1 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" : "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"}`}
+                                        >
+                                            {i + 1}
+                                        </button>
+                                    ))}
+                                    <button
+                                        onClick={() => handlePageChange(currentPage + 1)}
+                                        disabled={currentPage === totalPages}
+                                        className={`relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-500 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${currentPage === totalPages && "opacity-50 cursor-not-allowed"}`}
+                                    >
+                                        <i className="ri-arrow-right-s-line"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            :
+                            <p className='text-sm text-center font-medium mt-5 text-red-500'>No jobs</p>
+                    }
+
                 </div>
             </section>
 
