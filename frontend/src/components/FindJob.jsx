@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import JobCard from './JobCard';
 import SingleJobCard from './SingleJobCard';
+import Footer from './Footer';
 import { AppContext } from './context/AppContext';
 import axios from 'axios';
 
@@ -115,6 +116,8 @@ const FindJob = () => {
                     </div>
                 </div>
             </section>
+
+            <Footer />
 
         </>
     )
