@@ -1,8 +1,8 @@
-import React from 'react'
 import { formatDistanceToNow } from 'date-fns';
+import React from 'react'
 
-const SingleJobCard = ({ job }) => {
-    // Convert job.datePosted to a readable "time ago" format
+const ViewSingleJobModal = ({ job }) => {
+
     const formattedDate = formatDistanceToNow(new Date(job.datePosted), { addSuffix: true });
 
     return (
@@ -23,21 +23,18 @@ const SingleJobCard = ({ job }) => {
                 <span className='text-lg mr-2'><i className="ri-briefcase-4-fill"></i></span>Employment time : {job.employmentType} · Entry level
             </p>
             <p className='font-medium text-sm text-gray-600 mt-1'>
-                <span className='text-lg mr-2'><i className="ri-list-check-3"></i></span>Skills: {job.requirements.join(", ")}
+                <span className='text-lg mr-2'><i className="ri-list-check-3"></i></span>Skills : {job.requirements.join(", ")}
             </p>
             <p className='font-medium text-sm text-gray-600 mt-1'>
                 <span className='text-lg mr-2'><i className="ri-money-rupee-circle-fill"></i></span>
-                Salary Range: ₹{job.salaryRange.min.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace(/(\d+),(\d{2})$/, '$1,$2')} - ₹{job.salaryRange.max.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace(/(\d+),(\d{2})$/, '$1,$2')}
+                Salary Range : ₹{job.salaryRange.min.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace(/(\d+),(\d{2})$/, '$1,$2')} - ₹{job.salaryRange.max.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace(/(\d+),(\d{2})$/, '$1,$2')}
             </p>
-            <button className="mt-5 font-medium text-sm text-white bg-[#108a00] hover:bg-[#14a800] py-2 w-[80px] rounded">
-                Apply
-            </button>
             <h2 className='mt-5 text-lg font-semibold text-gray-800'>About the job</h2>
             <p className='text-sm text-gray-600 mt-3'>
                 {job.description}
             </p>
         </div>
-    );
+    )
 }
 
-export default SingleJobCard;
+export default ViewSingleJobModal

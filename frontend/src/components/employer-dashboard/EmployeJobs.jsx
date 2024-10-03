@@ -4,6 +4,7 @@ import JobPostForm from './JobPostForm';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import ViewSingleJobModal from './ViewSingleJobModal';
 
 const EmployeJobs = () => {
 
@@ -64,10 +65,6 @@ const EmployeJobs = () => {
         setIsModalOpen(true);
     }
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-    }
-
     const deleteJobPost = async (id) => {
         try {
             const response = await axios.post(`${url}/jobPost/deleteJobPost/${id}`);
@@ -93,6 +90,20 @@ const EmployeJobs = () => {
             console.error(error.message);
         }
     }
+
+    const [viewJob, setViewJob] = useState([]);
+    const [isOpenViewJobModal, setIsOpenViewJobModal] = useState(false);
+    const viewSingleJobPost = (id) => {
+        let newAry = jobData.filter((ary) => ary._id === id);
+        setViewJob(newAry[0]);
+        setIsOpenViewJobModal(true);
+    }
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setIsOpenViewJobModal(false);
+    }
+
     return (
         <>
             <Toaster />
@@ -146,7 +157,12 @@ const EmployeJobs = () => {
                                             {job.datePosted.split('T')[0]}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium border text-white border-gray-200 space-x-2">
-                                            <button className="bg-yellow-500 px-2 py-1 rounded hover:bg-yellow-600">View</button>
+                                            <button
+                                                className="bg-yellow-500 px-2 py-1 rounded hover:bg-yellow-600"
+                                                onClick={() => viewSingleJobPost(job._id)}
+                                            >
+                                                View
+                                            </button>
                                             <button
                                                 className="bg-blue-600 px-2 py-1 rounded hover:bg-blue-700"
                                                 onClick={() => changeJobPostStatus(job._id, job.status)}
@@ -202,8 +218,28 @@ const EmployeJobs = () => {
             </section>
 
 
-            {/* Add jobs form */}
+            {/* View single job post */}
+            {
+                isOpenViewJobModal &&
+                <section className="px-3 md:px-0 fixed top-0 w-full bg-[#afafaf44] z-20 h-screen flex items-center justify-center">
+                    <div className="container relative max-h-full">
+                        <div className="relative w-full max-w-xl mx-auto">
+                            <ViewSingleJobModal job={viewJob} />
 
+                            {/* Close Icon */}
+                            <div
+                                className="absolute -top-2 -right-2 md:-top-3 md:-right-3 cursor-pointer bg-gray-500 rounded-full h-7 w-7 flex items-center justify-center text-white"
+                                onClick={closeModal}
+                            >
+                                <i className="ri-close-fill text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            }
+
+
+            {/* Add jobs form */}
             {
                 isModalOpen &&
                 <section className="px-3 md:px-0 fixed top-0 w-full bg-[#afafaf44] z-20 h-screen flex items-center justify-center">
