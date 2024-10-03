@@ -119,3 +119,25 @@ export const changeJobPostStatus = async (req, res) => {
         return res.status(500).json({ msg: 'Internal server error' });
     }
 }
+
+// Job application
+export const applyToJob = async (req, res) => {
+    const { id } = req.params;
+    const { userId } = req.body;
+    try {
+        const job = await Job.findById(id);
+        if (!job) {
+            return res.status(404).json({ msg: 'Job not found' });
+        }
+        // Add the applicant to the job
+        job.applicants.push({
+            userId,
+            status: 'Under Review'
+        });
+        await job.save();
+        return res.status(200).json({ msg: 'Application submitted successfully' });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ msg: 'Internal server error' });
+    }
+}
