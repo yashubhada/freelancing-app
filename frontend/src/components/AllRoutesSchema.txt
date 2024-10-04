@@ -99,18 +99,6 @@ Message
   ]
 }
 
-Job application
-
-{
-  "_id": "6489b8706f28d2c4b8b9e123",
-  "jobId": "6489b8706f28d2c4b8b9e789", 
-  "jobSeekerId": "6489b8706f28d2c4b8b9e123",
-  "resumeUrl": "https://example.com/john-resume.pdf",
-  "coverLetter": "I am very excited about this opportunity and would love to discuss my qualifications in more detail.",
-  "status": "Under Review",
-  "appliedOn": "2024-09-01"
-}
-
 Notification 
 
 {

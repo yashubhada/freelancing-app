@@ -63,10 +63,22 @@ const JobSchema = new mongoose.Schema({
                 ref: 'jobber', // Reference to JobSeeker collection
                 required: true
             },
+            resumeUrl: {
+                type: String,
+                required: true
+            },
+            coverLetter: {
+                type: String,
+                required: true
+            },
             status: {
                 type: String,
                 enum: ['Under Review', 'Interview', 'Rejected', 'Hired'],
                 default: 'Under Review'
+            },
+            appliedOn: {
+                type: Date,
+                default: Date.now
             }
         }
     ]

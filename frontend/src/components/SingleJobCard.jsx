@@ -7,7 +7,6 @@ import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 
 const SingleJobCard = ({ job }) => {
-    // Convert job.datePosted to a readable "time ago" format
     const formattedDate = formatDistanceToNow(new Date(job.datePosted), { addSuffix: true });
 
     const [userId, setUserId] = useState();
@@ -28,6 +27,8 @@ const SingleJobCard = ({ job }) => {
 
     const url = "http://localhost:9171"; // API URL
     const [isOpenJobApplyModal, setIsOpenJobApplyModal] = useState(false);
+    const [coverLetter, setCoverLetter] = useState(null);
+
     useEffect(() => {
         if (isOpenJobApplyModal) {
             document.body.style.overflowY = "hidden";
@@ -36,26 +37,47 @@ const SingleJobCard = ({ job }) => {
         }
     }, [isOpenJobApplyModal]);
 
-    const handleJobPostApply = async () => {
+    const closeApplyModal = () => {
+        setIsOpenJobApplyModal(false);
+    }
+
+    const [isApplied, setIsApplied] = useState(false);
+    const checkIsApplied = () => {
+        if (userId && job?.applicants) {
+            const hasApplied = job.applicants.some(applicant => applicant.userId === userId);
+            setIsApplied(hasApplied);
+        }
+    }
+    useEffect(() => {
+        checkIsApplied();
+    }, [userId, job?.applicants]);
+
+    const handleJobPostApply = async (e) => {
+        e.preventDefault();
         if (JobberProfileInfo) {
             const isProfileComplete = JobberProfileInfo.name && JobberProfileInfo.profile.resumeUrl && JobberProfileInfo.profile.skills.length > 0 && JobberProfileInfo.profile.experience.length > 0 && JobberProfileInfo.profile.education.length > 0;
             if (!isProfileComplete) {
                 toast.error('Please complete your profile before applying for jobs');
             } else {
                 setIsOpenJobApplyModal(true);
-                // try {
-                //     const response = await axios.post(`${url}/jobPost/applyToJob/${job._id}`, { userId });
-                //     toast.success(response.data.msg);
-                // } catch (error) {
-                //     console.error(error.message);
-                //     toast.error(error.response.data.msg);
-                // }
+                try {
+                    const response = await axios.post(`${url}/jobPost/applyToJob/${job._id}`,
+                        {
+                            userId,
+                            resumeUrl: JobberProfileInfo.profile.resumeUrl,
+                            coverLetter
+                        }
+                    );
+                    toast.success(response.data.msg);
+                } catch (error) {
+                    console.error(error.message);
+                    toast.error(error.response.data.msg);
+                } finally {
+                    closeApplyModal();
+                    checkIsApplied();
+                }
             }
         }
-    }
-
-    const closeApplyModal = () => {
-        setIsOpenJobApplyModal(false);
     }
 
     return (
@@ -85,10 +107,17 @@ const SingleJobCard = ({ job }) => {
                     Salary Range : ₹{job.salaryRange.min.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace(/(\d+),(\d{2})$/, '$1,$2')} - ₹{job.salaryRange.max.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace(/(\d+),(\d{2})$/, '$1,$2')}
                 </p>
                 <button
-                    className="mt-5 font-medium text-sm text-white bg-[#108a00] hover:bg-[#14a800] py-2 w-[80px] rounded"
-                    onClick={handleJobPostApply}
+                    className="mt-5 font-medium text-sm text-white bg-[#108a00] hover:bg-[#14a800] py-2 px-3 rounded disabled:opacity-65 disabled:cursor-not-allowed disabled:hover:bg-[#108a00]"
+                    onClick={() => setIsOpenJobApplyModal(true)}
+                    disabled={isApplied}
                 >
-                    Apply
+                    {
+                        isApplied
+                            ?
+                            "Already applied"
+                            :
+                            "Apply"
+                    }
                 </button>
                 <h2 className='mt-5 text-lg font-semibold text-gray-800'>About the job</h2>
                 <p className='text-sm text-gray-600 mt-3'>
@@ -102,18 +131,18 @@ const SingleJobCard = ({ job }) => {
                 <section className="px-3 md:px-0 fixed top-0 left-0 w-full bg-[#afafaf44] z-20 h-screen flex items-center justify-center">
                     <div className="container relative max-h-full">
                         <div className="relative w-full max-w-xl mx-auto">
-                            <form action="" className="p-6 bg-white rounded-lg">
+                            <form onSubmit={handleJobPostApply} className="p-6 bg-white rounded-lg">
                                 <div className="mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mb-2">Cover Latter</label>
                                     <textarea
-                                        name="coverLatter"
+                                        onChange={(e) => setCoverLetter(e.target.value)}
                                         placeholder='(e.g.) I am very excited about this opportunity'
                                         className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-indigo-500"
                                         autoComplete="off"
                                         required
                                     />
                                 </div>
-                                <p className='mb-4 text-sm text-red-500'>Note : your profile resume is used to apply this job</p>
+                                <p className='mb-4 text-sm font-medium text-red-500'><span className='font-bold'>Note :</span> Your profile resume will be automatically submitted when applying for this job.</p>
                                 <button
                                     type="submit"
                                     className="flex justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none disabled:opacity-65 "

@@ -123,7 +123,7 @@ export const changeJobPostStatus = async (req, res) => {
 // Job application
 export const applyToJob = async (req, res) => {
     const { id } = req.params;
-    const { userId } = req.body;
+    const { userId, resumeUrl, coverLetter } = req.body;
     try {
         const job = await Job.findById(id);
         if (!job) {
@@ -132,7 +132,8 @@ export const applyToJob = async (req, res) => {
         // Add the applicant to the job
         job.applicants.push({
             userId,
-            status: 'Under Review'
+            resumeUrl,
+            coverLetter
         });
         await job.save();
         return res.status(200).json({ msg: 'Application submitted successfully' });
