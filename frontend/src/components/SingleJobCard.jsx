@@ -4,6 +4,7 @@ import { AppContext } from './context/AppContext';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
 
 const SingleJobCard = ({ job }) => {
     // Convert job.datePosted to a readable "time ago" format
@@ -25,15 +26,36 @@ const SingleJobCard = ({ job }) => {
         }
     }, [userId, fetchJobberInfo]);
 
-    const handleJobPostApply = () => {
+    const url = "http://localhost:9171"; // API URL
+    const [isOpenJobApplyModal, setIsOpenJobApplyModal] = useState(false);
+    useEffect(() => {
+        if (isOpenJobApplyModal) {
+            document.body.style.overflowY = "hidden";
+        } else {
+            document.body.style.overflowY = "scroll";
+        }
+    }, [isOpenJobApplyModal]);
+
+    const handleJobPostApply = async () => {
         if (JobberProfileInfo) {
             const isProfileComplete = JobberProfileInfo.name && JobberProfileInfo.profile.resumeUrl && JobberProfileInfo.profile.skills.length > 0 && JobberProfileInfo.profile.experience.length > 0 && JobberProfileInfo.profile.education.length > 0;
             if (!isProfileComplete) {
                 toast.error('Please complete your profile before applying for jobs');
-            } else { 
-                toast.success('successfully applying for jobs');
+            } else {
+                setIsOpenJobApplyModal(true);
+                // try {
+                //     const response = await axios.post(`${url}/jobPost/applyToJob/${job._id}`, { userId });
+                //     toast.success(response.data.msg);
+                // } catch (error) {
+                //     console.error(error.message);
+                //     toast.error(error.response.data.msg);
+                // }
             }
         }
+    }
+
+    const closeApplyModal = () => {
+        setIsOpenJobApplyModal(false);
     }
 
     return (
@@ -73,6 +95,43 @@ const SingleJobCard = ({ job }) => {
                     {job.description}
                 </p>
             </div>
+
+            {/* job application modal */}
+            {
+                isOpenJobApplyModal &&
+                <section className="px-3 md:px-0 fixed top-0 left-0 w-full bg-[#afafaf44] z-20 h-screen flex items-center justify-center">
+                    <div className="container relative max-h-full">
+                        <div className="relative w-full max-w-xl mx-auto">
+                            <form action="" className="p-6 bg-white rounded-lg">
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">Cover Latter</label>
+                                    <textarea
+                                        name="coverLatter"
+                                        placeholder='(e.g.) I am very excited about this opportunity'
+                                        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-indigo-500"
+                                        autoComplete="off"
+                                        required
+                                    />
+                                </div>
+                                <p className='mb-4 text-sm text-red-500'>Note : your profile resume is used to apply this job</p>
+                                <button
+                                    type="submit"
+                                    className="flex justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none disabled:opacity-65 "
+                                >
+                                    submit
+                                </button>
+                            </form>
+                            {/* Close Icon */}
+                            <div
+                                className="absolute -top-2 -right-2 md:-top-3 md:-right-3 cursor-pointer bg-gray-500 rounded-full h-7 w-7 flex items-center justify-center text-white"
+                                onClick={closeApplyModal}
+                            >
+                                <i className="ri-close-fill text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            }
         </>
     );
 }
