@@ -29,7 +29,7 @@ const NavbarEmp = () => {
                         <ul className="hidden absolute w-full top-[61px] bg-white z-10 right-0 space-y-5 p-4 md:static md:flex ml-10 text-sm md:space-x-5 md:space-y-0 md:p-0 menu-items">
                             <li className="font-medium menu-link"><NavLink to='/employe-dashboard' className="hover:text-[#108a00]" onClick={toggleMenu}>Home</NavLink></li>
                             <li className="font-medium menu-link"><NavLink to='/employe-jobs' className="hover:text-[#108a00]" onClick={toggleMenu}>Jobs</NavLink></li>
-                            <li className="font-medium menu-link"><a href="#" className="hover:text-[#108a00]" onClick={toggleMenu}>Applicants</a></li>
+                            <li className="font-medium menu-link"><NavLink to='/employe-applicants' className="hover:text-[#108a00]" onClick={toggleMenu}>Applicants</NavLink></li>
                             <li className="font-medium menu-link"><NavLink to="/employe-profile" className="hover:text-[#108a00]" onClick={toggleMenu}>Profile</NavLink></li>
                             <li className="font-medium menu-link cursor-pointer hover:text-[#108a00]" onClick={handleLogout}>Logout</li>
                         </ul>
