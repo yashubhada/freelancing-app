@@ -8,7 +8,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import PageLoader from './PageLoader';
 
 const JobSeekerProfile = () => {
-    const { fetchJobberInfo, JobberProfileInfo, ItSkillsArray } = useContext(AppContext);
+    const { fetchJobberInfo, ItSkillsArray } = useContext(AppContext);
+    const [JobberProfileInfo, setJobberProfileInfo] = useState([]);
     const navigate = useNavigate();
 
     // Memoized constants
@@ -70,7 +71,7 @@ const JobSeekerProfile = () => {
                 withCredentials: true,
             });
             setUserId(response.data.user.userId);
-            fetchJobberInfo(response.data.user.userId);
+            setJobberProfileInfo(await fetchJobberInfo(response.data.user.userId));
             if (response.data.user.role !== "JobSeeker") {
                 navigate('/signin');
             }
@@ -488,17 +489,17 @@ const JobSeekerProfile = () => {
                     {isEditingSkills ? (
                         <div>
                             <div className="flex items-center space-x-3">
-                                <div className='relative'>
+                                <div className='relative flex items-center w-full md:w-96 px-3 py-2 border border-gray-300 rounded focus-within:border-indigo-500'>
                                     <input
                                         type="text"
                                         value={newSkill}
                                         onChange={handleSkillInput} // Update handler
-                                        className="w-full md:w-96 px-3 py-1 border rounded focus:outline-indigo-500"
+                                        className="w-full outline-none"
                                         placeholder="Type skill..."
                                     />
                                     {/* Render skill suggestions */}
                                     {suggestions.length > 0 && (
-                                        <div className="absolute z-10 bg-white border border-gray-200 rounded shadow-md w-full md:w-96 max-h-40 overflow-y-auto">
+                                        <div className="absolute left-0 top-[42px] z-10 bg-white border border-gray-200 rounded shadow-md w-full md:w-96 max-h-40 overflow-y-auto">
                                             {suggestions.map((suggestedSkill, index) => (
                                                 <div
                                                     key={index}
@@ -510,8 +511,13 @@ const JobSeekerProfile = () => {
                                             ))}
                                         </div>
                                     )}
+                                <button
+                                    onClick={handleAddSkill}
+                                    className="absolute right-2 bg-[#108a00] hover:bg-[#14a800] text-white rounded-full h-7 w-7">
+                                    <i className="ri-add-line text-lg"></i>
+                                </button>
                                 </div>
-                                <button onClick={handleAddSkill} className="bg-gray-500 text-white px-2 py-1 rounded text-sm">Add</button>
+                                {/* <button onClick={handleAddSkill} className="bg-gray-500 text-white px-2 py-1 rounded text-sm">Add</button> */}
                             </div>
 
                             <div className="flex flex-wrap gap-2 mt-3">

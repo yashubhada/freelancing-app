@@ -384,10 +384,10 @@ const EmployeProfile = () => {
                                                 className="w-32 h-32 rounded-full object-cover border border-gray-200"
                                             />
                                         </div>
-                                        <div className="md:ml-6 text-center md:text-left">
-                                            <h1 className="text-2xl font-semibold">{state.profile.companyName || "No name available"}</h1>
-                                            <p className="text-gray-600">{state.profile.bio || "No bio available"}</p>
-                                            <p className="text-gray-600 text-sm mt-3">{state.profile.industry || "No industry available"}</p>
+                                        <div className="md:ml-6">
+                                            <h1 className="text-2xl font-semibold text-center md:text-left">{state.profile.companyName || "No name available"}</h1>
+                                            <p className="text-gray-600 text-center md:text-left">{state.profile.bio || "No bio available"}</p>
+                                            <p className="text-gray-600 text-sm mt-3"><span className='font-semibold'>Company industry : </span>{state.profile.industry || "No industry available"}</p>
                                             <p className="text-gray-600 text-sm"><i className="mr-2 ri-map-pin-line"></i><span>{state.profile.location || "No Location available"}</span></p>
                                             <a href={state.profile.website} target='_blank' className="text-sm mt-3 text-blue-600 hover:underline">{state.profile.website || "No website available"}</a>
                                         </div>

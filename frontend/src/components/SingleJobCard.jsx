@@ -18,12 +18,18 @@ const SingleJobCard = ({ job }) => {
         }
     }, []);
 
-    const { JobberProfileInfo, fetchJobberInfo } = useContext(AppContext);
-    useEffect(() => {
+    const { fetchJobberInfo } = useContext(AppContext);
+    const [JobberProfileInfo, setJobberProfileInfo] = useState([]);
+
+    const fetchInfo = async () => {
         if (userId) {
-            fetchJobberInfo(userId);
+            setJobberProfileInfo(await fetchJobberInfo(userId));
         }
-    }, [userId, fetchJobberInfo]);
+    }
+
+    useEffect(() => {
+        fetchInfo();
+    }, [userId, fetchInfo]);
 
     const url = "http://localhost:9171"; // API URL
     const [isOpenJobApplyModal, setIsOpenJobApplyModal] = useState(false);

@@ -7,7 +7,7 @@ import { AppContext } from '../context/AppContext';
 const EmployeApplicants = () => {
     document.title = "Employer dashboard | Applicants";
 
-    const { fetchJobberInfo, JobberProfileInfo } = useContext(AppContext);
+    const { fetchJobberInfo } = useContext(AppContext);
     const [allApplicants, setAllApplicants] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 5;
@@ -30,12 +30,14 @@ const EmployeApplicants = () => {
                 const applicantsWithProfiles = await Promise.all(
                     jobs.flatMap(job =>
                         job.applicants.map(async applicant => {
-                            await fetchJobberInfo(applicant.userId);
+                            const JobberProfileInfo = await fetchJobberInfo(applicant.userId);
                             // Ensure that the profileInfo exists before returning applicant data
                             if (JobberProfileInfo) {
                                 return {
                                     ...applicant,
                                     jobTitle: job.title,
+                                    name: JobberProfileInfo.name || "No name",
+                                    email: JobberProfileInfo.email || "No Email",
                                     profileImage: JobberProfileInfo.profileImage,
                                     headline: JobberProfileInfo.profile?.headline || "No headline provided",
                                     skills: JobberProfileInfo.profile?.skills || [],
@@ -95,6 +97,12 @@ const EmployeApplicants = () => {
                                         Job Title
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-gray-200">
+                                        user name
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-gray-200">
+                                        user email
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-gray-200">
                                         Applicant Status
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-gray-200">
@@ -112,6 +120,12 @@ const EmployeApplicants = () => {
                                             {applicant.jobTitle}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                            {applicant.name}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                            {applicant.email}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {applicant.status}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
@@ -119,14 +133,9 @@ const EmployeApplicants = () => {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium border text-white border-gray-200 space-x-2">
                                             <button
-                                                className="bg-yellow-500 px-2 py-1 rounded hover:bg-yellow-600"
-                                            >
-                                                View Resume
-                                            </button>
-                                            <button
                                                 className="bg-blue-600 px-2 py-1 rounded hover:bg-blue-700"
                                             >
-                                                View Profile
+                                                View
                                             </button>
                                         </td>
                                     </tr>
