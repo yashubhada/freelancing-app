@@ -3,6 +3,7 @@ import NavbarEmp from './NavbarEmp';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AppContext } from '../context/AppContext';
+import ViewSingleApplicantModal from './ViewSingleApplicantModal';
 
 const EmployeApplicants = () => {
     document.title = "Employer dashboard | Applicants";
@@ -76,7 +77,17 @@ const EmployeApplicants = () => {
         currentPage * rowsPerPage
     );
 
-    console.log(allApplicants);
+    const [viewApplicant, setViewApplicant] = useState([]);
+    const [isOpenViewApplicantModal, setIsOpenViewApplicantModal] = useState(false);
+    const viewSingleApplicant = (id) => {
+        let newAry = allApplicants.filter((ary) => ary._id === id);
+        setViewApplicant(newAry[0]);
+        setIsOpenViewApplicantModal(true);
+    }
+
+    const closeModal = () => {
+        setIsOpenViewApplicantModal(false);
+    }
 
     // Handle page change
     const handlePageChange = (newPage) => {
@@ -134,6 +145,7 @@ const EmployeApplicants = () => {
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium border text-white border-gray-200 space-x-2">
                                             <button
                                                 className="bg-blue-600 px-2 py-1 rounded hover:bg-blue-700"
+                                                onClick={() => viewSingleApplicant(applicant._id)}
                                             >
                                                 View
                                             </button>
@@ -178,6 +190,26 @@ const EmployeApplicants = () => {
                     )}
                 </div>
             </section>
+
+            {/* View single applicants */}
+            {
+                isOpenViewApplicantModal &&
+                <section className="px-3 md:px-0 fixed top-0 w-full bg-[#afafaf44] z-20 h-screen flex items-center justify-center">
+                    <div className="container relative max-h-full">
+                        <div className="relative w-full max-w-xl mx-auto">
+                            <ViewSingleApplicantModal applicants={viewApplicant} />
+
+                            {/* Close Icon */}
+                            <div
+                                className="absolute -top-2 -right-2 md:-top-3 md:-right-3 cursor-pointer bg-gray-500 rounded-full h-7 w-7 flex items-center justify-center text-white"
+                                onClick={closeModal}
+                            >
+                                <i className="ri-close-fill text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            }
         </>
     );
 };
