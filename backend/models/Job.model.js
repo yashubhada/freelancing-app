@@ -71,11 +71,6 @@ const JobSchema = new mongoose.Schema({
                 type: String,
                 required: true
             },
-            status: {
-                type: String,
-                enum: ['Under Review', 'Interview', 'Rejected', 'Hired'],
-                default: 'Under Review'
-            },
             appliedOn: {
                 type: Date,
                 default: Date.now
