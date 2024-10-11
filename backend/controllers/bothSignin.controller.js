@@ -36,6 +36,7 @@ export const userSignin = async (req, res) => {
             tokenData = {
                 userId: jobber._id,
                 name: jobber.name,
+                profileImage: jobber.profileImage,
                 email: jobber.email,
                 role: jobber.role,
             };
@@ -53,6 +54,7 @@ export const userSignin = async (req, res) => {
             user = employer;
             tokenData = {
                 userId: employer._id,
+                profileImage: employer.profileImage,
                 name: employer.name,
                 email: employer.email,
                 role: employer.role,
