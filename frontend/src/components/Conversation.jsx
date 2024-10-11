@@ -1,7 +1,20 @@
+import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 
-const Conversation = () => {
+const Conversation = ({ participantId }) => {
 
+    const url = "http://localhost:9171"; // API URL
+
+    const [conversationList, setConversationList] = useState([]);
+
+    const fetchAllConversation = async () => {
+        try {
+            const response = await axios.post(`${url}/conversation/allConversations/${participantId}`);
+            setConversationList(response.data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     const messages = [
         { id: 1, text: 'Hello! How are you?', sender: 'me' },
@@ -23,6 +36,12 @@ const Conversation = () => {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
     };
+
+    useEffect(() => {
+        if (participantId) {
+            fetchAllConversation();
+        }
+    }, [fetchAllConversation, participantId]);
 
     useEffect(() => {
         scrollToBottom();
@@ -63,51 +82,24 @@ const Conversation = () => {
                     </div>
                     {/* conversation */}
                     <div className='mt-[50px]'>
-                        <div className='flex items-center p-2 cursor-pointer hover:bg-[#f7f7f7] border-b' onClick={() => setIsOpenConversation(true)}>
-                            <div className='w-10 h-10 mr-2'>
-                                <img className='w-full h-full object-cover rounded-full' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLQUQ6g6NjGqj3qncgsJGpxzzRrL_qDAc1qQ&s" alt="Profile image" />
-                            </div>
-                            <div>
-                                <h1 className='text-sm text-gray-800 font-medium'>Yash patel</h1>
-                                <p className='text-[12px] text-gray-500 font-medium'>Oct 10</p>
-                            </div>
-                        </div>
-                        <div className='flex items-center p-2 cursor-pointer hover:bg-[#f7f7f7] border-b'>
-                            <div className='w-10 h-10 mr-2'>
-                                <img className='w-full h-full object-cover rounded-full' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLQUQ6g6NjGqj3qncgsJGpxzzRrL_qDAc1qQ&s" alt="Profile image" />
-                            </div>
-                            <div>
-                                <h1 className='text-sm text-gray-800 font-medium'>Yash patel</h1>
-                                <p className='text-[12px] text-gray-500 font-medium'>Oct 10</p>
-                            </div>
-                        </div>
-                        <div className='flex items-center p-2 cursor-pointer hover:bg-[#f7f7f7] border-b'>
-                            <div className='w-10 h-10 mr-2'>
-                                <img className='w-full h-full object-cover rounded-full' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLQUQ6g6NjGqj3qncgsJGpxzzRrL_qDAc1qQ&s" alt="Profile image" />
-                            </div>
-                            <div>
-                                <h1 className='text-sm text-gray-800 font-medium'>Yash patel</h1>
-                                <p className='text-[12px] text-gray-500 font-medium'>Oct 10</p>
-                            </div>
-                        </div>
-                        <div className='flex items-center p-2 cursor-pointer hover:bg-[#f7f7f7] border-b'>
-                            <div className='w-10 h-10 mr-2'>
-                                <img className='w-full h-full object-cover rounded-full' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLQUQ6g6NjGqj3qncgsJGpxzzRrL_qDAc1qQ&s" alt="Profile image" />
-                            </div>
-                            <div>
-                                <h1 className='text-sm text-gray-800 font-medium'>Yash patel</h1>
-                                <p className='text-[12px] text-gray-500 font-medium'>Oct 10</p>
-                            </div>
-                        </div>
-                        <div className='flex items-center p-2 cursor-pointer hover:bg-[#f7f7f7] border-b'>
-                            <div className='w-10 h-10 mr-2'>
-                                <img className='w-full h-full object-cover rounded-full' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLQUQ6g6NjGqj3qncgsJGpxzzRrL_qDAc1qQ&s" alt="Profile image" />
-                            </div>
-                            <div>
-                                <h1 className='text-sm text-gray-800 font-medium'>Yash patel</h1>
-                                <p className='text-[12px] text-gray-500 font-medium'>Oct 10</p>
-                            </div>
-                        </div>
+                        {
+                            conversationList.length > 0
+                                ? conversationList.map((conversation) => (
+                                    conversation.messages.map((ary, j) => (
+                                        <div key={j} className='flex items-center p-2 cursor-pointer hover:bg-[#f7f7f7] border-b' onClick={() => setIsOpenConversation(true)}>
+                                            <div className='w-10 h-10 mr-2'>
+                                                <img className='w-full h-full object-cover rounded-full' src={ary.userProfileImage} alt="Profile image" />
+                                            </div>
+                                            <div>
+                                                <h1 className='text-sm text-gray-800 font-medium'>{ary.userName}</h1>
+                                                <p className='text-[12px] text-gray-500 font-medium'>{new Date(ary.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                                            </div>
+                                        </div>
+                                    ))
+                                ))
+                                : <h1>No any messages</h1>
+                        }
+
                     </div>
                 </section>
             }

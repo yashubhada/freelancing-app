@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ViewSingleApplicantModal = ({ applicants, sendMessageToUser }) => {
+const ViewSingleApplicantModal = ({ applicants, openMessageBox }) => {
     return (
         <div className='p-4 bg-white rounded-lg overflow-y-auto max-h-[80vh]'>
             <h1 className='text-lg font-semibold text-gray-900 mb-4'>{applicants.jobTitle}</h1>
@@ -43,7 +43,7 @@ const ViewSingleApplicantModal = ({ applicants, sendMessageToUser }) => {
             <a href={applicants.resumeUrl} target='_blank' className='text-indigo-600 cursor-pointer hover:underline'>view resume</a>
 
             <div className='mt-4 flex items-star space-x-4'>
-                <button onClick={() => sendMessageToUser(applicants.userId)} className='w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-1 rounded'>
+                <button onClick={() => openMessageBox(applicants)} className='w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-1 rounded'>
                     <i className="ri-send-plane-fill mr-1"></i>Message
                 </button>
                 <button className='w-full bg-red-500 hover:bg-red-600 text-white font-medium py-1 rounded'>

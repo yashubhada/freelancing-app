@@ -97,17 +97,36 @@ const EmployeApplicants = () => {
         setCurrentPage(newPage);
     };
 
-    const sendMessageToUser = async (userId) => {
-        // try {
-        //     const response = await axios.post(`${url}/conversation/newConversation`, {
-        //         participants: [empId, userId],
-        //         message,
-        //         senderId: empId
-        //     });
-        //     console.log(response.data);
-        // } catch (err) {
-        //     console.error(err);
-        // }
+
+    // message -- conversation
+
+    const [isOpenFirstConversation, setIsOpenFirstConversation] = useState(false);
+    const [msgApplication, setMsgApplication] = useState(null);
+
+    const openMessageBox = (applicants) => {
+        setIsOpenFirstConversation(true);
+        if (applicants) {
+            setMsgApplication(applicants);
+        }
+    }
+    const [message, setMessage] = useState('');
+    const sendFirstMsg = async (e) => {
+        e.preventDefault();
+        if (msgApplication) {
+            try {
+                const response = await axios.post(`${url}/conversation/newConversation`, {
+                    participants: [empId, msgApplication.userId],
+                    senderId: empId,
+                    message,
+                    userName: msgApplication.name,
+                    userProfileImage: msgApplication.profileImage
+                });
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setIsOpenFirstConversation(false);
+            }
+        }
     }
 
     return (
@@ -207,7 +226,7 @@ const EmployeApplicants = () => {
                 <section className="px-3 md:px-0 fixed top-0 w-full bg-[#afafaf44] z-20 h-screen flex items-center justify-center">
                     <div className="container relative max-h-full">
                         <div className="relative w-full max-w-xl mx-auto">
-                            <ViewSingleApplicantModal applicants={viewApplicant} sendMessageToUser={sendMessageToUser} />
+                            <ViewSingleApplicantModal applicants={viewApplicant} openMessageBox={openMessageBox} />
 
                             {/* Close Icon */}
                             <div
@@ -222,27 +241,30 @@ const EmployeApplicants = () => {
             }
 
             {/* first message --- create  new conversation */}
-            <section className="px-3 md:px-0 fixed top-0 w-full bg-[#afafaf44] z-20 h-screen flex pt-10 justify-center">
-                <div className="container relative max-h-full">
-                    <div className="relative w-full max-w-xl mx-auto">
-                        <div className='bg-white rounded-md'>
-                            <h1 className='text-xl font-semibold text-gray-700 p-4'>Start new conversation</h1>
-                            <form>
-                                <div className='border-t border-b p-4'>
-                                    <label className='text-base font-medium text-gray-700 block'>Enter new conversation message</label>
-                                    <input type="text" className='outline-none border border-gray-500 rounded px-3 py-2 w-full mt-3 focus:border-indigo-500' />
-                                </div>
-                                <div className='flex items-center justify-end p-4 space-x-4'>
-                                    <button className='bg-indigo-500 text-white px-2 py-1 rounded font-medium text-base'>send</button>
-                                    <button className='bg-gray-500 text-white px-2 py-1 rounded font-medium text-base'>cancel</button>
-                                </div>
-                            </form>
+            {
+                isOpenFirstConversation &&
+                <section className="px-3 md:px-0 fixed top-0 w-full bg-[#afafaf44] z-20 h-screen flex pt-10 justify-center">
+                    <div className="container relative max-h-full">
+                        <div className="relative w-full max-w-xl mx-auto">
+                            <div className='bg-white rounded-md'>
+                                <h1 className='text-xl font-semibold text-gray-700 p-4'>Start new conversation</h1>
+                                <form onSubmit={sendFirstMsg}>
+                                    <div className='border-t border-b p-4'>
+                                        <label className='text-base font-medium text-gray-700 block'>Enter new conversation message</label>
+                                        <input value={message} onChange={(e) => setMessage(e.target.value)} type="text" className='outline-none border border-gray-500 rounded px-3 py-2 w-full mt-3 focus:border-indigo-500' required />
+                                    </div>
+                                    <div className='flex items-center justify-end p-4 space-x-4'>
+                                        <button type='submit' className='bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded font-medium text-base'>send</button>
+                                        <button type='button' onClick={() => setIsOpenFirstConversation(false)} className='bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded font-medium text-base'>cancel</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            }
 
-            <Conversation />
+            <Conversation participantId={empId} />
         </>
     );
 };

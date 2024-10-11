@@ -21,6 +21,15 @@ const conversationSchema = new Schema({
             },
             message: {
                 type: String,
+                required: true
+            },
+            userName: {
+                type: String,
+                required: true
+            },
+            userProfileImage: {
+                type: String,
+                required: true
             },
             timestamp: {
                 type: Date,
