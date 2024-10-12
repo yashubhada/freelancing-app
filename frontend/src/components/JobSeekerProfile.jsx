@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import PageLoader from './PageLoader';
+import Conversation from './Conversation';
 
 const JobSeekerProfile = () => {
     const { fetchJobberInfo, ItSkillsArray } = useContext(AppContext);
@@ -511,11 +512,11 @@ const JobSeekerProfile = () => {
                                             ))}
                                         </div>
                                     )}
-                                <button
-                                    onClick={handleAddSkill}
-                                    className="absolute right-2 bg-[#108a00] hover:bg-[#14a800] text-white rounded-full h-7 w-7">
-                                    <i className="ri-add-line text-lg"></i>
-                                </button>
+                                    <button
+                                        onClick={handleAddSkill}
+                                        className="absolute right-2 bg-[#108a00] hover:bg-[#14a800] text-white rounded-full h-7 w-7">
+                                        <i className="ri-add-line text-lg"></i>
+                                    </button>
                                 </div>
                                 {/* <button onClick={handleAddSkill} className="bg-gray-500 text-white px-2 py-1 rounded text-sm">Add</button> */}
                             </div>
@@ -775,6 +776,7 @@ const JobSeekerProfile = () => {
                     </div>
                 </div>
             </div >
+            <Conversation participantId={JobberProfileInfo._id} />
             <Footer />
         </>
     );

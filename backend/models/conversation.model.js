@@ -13,6 +13,18 @@ const conversationSchema = new Schema({
             required: true
         }
     ],
+    userInfo: [
+        {
+            userName: {
+                type: String,
+                required: true
+            },
+            userProfileImage: {
+                type: String,
+                required: true
+            },
+        }
+    ],
     messages: [
         {
             senderId: {
@@ -20,14 +32,6 @@ const conversationSchema = new Schema({
                 required: true
             },
             message: {
-                type: String,
-                required: true
-            },
-            userName: {
-                type: String,
-                required: true
-            },
-            userProfileImage: {
                 type: String,
                 required: true
             },

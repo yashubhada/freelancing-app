@@ -16,17 +16,6 @@ const Conversation = ({ participantId }) => {
         }
     }
 
-    const messages = [
-        { id: 1, text: 'Hello! How are you?', sender: 'me' },
-        { id: 2, text: 'I’m good, thank you! How about you?', sender: 'other' },
-        { id: 3, text: 'I’m great, thanks for asking!', sender: 'me' },
-        { id: 4, text: 'I’m great, thanks for asking! I’m great, thanks for asking! I’m great, thanks for asking!', sender: 'me' },
-        { id: 5, text: 'I’m great, thanks for asking! I’m great, thanks for asking! I’m great, thanks for asking!', sender: 'me' },
-        { id: 6, text: 'I’m great, thanks for asking! I’m great, thanks for asking! I’m great, thanks for asking!', sender: 'me' },
-        { id: 7, text: 'I’m great, thanks for asking! I’m great, thanks for asking! I’m great, thanks for asking!', sender: 'me' },
-        { id: 8, text: 'I’m great, thanks for asking! I’m great, thanks for asking! I’m great, thanks for asking!', sender: 'me' },
-        { id: 9, text: 'Good to hear!', sender: 'other' },
-    ];
     const [showMessages, setShowMessages] = useState(false);
     const [isOpenConversation, setIsOpenConversation] = useState(false);
     const chatContainerRef = useRef(null);
@@ -46,6 +35,35 @@ const Conversation = ({ participantId }) => {
     useEffect(() => {
         scrollToBottom();
     }, [isOpenConversation]);
+
+    const [userChat, setUserChat] = useState([]);
+    const [chatid, setChatid] = useState('');
+    const getAllMessages = async (chatId) => {
+        setIsOpenConversation(true);
+        setChatid(chatId);
+        try {
+            const response = await axios.post(`${url}/conversation/getAllMessages/${chatId}`);
+            setUserChat(response.data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const [newMsg, setNewMsg] = useState('');
+    const sendMessage = async () => {
+        try {
+            const response = await axios.post(`${url}/conversation/addNewMessage/${chatid}`,{
+                senderId: participantId,
+                message: newMsg
+            });
+            if(response.status === 200) {
+                getAllMessages(chatid);
+                setNewMsg('');
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     return (
         <>
@@ -82,23 +100,41 @@ const Conversation = ({ participantId }) => {
                     </div>
                     {/* conversation */}
                     <div className='mt-[50px]'>
-                        {
-                            conversationList.length > 0
-                                ? conversationList.map((conversation) => (
-                                    conversation.messages.map((ary, j) => (
-                                        <div key={j} className='flex items-center p-2 cursor-pointer hover:bg-[#f7f7f7] border-b' onClick={() => setIsOpenConversation(true)}>
+                        {conversationList.length > 0 ? (
+                            conversationList.map((conversation, index) => (
+                                <div key={index} className='border-b'>
+                                    {conversation.userInfo.map((ary, j) => (
+                                        <div
+                                            key={j}
+                                            className='flex items-center p-2 cursor-pointer hover:bg-[#f7f7f7] border-b'
+                                            onClick={() => getAllMessages(conversation._id)}
+                                        >
                                             <div className='w-10 h-10 mr-2'>
-                                                <img className='w-full h-full object-cover rounded-full' src={ary.userProfileImage} alt="Profile image" />
+                                                <img
+                                                    className='w-full h-full object-cover rounded-full'
+                                                    src={ary.userProfileImage}
+                                                    alt="Profile image"
+                                                />
                                             </div>
                                             <div>
                                                 <h1 className='text-sm text-gray-800 font-medium'>{ary.userName}</h1>
-                                                <p className='text-[12px] text-gray-500 font-medium'>{new Date(ary.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                                                {/* Display timestamp of the last message */}
+                                                {conversation.messages.length > 0 && (
+                                                    <p className='text-[12px] text-gray-500 font-medium'>
+                                                        {new Date(conversation.messages[conversation.messages.length - 1].timestamp)
+                                                            .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
-                                    ))
-                                ))
-                                : <h1>No any messages</h1>
-                        }
+                                    ))}
+                                </div>
+                            ))
+                        ) : (
+                            <div className='h-[285px] flex items-center justify-center'>
+                                <h1 className='text-sm text-gray-600'>No any messages</h1>
+                            </div>
+                        )}
 
                     </div>
                 </section>
@@ -121,16 +157,16 @@ const Conversation = ({ participantId }) => {
                         </button>
                     </div>
                     <div ref={chatContainerRef} className="mb-[66px] md:max-h-[400px] overflow-y-auto hide-scrollbar space-y-1 px-2">
-                        {messages.map((message) => (
+                        {userChat.map((message, i) => (
                             <div
-                                key={message.id}
-                                className={`flex ${message.sender === 'me' ? 'justify-end' : 'justify-start'}`}
+                                key={i}
+                                className={`flex ${message.senderId === participantId ? 'justify-end' : 'justify-start'}`}
                             >
                                 <div
-                                    className={`max-w-64 p-2 rounded-lg text-white text-sm ${message.sender === 'me' ? 'bg-indigo-500' : 'bg-gray-500'
+                                    className={`max-w-64 p-2 rounded-lg text-white text-sm ${message.senderId === participantId ? 'bg-indigo-500' : 'bg-gray-500'
                                         }`}
                                 >
-                                    {message.text}
+                                    {message.message}
                                 </div>
                             </div>
                         ))}
@@ -141,10 +177,12 @@ const Conversation = ({ participantId }) => {
                         <div className='bg-white rounded-md p-2 flex items-center justify-between w-full border focus-within:border-indigo-500'>
                             <input
                                 type="text"
+                                onChange={(e) => setNewMsg(e.target.value)}
+                                value={newMsg}
                                 placeholder="Type a message"
                                 className="bg-transparent outline-none bottom-0 w-full pr-2"
                             />
-                            <button className="bg-[#14a800] text-white rounded-full w-8 h-8 flex items-center justify-center text-base">
+                            <button onClick={sendMessage} className="bg-[#14a800] text-white rounded w-8 h-8 flex items-center justify-center text-base">
                                 <i className="ri-send-plane-2-fill"></i>
                             </button>
                         </div>

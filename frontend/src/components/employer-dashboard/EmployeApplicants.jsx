@@ -114,7 +114,7 @@ const EmployeApplicants = () => {
         e.preventDefault();
         if (msgApplication) {
             try {
-                const response = await axios.post(`${url}/conversation/newConversation`, {
+                await axios.post(`${url}/conversation/newConversation`, {
                     participants: [empId, msgApplication.userId],
                     senderId: empId,
                     message,

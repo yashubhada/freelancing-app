@@ -5,11 +5,13 @@ export const createNewConversation = async (req, res) => {
     try {
         const newConversation = new Conversation({
             participants,
+            userInfo: [{
+                userName,
+                userProfileImage
+            }],
             messages: [{
                 senderId,
                 message,
-                userName,
-                userProfileImage
             }]
         });
         await newConversation.save();
@@ -54,3 +56,16 @@ export const addNewMessage = async (req, res) => {
         res.status(500).json({ msg: 'Internal server error' });
     }
 };
+
+// get all messages via convarsation Id
+export const getAllMessages = async (req, res) => {
+    const { conversationId } = req.params;
+    try {
+        const allChat = await Conversation.findById(conversationId);
+        if (!allChat) return res.status(404).json({ msg: 'Conversation not found' });
+        res.status(200).json(allChat.messages);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ msg: 'Internal server error' });
+    }
+}
