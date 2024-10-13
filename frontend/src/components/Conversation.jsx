@@ -52,11 +52,11 @@ const Conversation = ({ participantId }) => {
     const [newMsg, setNewMsg] = useState('');
     const sendMessage = async () => {
         try {
-            const response = await axios.post(`${url}/conversation/addNewMessage/${chatid}`,{
+            const response = await axios.post(`${url}/conversation/addNewMessage/${chatid}`, {
                 senderId: participantId,
                 message: newMsg
             });
-            if(response.status === 200) {
+            if (response.status === 200) {
                 getAllMessages(chatid);
                 setNewMsg('');
             }
@@ -103,31 +103,33 @@ const Conversation = ({ participantId }) => {
                         {conversationList.length > 0 ? (
                             conversationList.map((conversation, index) => (
                                 <div key={index} className='border-b'>
-                                    {conversation.userInfo.map((ary, j) => (
-                                        <div
-                                            key={j}
-                                            className='flex items-center p-2 cursor-pointer hover:bg-[#f7f7f7] border-b'
-                                            onClick={() => getAllMessages(conversation._id)}
-                                        >
-                                            <div className='w-10 h-10 mr-2'>
-                                                <img
-                                                    className='w-full h-full object-cover rounded-full'
-                                                    src={ary.userProfileImage}
-                                                    alt="Profile image"
-                                                />
+                                    {conversation.participants
+                                        .filter((ary) => ary.userId !== participantId) // Exclude the logged-in user's information
+                                        .map((ary, j) => (
+                                            <div
+                                                key={j}
+                                                className='flex items-center p-2 cursor-pointer hover:bg-[#f7f7f7] border-b'
+                                                onClick={() => getAllMessages(conversation._id)}
+                                            >
+                                                <div className='w-10 h-10 mr-2'>
+                                                    <img
+                                                        className='w-full h-full object-cover rounded-full'
+                                                        src={ary.userProfileImage}
+                                                        alt="Profile image"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <h1 className='text-sm text-gray-800 font-medium'>{ary.userName}</h1>
+                                                    {/* Display timestamp of the last message */}
+                                                    {conversation.messages.length > 0 && (
+                                                        <p className='text-[12px] text-gray-500 font-medium'>
+                                                            {new Date(conversation.messages[conversation.messages.length - 1].timestamp)
+                                                                .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                        </p>
+                                                    )}
+                                                </div>
                                             </div>
-                                            <div>
-                                                <h1 className='text-sm text-gray-800 font-medium'>{ary.userName}</h1>
-                                                {/* Display timestamp of the last message */}
-                                                {conversation.messages.length > 0 && (
-                                                    <p className='text-[12px] text-gray-500 font-medium'>
-                                                        {new Date(conversation.messages[conversation.messages.length - 1].timestamp)
-                                                            .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
+                                        ))}
                                 </div>
                             ))
                         ) : (
@@ -135,6 +137,7 @@ const Conversation = ({ participantId }) => {
                                 <h1 className='text-sm text-gray-600'>No any messages</h1>
                             </div>
                         )}
+
 
                     </div>
                 </section>
@@ -173,7 +176,7 @@ const Conversation = ({ participantId }) => {
                     </div>
 
                     {/* Input Area */}
-                    <div className='p-2 fixed w-full bottom-0 z-10 bg-[#fcfcfc]'>
+                    <div className='p-2 fixed w-full md:w-[498px] bottom-0 z-10 bg-[#fcfcfc]'>
                         <div className='bg-white rounded-md p-2 flex items-center justify-between w-full border focus-within:border-indigo-500'>
                             <input
                                 type="text"

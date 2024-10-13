@@ -1,14 +1,30 @@
 import Conversation from "../models/conversation.model.js";
 
 export const createNewConversation = async (req, res) => {
-    const { participants, senderId, message, userName, userProfileImage } = req.body;
+    const {
+        user1id,
+        user1name,
+        user1ProfileImage,
+        user2id,
+        user2name,
+        user2ProfileImage,
+        senderId,
+        message
+    } = req.body;
     try {
         const newConversation = new Conversation({
-            participants,
-            userInfo: [{
-                userName,
-                userProfileImage
-            }],
+            participants: [
+                {
+                    userId: user1id,
+                    userName: user1name,
+                    userProfileImage: user1ProfileImage
+                },
+                {
+                    userId: user2id,
+                    userName: user2name,
+                    userProfileImage: user2ProfileImage
+                }
+            ],
             messages: [{
                 senderId,
                 message,
@@ -26,9 +42,17 @@ export const createNewConversation = async (req, res) => {
 export const allConversations = async (req, res) => {
     try {
         const conversations = await Conversation.find({
-            participants: req.params.id
-        })
+            participants: {
+                $elemMatch: { userId: req.params.id }
+            }
+        });
 
+        // Check if no conversations were found
+        if (conversations.length === 0) {
+            return res.status(404).json({ msg: 'Conversation not found' });
+        }
+
+        // If conversations are found, return them
         res.status(200).json(conversations);
     } catch (error) {
         console.error(error.message);
