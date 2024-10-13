@@ -1,11 +1,12 @@
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 
-const Conversation = ({ participantId }) => {
+const Conversation = ({ participantId, loggedInUser }) => {
 
     const url = "http://localhost:9171"; // API URL
 
     const [conversationList, setConversationList] = useState([]);
+    const [selectedUser, setSelectedUser] = useState({ name: '', image: '' });
 
     const fetchAllConversation = async () => {
         try {
@@ -14,7 +15,7 @@ const Conversation = ({ participantId }) => {
         } catch (err) {
             console.error(err);
         }
-    }
+    };
 
     const [showMessages, setShowMessages] = useState(false);
     const [isOpenConversation, setIsOpenConversation] = useState(false);
@@ -30,7 +31,7 @@ const Conversation = ({ participantId }) => {
         if (participantId) {
             fetchAllConversation();
         }
-    }, [fetchAllConversation, participantId]);
+    }, [participantId]);
 
     useEffect(() => {
         scrollToBottom();
@@ -38,16 +39,19 @@ const Conversation = ({ participantId }) => {
 
     const [userChat, setUserChat] = useState([]);
     const [chatid, setChatid] = useState('');
-    const getAllMessages = async (chatId) => {
+    const getAllMessages = async (chatId, user) => {
         setIsOpenConversation(true);
         setChatid(chatId);
+        if(!user.name){
+            setSelectedUser({ name: user.userName, image: user.userProfileImage });
+        }
         try {
             const response = await axios.post(`${url}/conversation/getAllMessages/${chatId}`);
             setUserChat(response.data);
         } catch (err) {
             console.error(err);
         }
-    }
+    };
 
     const [newMsg, setNewMsg] = useState('');
     const sendMessage = async () => {
@@ -57,20 +61,21 @@ const Conversation = ({ participantId }) => {
                 message: newMsg
             });
             if (response.status === 200) {
-                getAllMessages(chatid);
+                getAllMessages(chatid, selectedUser);
                 setNewMsg('');
+                scrollToBottom();
             }
         } catch (err) {
             console.error(err);
         }
-    }
+    };
 
     return (
         <>
-            <section className='md:w-[200px] p-2 rounded-t-md absolute right-1 border shadow-sm bottom-0 flex justify-between items-center'>
+            <section className='md:w-[200px] p-2 rounded-t-md fixed bg-white right-1 border shadow-sm bottom-0 flex justify-between items-center'>
                 <div className='hidden md:flex items-center'>
                     <div className='w-8 h-8 relative'>
-                        <img className='w-full h-full object-cover rounded-full' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLQUQ6g6NjGqj3qncgsJGpxzzRrL_qDAc1qQ&s" alt="Profile image" />
+                        <img className='w-full h-full object-cover rounded-full' src={loggedInUser.profileImage} alt="Profile image" />
                         <div className='absolute right-0 bottom-0'>
                             <div className='h-3 w-3 bg-green-500 border border-white rounded-full'></div>
                         </div>
@@ -83,16 +88,16 @@ const Conversation = ({ participantId }) => {
             </section>
             {
                 showMessages &&
-                <section className='z-10 w-[250px] rounded-t-md absolute right-1 border shadow-sm bottom-0 bg-white overflow-y-auto max-h-[337px]'>
+                <section className='z-10 w-[250px] rounded-t-md fixed right-1 border shadow-sm bottom-0 bg-white overflow-y-auto max-h-[337px]'>
                     <div className='flex justify-between items-center p-2 border-b-2 fixed bg-white w-[248px]'>
                         <div className='flex items-center'>
                             <div className='w-8 h-8 relative'>
-                                <img className='w-full h-full object-cover rounded-full' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLQUQ6g6NjGqj3qncgsJGpxzzRrL_qDAc1qQ&s" alt="Profile image" />
+                                <img className='w-full h-full object-cover rounded-full' src={loggedInUser.profileImage} alt="Profile image" />
                                 <div className='absolute right-0 bottom-0'>
                                     <div className='h-3 w-3 bg-green-500 border border-white rounded-full'></div>
                                 </div>
                             </div>
-                            <p className='text-sm font-medium ml-2'>Messaging</p>
+                            <p className='text-sm font-medium ml-2'>Message list</p>
                         </div>
                         <button onClick={() => setShowMessages(false)} className='text-xl font-medium text-white bg-indigo-600 w-8 h-8 flex items-center justify-center rounded-full'>
                             <i className="ri-close-fill"></i>
@@ -109,7 +114,7 @@ const Conversation = ({ participantId }) => {
                                             <div
                                                 key={j}
                                                 className='flex items-center p-2 cursor-pointer hover:bg-[#f7f7f7] border-b'
-                                                onClick={() => getAllMessages(conversation._id)}
+                                                onClick={() => getAllMessages(conversation._id, ary)}
                                             >
                                                 <div className='w-10 h-10 mr-2'>
                                                     <img
@@ -137,23 +142,18 @@ const Conversation = ({ participantId }) => {
                                 <h1 className='text-sm text-gray-600'>No any messages</h1>
                             </div>
                         )}
-
-
                     </div>
                 </section>
             }
             {
                 isOpenConversation &&
-                <section className="z-20 absolute right-0 md:right-1 h-screen md:h-fit bottom-0 bg-[#fcfcfc] flex flex-col w-full md:w-[500px] md:rounded-t-md md:border">
+                <section className="z-20 fixed right-0 md:right-1 h-screen md:h-fit bottom-0 bg-[#fcfcfc] flex flex-col w-full md:w-[500px] md:rounded-t-md md:border">
                     <div className='flex justify-between items-center p-2 border-b mb-2'>
                         <div className='flex items-center'>
                             <div className='w-8 h-8 relative'>
-                                <img className='w-full h-full object-cover rounded-full' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLQUQ6g6NjGqj3qncgsJGpxzzRrL_qDAc1qQ&s" alt="Profile image" />
-                                <div className='absolute right-0 bottom-0'>
-                                    <div className='h-3 w-3 bg-green-500 border border-white rounded-full'></div>
-                                </div>
+                                <img className='w-full h-full object-cover rounded-full border' src={selectedUser.image} alt="Profile image" />
                             </div>
-                            <p className='text-sm font-medium ml-2'>Yash patel</p>
+                            <p className='text-sm font-medium ml-2'>{selectedUser.name}</p>
                         </div>
                         <button onClick={() => setIsOpenConversation(false)} className='text-base font-medium text-white bg-indigo-600 px-2 py-1 rounded-full'>
                             <i className="ri-close-fill"></i>
@@ -166,8 +166,7 @@ const Conversation = ({ participantId }) => {
                                 className={`flex ${message.senderId === participantId ? 'justify-end' : 'justify-start'}`}
                             >
                                 <div
-                                    className={`max-w-64 p-2 rounded-lg text-white text-sm ${message.senderId === participantId ? 'bg-indigo-500' : 'bg-gray-500'
-                                        }`}
+                                    className={`max-w-64 p-2 rounded-lg text-white text-sm ${message.senderId === participantId ? 'bg-indigo-500' : 'bg-gray-500'}`}
                                 >
                                     {message.message}
                                 </div>
@@ -185,7 +184,7 @@ const Conversation = ({ participantId }) => {
                                 placeholder="Type a message"
                                 className="bg-transparent outline-none bottom-0 w-full pr-2"
                             />
-                            <button onClick={sendMessage} className="bg-[#14a800] text-white rounded w-8 h-8 flex items-center justify-center text-base">
+                            <button onClick={sendMessage} className="bg-[#14a800] text-white rounded w-8 h-8 flex items-center justify-center">
                                 <i className="ri-send-plane-2-fill"></i>
                             </button>
                         </div>
@@ -193,7 +192,7 @@ const Conversation = ({ participantId }) => {
                 </section>
             }
         </>
-    )
-}
+    );
+};
 
-export default Conversation
+export default Conversation;

@@ -74,11 +74,18 @@ const FindJob = () => {
             return;
         }
 
+        // Split the skill input into individual words
+        const searchWords = skill.toLowerCase().split(' ');
+
         const filteredJobs = jobPosts.filter((job) => {
+            // Check if any word matches the job title or requirements
             return (
-                job.title.toLowerCase().includes(skill.toLowerCase()) ||
+                searchWords.some((word) => job.title.toLowerCase().includes(word)) || // Check against job title
                 (Array.isArray(job.requirements) &&
-                    job.requirements.some((s) => s.toLowerCase().includes(skill.toLowerCase())))
+                    job.requirements.some((requirement) =>
+                        searchWords.some((word) => requirement.toLowerCase().includes(word))
+                    )
+                )
             );
         });
 
@@ -89,6 +96,8 @@ const FindJob = () => {
             setSelectedJob(filteredJobs[0]);
         }
     };
+
+
 
     useEffect(() => {
         if (jobPosts.length > 0) {

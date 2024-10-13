@@ -776,7 +776,7 @@ const JobSeekerProfile = () => {
                     </div>
                 </div>
             </div >
-            <Conversation participantId={JobberProfileInfo._id} />
+            <Conversation participantId={JobberProfileInfo._id} loggedInUser={JobberProfileInfo} />
             <Footer />
         </>
     );

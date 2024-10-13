@@ -278,7 +278,7 @@ const EmployeApplicants = () => {
                             </section>
                         }
 
-                        <Conversation participantId={empInfo.userId} />
+                        <Conversation participantId={empInfo.userId} loggedInUser={empInfo} />
                     </>
             }
         </>

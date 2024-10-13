@@ -5,17 +5,26 @@ import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const SingleJobCard = ({ job }) => {
     const formattedDate = formatDistanceToNow(new Date(job.datePosted), { addSuffix: true });
 
+    const navigate = useNavigate();
+
     const [userId, setUserId] = useState();
-    useEffect(() => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const userLoggedIn = () => {
         const cookieToken = Cookies.get('token');
         if (cookieToken) {
             const decoded = jwtDecode(cookieToken);
             setUserId(decoded.userId);
+            setIsLoggedIn(true);
         }
+    }
+    useEffect(() => {
+        userLoggedIn();
     }, []);
 
     const { fetchJobberInfo } = useContext(AppContext);
@@ -84,6 +93,14 @@ const SingleJobCard = ({ job }) => {
                 }
             }
         }
+    };
+
+    const checkUserIsLoggedIn = () => {
+        if(isLoggedIn) {
+            setIsOpenJobApplyModal(true);
+        } else {
+            navigate('/signin');
+        }
     }
 
     return (
@@ -114,7 +131,7 @@ const SingleJobCard = ({ job }) => {
                 </p>
                 <button
                     className="mt-5 font-medium text-sm text-white bg-[#108a00] hover:bg-[#14a800] py-2 px-3 rounded disabled:opacity-65 disabled:cursor-not-allowed disabled:hover:bg-[#108a00]"
-                    onClick={() => setIsOpenJobApplyModal(true)}
+                    onClick={checkUserIsLoggedIn}
                     disabled={isApplied}
                 >
                     {
