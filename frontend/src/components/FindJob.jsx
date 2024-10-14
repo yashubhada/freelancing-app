@@ -7,6 +7,9 @@ import { AppContext } from './context/AppContext';
 import axios from 'axios';
 
 const FindJob = () => {
+
+    document.title = "Jobs | PROFLEX";
+
     const { ItSkillsArray } = useContext(AppContext);
 
     const [jobPosts, setJobPosts] = useState([]);

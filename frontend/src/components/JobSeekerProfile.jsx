@@ -9,6 +9,9 @@ import PageLoader from './PageLoader';
 import Conversation from './Conversation';
 
 const JobSeekerProfile = () => {
+
+    document.title = "Profile | PROFLEX";
+    
     const { fetchJobberInfo, ItSkillsArray } = useContext(AppContext);
     const [JobberProfileInfo, setJobberProfileInfo] = useState([]);
     const navigate = useNavigate();
