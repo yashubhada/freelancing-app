@@ -40,6 +40,7 @@ const EmployeApplicants = () => {
                             if (JobberProfileInfo) {
                                 return {
                                     ...applicant,
+                                    jobId : job._id,
                                     jobTitle: job.title,
                                     name: JobberProfileInfo.name || "No name",
                                     email: JobberProfileInfo.email || "No Email",
