@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import NavbarEmp from './NavbarEmp';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -40,7 +40,7 @@ const EmployeApplicants = () => {
                             if (JobberProfileInfo) {
                                 return {
                                     ...applicant,
-                                    jobId : job._id,
+                                    jobId: job._id,
                                     jobTitle: job.title,
                                     name: JobberProfileInfo.name || "No name",
                                     email: JobberProfileInfo.email || "No Email",
@@ -84,13 +84,33 @@ const EmployeApplicants = () => {
         currentPage * rowsPerPage
     );
 
-    const [viewApplicant, setViewApplicant] = useState([]);
+    const [viewApplicant, setViewApplicant] = useState({});
     const [isOpenViewApplicantModal, setIsOpenViewApplicantModal] = useState(false);
-    const viewSingleApplicant = (id) => {
-        let newAry = allApplicants.filter((ary) => ary._id === id);
-        setViewApplicant(newAry[0]);
-        setIsOpenViewApplicantModal(true);
+
+    const sendNotification = async (applicant) => {
+        try {
+            await axios.post(`${url}/notification`, {
+                userId: applicant.userId,
+                jobId: applicant.jobId,
+                message: applicant.jobTitle
+            });
+        } catch (error) {
+            console.error(error.message);
+        }
     }
+
+    const viewSingleApplicant = async (id) => {
+        const selectedApplicant = allApplicants.find((ary) => ary._id === id);
+        if (selectedApplicant) {
+            setViewApplicant(selectedApplicant);
+            setIsOpenViewApplicantModal(true);
+
+            // Call sendNotification with the selected applicant directly
+            await sendNotification(selectedApplicant);
+        }
+    };
+
+
 
     const closeModal = () => {
         setIsOpenViewApplicantModal(false);

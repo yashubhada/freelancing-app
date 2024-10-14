@@ -21,3 +21,14 @@ export const newNotification = async (req, res) => {
         res.status(500).json({ msg: 'Internal server error' });
     }
 }
+
+export const fetchUserNotifications = async (req, res) => {
+    try {
+        const notification = await Notification.find({ userId: req.params.userId });
+        if (!notification) return res.status(404).json({ msg: 'Notifications not found' });
+        res.status(200).json({ notification });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ msg: 'Internal server error' });
+    }
+}
