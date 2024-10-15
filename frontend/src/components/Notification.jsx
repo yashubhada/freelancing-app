@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
+import { formatDistanceToNow } from 'date-fns';
 
 const Notification = () => {
 
@@ -36,6 +37,20 @@ const Notification = () => {
         }
     }, [jobberId]);
 
+    const [job, setJob] = useState({});
+    const [isShowJob, setIsShowJob] = useState(false);
+    const handleJob = async (id) => {
+        try {
+            const response = await axios.post(`${url}/jobPost/fetchOneJob/${id}`);
+            if(response.status === 200 && response.data) {
+                setJob(response.data);
+                setIsShowJob(true);
+            }
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
     return (
         <>
             <Navbar />
@@ -47,7 +62,7 @@ const Notification = () => {
                             ?
                             notifications.map((ary, i) => {
                                 return (
-                                    <div key={i} className='flex items-center bg-[#f5f5f5] py-2 px-3 border-b cursor-pointer'>
+                                    <div key={i} onClick={() => handleJob(ary.jobId)} className='flex items-center bg-[#f5f5f5] py-2 px-3 border-b cursor-pointer'>
                                         <div className='w-16 h-16 mr-5'>
                                             <img className='w-full h-full object-cover rounded-full border' src={ary.companyImage} alt={ary.companyName} />
                                         </div>
@@ -60,6 +75,51 @@ const Notification = () => {
                     }
                 </div>
             </section>
+
+            {
+                isShowJob && job &&
+                <section className="px-3 md:px-0 fixed top-0 w-full bg-[#afafaf44] z-20 h-screen flex items-center justify-center">
+                    <div className="container relative max-h-full">
+                        <div className="relative w-full max-w-xl mx-auto">
+                            <div className='p-4 border border-gray-200 rounded-lg bg-white mb-5'>
+                                <div className='flex items-center'>
+                                    <div className='w-14 mr-3'>
+                                        <img
+                                            src={job.postedBy.companyLogo}
+                                            alt="Company Logo"
+                                            className='w-full h-full object-contain'
+                                        />
+                                    </div>
+                                    <p className='text-sm font-normal text-gray-700'>{job.postedBy.companyName}</p>
+                                </div>
+                                <h2 className='text-lg font-semibold text-gray-800 mt-2'>{job.title}</h2>
+                                <p className='text-xs text-gray-400 mt-1'>{job.location} · {formatDistanceToNow(new Date(job.datePosted), { addSuffix: true })}</p>
+                                <p className='font-medium text-sm text-gray-600 mt-1'>
+                                    <span className='text-lg mr-2'><i className="ri-briefcase-4-fill"></i></span>Employment time : {job.employmentType} · Entry level
+                                </p>
+                                <p className='font-medium text-sm text-gray-600 mt-1'>
+                                    <span className='text-lg mr-2'><i className="ri-list-check-3"></i></span>Skills : {job.requirements.join(", ")}
+                                </p>
+                                <p className='font-medium text-sm text-gray-600 mt-1'>
+                                    <span className='text-lg mr-2'><i className="ri-money-rupee-circle-fill"></i></span>
+                                    Salary Range : ₹{job.salaryRange.min.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace(/(\d+),(\d{2})$/, '$1,$2')} - ₹{job.salaryRange.max.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace(/(\d+),(\d{2})$/, '$1,$2')}
+                                </p>
+                                <h2 className='mt-5 text-lg font-semibold text-gray-800'>About the job</h2>
+                                <p className='text-sm text-gray-600 mt-3'>
+                                    {job.description}
+                                </p>
+                            </div>
+                            {/* Close Icon */}
+                            <div
+                                className="absolute -top-2 -right-2 md:-top-3 md:-right-3 cursor-pointer bg-gray-500 rounded-full h-7 w-7 flex items-center justify-center text-white"
+                                onClick={() => setIsShowJob(false)}
+                            >
+                                <i className="ri-close-fill text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            }
         </>
     )
 }

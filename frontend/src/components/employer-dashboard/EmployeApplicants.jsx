@@ -168,60 +168,59 @@ const EmployeApplicants = () => {
                     <>
                         <NavbarEmp />
                         <section className="px-3 md:px-0 mt-10">
-                            <div className="container mx-auto">
-                                <h1 className='text-lg font-medium mb-5'>Existing Applicants</h1>
-                                <div className="overflow-x-auto">
-                                    <table className="min-w-full bg-white border border-gray-200">
-                                        <thead className="bg-gray-100">
-                                            <tr>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-gray-200">
-                                                    Job Title
-                                                </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-gray-200">
-                                                    user name
-                                                </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-gray-200">
-                                                    user email
-                                                </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-gray-200">
-                                                    Applied On
-                                                </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-gray-200">
-                                                    Actions
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {currentRows.map((applicant, index) => (
-                                                <tr key={index}>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-200">
-                                                        {applicant.jobTitle}
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
-                                                        {applicant.name}
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
-                                                        {applicant.email}
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
-                                                        {applicant.appliedOn.split('T')[0]}
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium border text-white border-gray-200 space-x-2">
-                                                        <button
-                                                            className="bg-blue-600 px-2 py-1 rounded hover:bg-blue-700"
-                                                            onClick={() => viewSingleApplicant(applicant._id)}
-                                                        >
-                                                            View
-                                                        </button>
-                                                    </td>
+                            {/* Pagination Controls */}
+                            {totalPages !== 0 ?
+                                <div className="container mx-auto">
+                                    <h1 className='text-lg font-medium mb-5'>Existing Applicants</h1>
+                                    <div className="overflow-x-auto">
+                                        <table className="min-w-full bg-white border border-gray-200">
+                                            <thead className="bg-gray-100">
+                                                <tr>
+                                                    <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-gray-200">
+                                                        Job Title
+                                                    </th>
+                                                    <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-gray-200">
+                                                        user name
+                                                    </th>
+                                                    <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-gray-200">
+                                                        user email
+                                                    </th>
+                                                    <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-gray-200">
+                                                        Applied On
+                                                    </th>
+                                                    <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-gray-200">
+                                                        Actions
+                                                    </th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                {/* Pagination Controls */}
-                                {totalPages !== 0 ? (
+                                            </thead>
+                                            <tbody>
+                                                {currentRows.map((applicant, index) => (
+                                                    <tr key={index}>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-200">
+                                                            {applicant.jobTitle}
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                                            {applicant.name}
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                                            {applicant.email}
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                                            {applicant.appliedOn.split('T')[0]}
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium border text-white border-gray-200 space-x-2">
+                                                            <button
+                                                                className="bg-blue-600 px-2 py-1 rounded hover:bg-blue-700"
+                                                                onClick={() => viewSingleApplicant(applicant._id)}
+                                                            >
+                                                                View
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <div className="flex justify-center mt-5">
                                         <div className="isolate inline-flex -space-x-px rounded-md shadow-sm">
                                             <button
@@ -249,10 +248,10 @@ const EmployeApplicants = () => {
                                             </button>
                                         </div>
                                     </div>
-                                ) : (
-                                    <p className='text-sm text-center font-medium mt-5 text-red-500'>No applicants</p>
-                                )}
-                            </div>
+                                </div>
+                                :
+                                <p className='text-sm text-center font-medium mt-5 text-red-500'>No applicants</p>
+                            }
                         </section>
 
                         {/* View single applicants */}
