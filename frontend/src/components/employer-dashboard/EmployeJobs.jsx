@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import NavbarEmp from './NavbarEmp'
 import JobPostForm from './JobPostForm';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import ViewSingleJobModal from './ViewSingleJobModal';
+import { AppContext } from '../context/AppContext';
 
 const EmployeJobs = () => {
 
     document.title = "Employer dashboard | Jobs";
+
+    const { fetchEmployerInfo } = useContext(AppContext);
+    const [EmployerProfileInfo, setEmployerProfileInfo] = useState({});
+
     const [jobData, setJobData] = useState([]);
 
     const navigate = useNavigate();
@@ -24,6 +29,10 @@ const EmployeJobs = () => {
             if (response.data.user.userId) {
                 const jobs = await axios.post(`${url}/jobPost/fetchEmpJob/${response.data.user.userId}`);
                 setJobData(jobs.data);
+                const emp = await fetchEmployerInfo(response.data.user.userId);
+                if (emp) {
+                    setEmployerProfileInfo(emp);
+                }
             }
             if (response.data.user.role !== "Employer") {
                 navigate('/signin');
@@ -62,6 +71,10 @@ const EmployeJobs = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => {
+        const { bio, companyLogoImg, companyName, industry, location, website } = EmployerProfileInfo.profile;
+        if(!bio || !companyLogoImg || !companyName || !industry || !location || !website){
+            return toast.error('Please fill your company information');
+        }
         setIsModalOpen(true);
     }
 

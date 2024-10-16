@@ -1,4 +1,4 @@
-import { createContext, useState, useMemo } from "react";
+import { createContext, useMemo } from "react";
 import axios from "axios";
 
 export const AppContext = createContext(null);
@@ -7,12 +7,11 @@ export const AppContextProvider = (props) => {
 
     const url = "http://localhost:9171"; // API URL
 
-    const [EmployerProfileInfo, setEmployerProfileInfo] = useState({});
+    // const [EmployerProfileInfo, setEmployerProfileInfo] = useState({});
 
     const fetchJobberInfo = async (id) => {
         try {
             const response = await axios.post(`${url}/jobber/findSingleJobber/${id}`);
-            // setJobberProfileInfo(response.data.jobber);
             return response.data.jobber;
         } catch (err) {
             console.log(err);
@@ -22,7 +21,7 @@ export const AppContextProvider = (props) => {
     const fetchEmployerInfo = async (id) => {
         try {
             const response = await axios.post(`${url}/employer/fetchSingleEmploye/${id}`);
-            setEmployerProfileInfo(response.data.emp);
+            return response.data.emp;
         } catch (err) {
             console.log(err);
         }
@@ -171,7 +170,6 @@ export const AppContextProvider = (props) => {
 
     return (
         <AppContext.Provider value={{
-            EmployerProfileInfo,
             fetchJobberInfo,
             fetchEmployerInfo,
             ItSkillsArray

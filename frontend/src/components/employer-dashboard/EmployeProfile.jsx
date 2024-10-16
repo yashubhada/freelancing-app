@@ -9,7 +9,8 @@ import toast, { Toaster } from 'react-hot-toast';
 const EmployeProfile = () => {
     document.title = "Employer Dashboard | Profile";
 
-    const { fetchEmployerInfo, EmployerProfileInfo } = useContext(AppContext);
+    const { fetchEmployerInfo } = useContext(AppContext);
+    const [EmployerProfileInfo, setEmployerProfileInfo] = useState({});
     const navigate = useNavigate();
     const url = "http://localhost:9171";
 
@@ -21,10 +22,12 @@ const EmployeProfile = () => {
         try {
             const response = await axios.get(`${url}/employer/userTokenVerify`, { withCredentials: true });
             setUserId(response.data.user.userId);
-            await fetchEmployerInfo(response.data.user.userId);
-
             if (response.data.user.role !== "Employer") {
                 navigate('/signin');
+            }
+            const emp = await fetchEmployerInfo(response.data.user.userId);
+            if(emp){
+                setEmployerProfileInfo(emp);
             }
         } catch (error) {
             if (error.response?.status === 401 || error.response?.status === 403) {
