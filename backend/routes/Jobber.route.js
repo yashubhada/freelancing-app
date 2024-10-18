@@ -1,6 +1,7 @@
 import express from 'express';
 import {
     jobberSignup,
+    fetchAllJobbers,
     findSingleJobber,
     updateBio,
     updateSkills,
@@ -21,6 +22,7 @@ const upload = multer({ storage: storage });
 const router = express.Router();
 
 router.post("/signup", jobberSignup);
+router.post("/fetchAllJobbers", fetchAllJobbers);
 router.post("/findSingleJobber/:id", findSingleJobber);
 router.get("/userTokenVerify", verifyToken, (req, res) => {
     res.json({

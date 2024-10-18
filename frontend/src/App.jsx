@@ -15,6 +15,7 @@ import EmployeJobs from './components/employer-dashboard/EmployeJobs';
 import EmployeProfile from './components/employer-dashboard/EmployeProfile';
 import EmployeApplicants from './components/employer-dashboard/EmployeApplicants';
 import Notification from './components/Notification';
+import Search from './components/Search';
 
 const App = () => {
     return (
@@ -27,6 +28,7 @@ const App = () => {
                 <Route path="/find-job" element={<FindJob />} />
                 <Route path="/notification" element={<Notification />} />
                 <Route path="/profile" element={<JobSeekerProfile />} />
+                <Route path="/search" element={<Search />} />
                 {/* Employer Routes */}
                 <Route path="/employe-dashboard" element={<EmployerDashboard />} />
                 <Route path="/employe-jobs" element={<EmployeJobs />} />

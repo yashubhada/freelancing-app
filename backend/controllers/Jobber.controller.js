@@ -60,6 +60,21 @@ export const jobberSignup = async (req, res) => {
 };
 
 // Controller to fetch single jobber
+export const fetchAllJobbers = async (req, res) => {
+    try {
+        const jobber = await Jobber.find();
+        if (!jobber) return res.status(404).json({ msg: "Jobbers not found" });
+        res.status(200).json(jobber);
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            msg: "Internal server error",
+            error: err.message
+        });
+    }
+}
+
+// Controller to fetch single jobber
 export const findSingleJobber = async (req, res) => {
     const { id } = req.params;
     try {

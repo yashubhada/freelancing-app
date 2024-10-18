@@ -36,6 +36,7 @@ const Navbar = () => {
                             <ul className="hidden absolute w-full top-[61px] bg-white z-10 right-0 space-y-5 p-4 md:static md:flex ml-10 text-sm md:space-x-5 md:space-y-0 md:p-0 menu-items">
                                 <li className="font-medium menu-link"><NavLink to='/find-job' className="hover:text-[#108a00]" onClick={toggleMenu}>Find Jobs</NavLink></li>
                                 <li className="font-medium menu-link"><NavLink to='/profile' className="hover:text-[#108a00]" onClick={toggleMenu}>Profile</NavLink></li>
+                                <li className="font-medium menu-link"><NavLink to='/search' className="hover:text-[#108a00]" onClick={toggleMenu}>Search</NavLink></li>
                                 <li className="font-medium menu-link"><NavLink to='/notification' className="hover:text-[#108a00]" onClick={toggleMenu}>Notification</NavLink></li>
                                 {
                                     isLogin
@@ -50,29 +51,8 @@ const Navbar = () => {
                             </ul>
                         </div>
                         <div className="flex items-center">
-                            <div className="hidden md:relative md:flex w-80 border items-center rounded-full px-3 py-2">
-                                <i className='ri-search-line text-base mr-3'></i>
-                                <input type="text" className="w-full outline-none" placeholder="Search.." />
-                                <ul className="z-10 bg-white absolute shadow w-full left-0 top-[45px] rounded">
-                                    <li className="flex items-center py-2 cursor-pointer hover:bg-[#f0f0f0]">
-                                        <i className='ri-search-line text-sm mx-2'></i>
-                                        <p className="text-sm">yash ubhada</p>
-                                    </li>
-                                    <li className="flex items-center py-2 cursor-pointer hover:bg-[#f0f0f0]">
-                                        <i className='ri-search-line text-sm mx-2'></i>
-                                        <p className="text-sm">yash ubhada</p>
-                                    </li>
-                                    <li className="flex items-center py-2 cursor-pointer hover:bg-[#f0f0f0]">
-                                        <i className='ri-search-line text-sm mx-2'></i>
-                                        <p className="text-sm">yash ubhada</p>
-                                    </li>
-                                </ul>
-                            </div>
                             <button className="md:mx-10 font-medium text-sm text-white bg-[#108a00] hover:bg-[#14a800] py-2 px-3 rounded">
                                 Post a Job
-                            </button>
-                            <button className="md:hidden ml-4">
-                                <i className='ri-search-line text-base text-[#108a00]'></i>
                             </button>
                             <ul className="hidden md:flex text-sm space-x-4">
                                 {
