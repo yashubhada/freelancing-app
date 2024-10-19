@@ -52,11 +52,16 @@ const Search = () => {
             }
 
             if (response.data.user.userId) {
-                if(response.data.user.userId === profile._id) {
+                if (response.data.user.userId === profile._id) {
                     navigate('/profile');
                 }
                 setSearchProfile(profile);
                 setIsSearchProfileOpen(true);
+            }
+
+            const response2 = await axios.post(`${url}/conversation/allConversations/${profile._id}`);
+            if (response2.status === 200) {
+                setMsgAvailable(true);
             }
         } catch (error) {
             if (error.response?.status === 401 || error.response?.status === 403) {
@@ -75,10 +80,11 @@ const Search = () => {
     const [isOpenFirstConversation, setIsOpenFirstConversation] = useState(false);
     const [sendToUserInfo, setSendToUserInfo] = useState(null);
     const [loggedInuserInfo, setLoggedInuserInfo] = useState([]);
+    const [msgAvailable, setMsgAvailable] = useState(false);
 
     const openMessageBox = async (userProfile) => {
         try {
-            const response = await axios.get(`${url}/jobber/userTokenVerify`, {
+            const response = await axios.get(`${url} /jobber/userTokenVerify`, {
                 withCredentials: true,
             });
 
@@ -107,7 +113,7 @@ const Search = () => {
         if (sendToUserInfo) {
             console.log(sendToUserInfo);
             try {
-                await axios.post(`${url}/conversation/newConversation`, {
+                await axios.post(`${url} /conversation/newConversation`, {
                     user1id: loggedInuserInfo.userId,
                     user1name: loggedInuserInfo.name,
                     user1ProfileImage: loggedInuserInfo.profileImage,
@@ -230,7 +236,7 @@ const Search = () => {
                                 <a href={searchProfile.profile.resumeUrl} target='_blank' className='text-indigo-600 cursor-pointer hover:underline'>view resume</a>
 
                                 <div className='mt-4 flex items-star space-x-4'>
-                                    <button onClick={() => openMessageBox(searchProfile)} className='w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-1 rounded disabled:opacity-65 disabled:hover:bg-indigo-500 disabled:cursor-not-allowed'>
+                                    <button onClick={() => openMessageBox(searchProfile)} className='w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-1 rounded disabled:opacity-65 disabled:hover:bg-indigo-500 disabled:cursor-not-allowed' disabled={msgAvailable}>
                                         <i className="ri-send-plane-fill mr-1"></i>Message
                                     </button>
                                 </div>

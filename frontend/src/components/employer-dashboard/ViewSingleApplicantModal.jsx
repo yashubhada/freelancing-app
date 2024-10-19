@@ -67,7 +67,7 @@ const ViewSingleApplicantModal = ({ applicants, openMessageBox }) => {
                 <button onClick={() => openMessageBox(applicants)} className='w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-1 rounded disabled:opacity-65 disabled:hover:bg-indigo-500 disabled:cursor-not-allowed' disabled={msgAvailable}>
                     <i className="ri-send-plane-fill mr-1"></i>Message
                 </button>
-                <button className='w-full bg-red-500 hover:bg-red-600 text-white font-medium py-1 rounded'>
+                <button className={`${msgAvailable && 'hidden'} w-full bg-red-500 hover:bg-red-600 text-white font-medium py-1 rounded`}>
                     Reject
                 </button>
             </div>
