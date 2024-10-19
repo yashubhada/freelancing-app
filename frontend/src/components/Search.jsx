@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Search = () => {
 
     document.title = "Search | PROFLEX";
+
+    const navigate = useNavigate();
 
     const url = "http://localhost:9171"; // API URL
 
@@ -32,22 +35,94 @@ const Search = () => {
             setSearchResult(filteredData);
         } else {
             setSearchResult([]);
-        }   
+        }
     };
 
     const [searchProfile, setSearchProfile] = useState({});
     const [isSearchProfileOpen, setIsSearchProfileOpen] = useState(false);
 
-    const openProfileModal = (profile) => {
-        setSearchProfile(profile);
-        setIsSearchProfileOpen(true);
+    const openProfileModal = async (profile) => {
+        try {
+            const response = await axios.get(`${url}/jobber/userTokenVerify`, {
+                withCredentials: true,
+            });
 
-        console.log(profile);
+            if (response.data.user.role !== "JobSeeker") {
+                navigate('/signin');
+            }
+
+            if (response.data.user.userId) {
+                if(response.data.user.userId === profile._id) {
+                    navigate('/profile');
+                }
+                setSearchProfile(profile);
+                setIsSearchProfileOpen(true);
+            }
+        } catch (error) {
+            if (error.response?.status === 401 || error.response?.status === 403) {
+                navigate('/signin');
+            } else {
+                console.error('Error fetching Job post:', error.response?.data || error.message);
+            }
+        }
     }
 
     const closeModal = () => {
         setIsSearchProfileOpen(false);
         setSearchProfile({});
+    }
+
+    const [isOpenFirstConversation, setIsOpenFirstConversation] = useState(false);
+    const [sendToUserInfo, setSendToUserInfo] = useState(null);
+    const [loggedInuserInfo, setLoggedInuserInfo] = useState([]);
+
+    const openMessageBox = async (userProfile) => {
+        try {
+            const response = await axios.get(`${url}/jobber/userTokenVerify`, {
+                withCredentials: true,
+            });
+
+            if (response.data.user.role !== "JobSeeker") {
+                navigate('/signin');
+            }
+
+            if (response.data.user.userId) {
+                setLoggedInuserInfo(response.data.user);
+                setIsOpenFirstConversation(true);
+                if (userProfile) {
+                    setSendToUserInfo(userProfile);
+                }
+            }
+        } catch (error) {
+            if (error.response?.status === 401 || error.response?.status === 403) {
+                navigate('/signin');
+            } else {
+                console.error('Error fetching Job post:', error.response?.data || error.message);
+            }
+        }
+    }
+    const [message, setMessage] = useState('');
+    const sendFirstMsg = async (e) => {
+        e.preventDefault();
+        if (sendToUserInfo) {
+            console.log(sendToUserInfo);
+            try {
+                await axios.post(`${url}/conversation/newConversation`, {
+                    user1id: loggedInuserInfo.userId,
+                    user1name: loggedInuserInfo.name,
+                    user1ProfileImage: loggedInuserInfo.profileImage,
+                    user2id: sendToUserInfo._id,
+                    user2name: sendToUserInfo.name,
+                    user2ProfileImage: sendToUserInfo.profileImage,
+                    senderId: loggedInuserInfo.userId,
+                    message
+                });
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setIsOpenFirstConversation(false);
+            }
+        }
     }
 
     useEffect(() => {
@@ -155,7 +230,7 @@ const Search = () => {
                                 <a href={searchProfile.profile.resumeUrl} target='_blank' className='text-indigo-600 cursor-pointer hover:underline'>view resume</a>
 
                                 <div className='mt-4 flex items-star space-x-4'>
-                                    <button className='w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-1 rounded disabled:opacity-65 disabled:hover:bg-indigo-500 disabled:cursor-not-allowed'>
+                                    <button onClick={() => openMessageBox(searchProfile)} className='w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-1 rounded disabled:opacity-65 disabled:hover:bg-indigo-500 disabled:cursor-not-allowed'>
                                         <i className="ri-send-plane-fill mr-1"></i>Message
                                     </button>
                                 </div>
@@ -166,6 +241,29 @@ const Search = () => {
                                 onClick={closeModal}
                             >
                                 <i className="ri-close-fill text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            }
+
+            {
+                isOpenFirstConversation &&
+                <section className="px-3 md:px-0 fixed top-0 w-full bg-[#afafaf44] z-20 h-screen flex pt-10 justify-center">
+                    <div className="container relative max-h-full">
+                        <div className="relative w-full max-w-xl mx-auto">
+                            <div className='bg-white rounded-md'>
+                                <h1 className='text-xl font-semibold text-gray-700 p-4'>Start new conversation</h1>
+                                <form onSubmit={sendFirstMsg}>
+                                    <div className='border-t border-b p-4'>
+                                        <label className='text-base font-medium text-gray-700 block'>Enter new conversation message</label>
+                                        <input value={message} onChange={(e) => setMessage(e.target.value)} type="text" className='outline-none border border-gray-500 rounded px-3 py-2 w-full mt-3 focus:border-indigo-500' required />
+                                    </div>
+                                    <div className='flex items-center justify-end p-4 space-x-4'>
+                                        <button type='submit' className='bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded font-medium text-base'>send</button>
+                                        <button type='button' onClick={() => setIsOpenFirstConversation(false)} className='bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded font-medium text-base'>cancel</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
