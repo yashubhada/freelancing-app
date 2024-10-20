@@ -60,6 +60,27 @@ export const allConversations = async (req, res) => {
     }
 };
 
+// check conversation exist or not
+
+export const conversationExist = async (req, res) => {
+    const { participant1Id, participant2Id } = req.body;
+    try {
+        const conversation = await Conversation.findOne({
+            participants: {
+                $all: [
+                    { $elemMatch: { userId: participant1Id } },
+                    { $elemMatch: { userId: participant2Id } }
+                ]
+            }
+        });
+        if (!conversation) return res.status(404).json({ msg: 'Conversation not found' });
+        res.status(200).json(conversation);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ msg: 'Internal server error' });
+    }
+}
+
 // Add a message to an existing conversation
 export const addNewMessage = async (req, res) => {
     const { senderId, message } = req.body;

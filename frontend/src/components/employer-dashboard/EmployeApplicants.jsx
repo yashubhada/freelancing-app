@@ -5,6 +5,7 @@ import axios from 'axios';
 import { AppContext } from '../context/AppContext';
 import ViewSingleApplicantModal from './ViewSingleApplicantModal';
 import Conversation from '../Conversation';
+import toast, { Toaster } from 'react-hot-toast';
 
 const EmployeApplicants = () => {
     document.title = "Employer dashboard | Applicants";
@@ -148,6 +149,7 @@ const EmployeApplicants = () => {
                     senderId: empInfo.userId,
                     message
                 });
+                toast.success('message sent successfully');
             } catch (err) {
                 console.error(err);
             } finally {
@@ -166,6 +168,7 @@ const EmployeApplicants = () => {
                     </div >
                     :
                     <>
+                        <Toaster />
                         <NavbarEmp />
                         <section className="px-3 md:px-0 mt-10">
                             {/* Pagination Controls */}

@@ -1,16 +1,30 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
+import React, { useEffect, useState } from 'react'
 
 const ViewSingleApplicantModal = ({ applicants, openMessageBox }) => {
 
     const url = "http://localhost:9171"; // API URL
 
     const [msgAvailable, setMsgAvailable] = useState(false);
+    const [employerId, setEmployerId] = useState();
+
+    useEffect(() => {
+        const cookieToken = Cookies.get('token');
+        if (cookieToken) {
+            const decoded = jwtDecode(cookieToken);
+            setEmployerId(decoded.userId);
+        }
+    }, []);
 
     const checkMsgSet = async () => {
         try {
-            const response = await axios.post(`${url}/conversation/allConversations/${applicants.userId}`);
-            if(response.status === 200) {
+            const response = await axios.post(`${url}/conversation/conversationExist`, {
+                participant1Id: employerId,
+                participant2Id: applicants.userId
+            });
+            if (response.status === 200) {
                 setMsgAvailable(true);
             }
         } catch (err) {
@@ -18,7 +32,7 @@ const ViewSingleApplicantModal = ({ applicants, openMessageBox }) => {
         }
     }
 
-    useState(() => {
+    useEffect(() => {
         checkMsgSet();
     }, [checkMsgSet]);
 
@@ -65,7 +79,16 @@ const ViewSingleApplicantModal = ({ applicants, openMessageBox }) => {
 
             <div className='mt-4 flex items-star space-x-4'>
                 <button onClick={() => openMessageBox(applicants)} className='w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-1 rounded disabled:opacity-65 disabled:hover:bg-indigo-500 disabled:cursor-not-allowed' disabled={msgAvailable}>
-                    <i className="ri-send-plane-fill mr-1"></i>Message
+                    {
+                        msgAvailable
+                            ?
+                            // "user already in your conversation list"
+                            <span className="text-sm">user already in your conversation list</span>
+                            :
+                            <>
+                                <i className="ri-send-plane-fill mr-1"></i>Message
+                            </>
+                    }
                 </button>
                 <button className={`${msgAvailable && 'hidden'} w-full bg-red-500 hover:bg-red-600 text-white font-medium py-1 rounded`}>
                     Reject

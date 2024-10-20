@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Search = () => {
 
@@ -59,7 +60,10 @@ const Search = () => {
                 setIsSearchProfileOpen(true);
             }
 
-            const response2 = await axios.post(`${url}/conversation/allConversations/${profile._id}`);
+            const response2 = await axios.post(`${url}/conversation/conversationExist`, {
+                participant1Id: response.data.user.userId,
+                participant2Id: profile._id
+            });
             if (response2.status === 200) {
                 setMsgAvailable(true);
             }
@@ -67,7 +71,7 @@ const Search = () => {
             if (error.response?.status === 401 || error.response?.status === 403) {
                 navigate('/signin');
             } else {
-                console.error('Error fetching Job post:', error.response?.data || error.message);
+                console.error('Error fetching Profile:', error.response?.data || error.message);
             }
         }
     }
@@ -84,7 +88,7 @@ const Search = () => {
 
     const openMessageBox = async (userProfile) => {
         try {
-            const response = await axios.get(`${url} /jobber/userTokenVerify`, {
+            const response = await axios.get(`${url}/jobber/userTokenVerify`, {
                 withCredentials: true,
             });
 
@@ -103,7 +107,7 @@ const Search = () => {
             if (error.response?.status === 401 || error.response?.status === 403) {
                 navigate('/signin');
             } else {
-                console.error('Error fetching Job post:', error.response?.data || error.message);
+                console.error('Error fetching user Profile:', error.response?.data || error.message);
             }
         }
     }
@@ -111,9 +115,8 @@ const Search = () => {
     const sendFirstMsg = async (e) => {
         e.preventDefault();
         if (sendToUserInfo) {
-            console.log(sendToUserInfo);
             try {
-                await axios.post(`${url} /conversation/newConversation`, {
+                await axios.post(`${url}/conversation/newConversation`, {
                     user1id: loggedInuserInfo.userId,
                     user1name: loggedInuserInfo.name,
                     user1ProfileImage: loggedInuserInfo.profileImage,
@@ -123,6 +126,7 @@ const Search = () => {
                     senderId: loggedInuserInfo.userId,
                     message
                 });
+                toast.success('message sent successfully');
             } catch (err) {
                 console.error(err);
             } finally {
@@ -137,6 +141,7 @@ const Search = () => {
 
     return (
         <>
+            <Toaster />
             <Navbar />
             <section className="px-3 md:px-0">
                 <div className="container mx-auto w-full md:w-2/5 mt-5">
@@ -237,7 +242,16 @@ const Search = () => {
 
                                 <div className='mt-4 flex items-star space-x-4'>
                                     <button onClick={() => openMessageBox(searchProfile)} className='w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-1 rounded disabled:opacity-65 disabled:hover:bg-indigo-500 disabled:cursor-not-allowed' disabled={msgAvailable}>
-                                        <i className="ri-send-plane-fill mr-1"></i>Message
+                                        {
+                                            msgAvailable
+                                                ?
+                                                // "user already in your conversation list"
+                                                <span className="text-sm">user already in your conversation list</span>
+                                                :
+                                                <>
+                                                    <i className="ri-send-plane-fill mr-1"></i>Message
+                                                </>
+                                        }
                                     </button>
                                 </div>
                             </div>

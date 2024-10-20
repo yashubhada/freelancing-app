@@ -771,7 +771,7 @@ const JobSeekerProfile = () => {
                                 </button>
                             </form>
                             :
-                            <p><a href={profile.resumeUrl} target='_blank' className='text-base text-indigo-600 hover:underline'>View</a> resume</p>
+                            <p><a href={profile.resumeUrl} target='_blank' className='text-base text-indigo-600 hover:underline cursor-pointer'>View</a> resume</p>
 
                     }
                     <div onClick={() => setIsEditResume(!isEditResume)} className='absolute top-1 right-1 hover:bg-gray-100 w-10 h-10 text-center rounded-full cursor-pointer'>
