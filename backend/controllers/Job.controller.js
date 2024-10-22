@@ -62,6 +62,7 @@ export const fetchAllJobPost = async (req, res) => {
     }
 }
 
+// Fetch only one job
 export const fetchOneJob = async (req, res) => {
     const { jobId } = req.params;
     try {
