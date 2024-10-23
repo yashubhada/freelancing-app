@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react'
 
-const ViewSingleApplicantModal = ({ applicants, openMessageBox }) => {
+const ViewSingleApplicantModal = ({ applicants, job, openMessageBox, closeModal }) => {
 
     const url = "http://localhost:9171"; // API URL
 
@@ -28,13 +28,22 @@ const ViewSingleApplicantModal = ({ applicants, openMessageBox }) => {
                 setMsgAvailable(true);
             }
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     }
 
     useEffect(() => {
         checkMsgSet();
     }, [checkMsgSet]);
+
+    const rejectApplication = async () => {
+        try {
+            await axios.post(`${url}/jobPost/removeJobApplication/${job.jobId}/${applicants._id}`);
+            closeModal();
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     return (
         <div className='p-4 bg-white rounded-lg overflow-y-auto max-h-[80vh]'>
@@ -90,7 +99,7 @@ const ViewSingleApplicantModal = ({ applicants, openMessageBox }) => {
                             </>
                     }
                 </button>
-                <button className={`${msgAvailable && 'hidden'} w-full bg-red-500 hover:bg-red-600 text-white font-medium py-1 rounded`}>
+                <button onClick={rejectApplication} className={`${msgAvailable && 'hidden'} w-full bg-red-500 hover:bg-red-600 text-white font-medium py-1 rounded`}>
                     Reject
                 </button>
             </div>

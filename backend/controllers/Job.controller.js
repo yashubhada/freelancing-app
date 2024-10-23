@@ -155,3 +155,21 @@ export const applyToJob = async (req, res) => {
         return res.status(500).json({ msg: 'Internal server error' });
     }
 }
+
+// remove appcation
+
+export const removeJobApplication = async (req, res) => {
+    const { jobId, applicationId } = req.params;
+    try {
+        const job = await Job.findById(jobId);
+        if (job) {
+            job.applicants = job.applicants.filter(applicant => applicant._id.toString() !== applicationId);
+            await job.save();
+            res.status(200).json({ msg: "Application rejected successfully" });
+        } else {
+            res.status(404).json({ msg: "Job not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ msg: "Error rejecting application", error });
+    }
+}

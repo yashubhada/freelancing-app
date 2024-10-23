@@ -83,6 +83,8 @@ const SingleJobCard = ({ job }) => {
                             coverLetter
                         }
                     );
+                    job.applicants.push({ userId });
+                    setIsApplied(true);
                     toast.success(response.data.msg);
                 } catch (error) {
                     console.error(error.message);
@@ -96,7 +98,7 @@ const SingleJobCard = ({ job }) => {
     };
 
     const checkUserIsLoggedIn = () => {
-        if(isLoggedIn) {
+        if (isLoggedIn) {
             setIsOpenJobApplyModal(true);
         } else {
             navigate('/signin');

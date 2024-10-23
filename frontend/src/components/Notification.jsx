@@ -62,9 +62,9 @@ const Notification = () => {
                             ?
                             notifications.map((ary, i) => {
                                 return (
-                                    <div key={i} onClick={() => handleJob(ary.jobId)} className='flex items-center bg-[#f5f5f5] py-2 px-3 border-b cursor-pointer'>
-                                        <div className='w-16 h-16 mr-5'>
-                                            <img className='w-full h-full object-cover rounded-full border' src={ary.companyImage} alt={ary.companyName} />
+                                    <div key={i} onClick={() => handleJob(ary.jobId)} className='flex items-center bg-white hover:bg-[#f5f5f5] py-2 px-3 border-b cursor-pointer'>
+                                        <div className='w-16 h-10 md:h-16 rounded-full overflow-hidden border mr-5'>
+                                            <img className='w-full h-full object-cover' src={ary.companyImage} alt={ary.companyName} />
                                         </div>
                                         <p className='text-base font-medium text-gray-600'>Your application was viewed for <span className='font-semibold'>{ary.message}</span></p>
                                     </div>

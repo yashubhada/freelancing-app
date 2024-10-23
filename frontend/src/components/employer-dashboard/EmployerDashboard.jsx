@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import NavbarEmp from './NavbarEmp'
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const EmployerDashboard = () => {
@@ -91,23 +91,27 @@ const EmployerDashboard = () => {
                     <section className="px-3 md:px-0 my-10">
                         <div className="container mx-auto">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-20">
-                                <div className="bg-blue-500 text-white p-6 rounded-lg shadow-lg">
-                                    <h2 className="text-xl font-semibold">Total Job Posts</h2>
-                                    <p className="mt-3 text-3xl font-bold">{totalEmpJobs}</p>
-                                    <p className="mt-2">Active Listings</p>
-                                </div>
-
-                                <div className="bg-green-500 text-white p-6 rounded-lg shadow-lg">
-                                    <h2 className="text-xl font-semibold">Total Applicants</h2>
-                                    <p className="mt-3 text-3xl font-bold">{totalJobApplication}</p>
-                                    <p className="mt-2">Candidates Applied</p>
-                                </div>
-
-                                <div className="bg-yellow-500 text-white p-6 rounded-lg shadow-lg">
-                                    <h2 className="text-xl font-semibold">New Applications</h2>
-                                    <p className="mt-3 text-3xl font-bold">{totalRecentApplications}</p>
-                                    <p className="mt-2">In Last 24 Hours</p>
-                                </div>
+                                <NavLink to='/employe-jobs'>
+                                    <div className="bg-blue-500 text-white p-6 rounded-lg shadow-lg">
+                                        <h2 className="text-xl font-semibold">Total Job Posts</h2>
+                                        <p className="mt-3 text-3xl font-bold">{totalEmpJobs}</p>
+                                        <p className="mt-2">Active Listings</p>
+                                    </div>
+                                </NavLink>
+                                <NavLink to='/employe-applicants'>
+                                    <div className="bg-green-500 text-white p-6 rounded-lg shadow-lg">
+                                        <h2 className="text-xl font-semibold">Total Applicants</h2>
+                                        <p className="mt-3 text-3xl font-bold">{totalJobApplication}</p>
+                                        <p className="mt-2">Candidates Applied</p>
+                                    </div>
+                                </NavLink>
+                                <NavLink to='/employe-applicants'>
+                                    <div className="bg-yellow-500 text-white p-6 rounded-lg shadow-lg">
+                                        <h2 className="text-xl font-semibold">New Applications</h2>
+                                        <p className="mt-3 text-3xl font-bold">{totalRecentApplications}</p>
+                                        <p className="mt-2">In Last 24 Hours</p>
+                                    </div>
+                                </NavLink>
                             </div>
                         </div>
                     </section>

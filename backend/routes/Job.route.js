@@ -8,7 +8,8 @@ import {
     deleteJobPost,
     changeJobPostStatus,
     applyToJob,
-    fetchOneJob
+    fetchOneJob,
+    removeJobApplication
 } from '../controllers/Job.controller.js';
 
 router.post('/newJobPost', jobCreate);
@@ -19,5 +20,6 @@ router.post('/deleteJobPost/:id', deleteJobPost);
 router.put('/changeJobPostStatus/:id', changeJobPostStatus);
 router.post('/applyToJob/:id', applyToJob);
 router.post('/fetchOneJob/:jobId', fetchOneJob);
+router.post('/removeJobApplication/:jobId/:applicationId', removeJobApplication);
 
 export default router;

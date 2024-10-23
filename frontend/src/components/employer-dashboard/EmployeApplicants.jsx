@@ -103,7 +103,13 @@ const EmployeApplicants = () => {
     const viewSingleApplicant = async (id) => {
         const selectedApplicant = allApplicants.find((ary) => ary._id === id);
         if (selectedApplicant) {
-            setViewApplicant(selectedApplicant);
+            setViewApplicant({
+                ...selectedApplicant,
+                job: {
+                    jobId: selectedApplicant.jobId,
+                    jobTitle: selectedApplicant.jobTitle
+                }
+            });
             setIsOpenViewApplicantModal(true);
 
             // Call sendNotification with the selected applicant directly
@@ -111,10 +117,9 @@ const EmployeApplicants = () => {
         }
     };
 
-
-
     const closeModal = () => {
         setIsOpenViewApplicantModal(false);
+        isEmployeSignin();
     }
 
     // Handle page change
@@ -278,7 +283,7 @@ const EmployeApplicants = () => {
                             <section className="px-3 md:px-0 fixed top-0 w-full bg-[#afafaf44] z-20 h-screen flex items-center justify-center">
                                 <div className="container relative max-h-full">
                                     <div className="relative w-full max-w-xl mx-auto">
-                                        <ViewSingleApplicantModal applicants={viewApplicant} openMessageBox={openMessageBox} />
+                                        <ViewSingleApplicantModal applicants={viewApplicant} job={viewApplicant?.job} openMessageBox={openMessageBox} closeModal={closeModal} />
 
                                         {/* Close Icon */}
                                         <div

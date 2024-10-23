@@ -8,6 +8,7 @@ import TcsImg from "../images/tcs.png";
 import MicrosoftImg from "../images/microsoft.png";
 import SpacexImg from "../images/spacex.png";
 import { AppContext } from "./context/AppContext";
+import { NavLink } from "react-router-dom";
 
 const MemoizedNavbar = React.memo(Navbar);
 const MemoizedFooter = React.memo(Footer);
@@ -113,9 +114,11 @@ const Home = () => {
                                     <p className="text-sm font-medium text-slate-600">Upwork makes it affordable to up your work and take advantage of low transaction rates.</p>
                                 </div>
                             </div>
-                            <button className="w-full md:w-fit font-medium text-sm text-white bg-[#108a00] hover:bg-[#14a800] py-2 px-3 rounded">
-                                Sign up for free
-                            </button>
+                            <NavLink to='/signuprole'>
+                                <button className="w-full md:w-fit font-medium text-sm text-white bg-[#108a00] hover:bg-[#14a800] py-2 px-3 rounded">
+                                    Sign up for free
+                                </button>
+                            </NavLink>
                         </div>
                     </div>
                 </div>
