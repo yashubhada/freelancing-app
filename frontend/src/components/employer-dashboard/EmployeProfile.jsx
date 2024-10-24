@@ -319,7 +319,7 @@ const EmployeProfile = () => {
                                                 />
                                             </div>
                                             <div>
-                                                <label className='mb-1 block'>Profile Image</label>
+                                                <label className='mb-1 block'>Company Logo</label>
                                                 <input
                                                     type="file"
                                                     name="profileImage"
@@ -350,7 +350,7 @@ const EmployeProfile = () => {
                                                 <img
                                                     src={previewImage}
                                                     alt={`${state.name}'s profile`}
-                                                    className="w-full h-full object-cover border border-gray-200"
+                                                    className="w-full h-full object-contain border border-gray-200"
                                                 />
                                             </div>
                                         )}
@@ -384,7 +384,7 @@ const EmployeProfile = () => {
                                             <img
                                                 src={state.profile.companyLogoImg}
                                                 alt={`${state.profile.companyName}'s Logo`}
-                                                className="w-32 h-32 rounded-full object-cover border border-gray-200"
+                                                className="w-32 h-32 rounded-full object-contain border border-gray-200"
                                             />
                                         </div>
                                         <div className="md:ml-6">

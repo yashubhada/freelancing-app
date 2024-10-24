@@ -17,6 +17,7 @@ const EmployeJobs = () => {
     const [EmployerProfileInfo, setEmployerProfileInfo] = useState({});
 
     const [jobData, setJobData] = useState([]);
+    const [filteredJobs, setFilteredJobs] = useState(jobData);
 
     const navigate = useNavigate();
 
@@ -30,7 +31,8 @@ const EmployeJobs = () => {
             // console.log('Dashboard Data:', response.data);
             if (response.data.user.userId) {
                 const jobs = await axios.post(`${url}/jobPost/fetchEmpJob/${response.data.user.userId}`);
-                setJobData(jobs.data);
+                // job sorted by on it's datePosted
+                setJobData(jobs.data.sort((a, b) => new Date(b.datePosted) - new Date(a.datePosted)));
                 const emp = await fetchEmployerInfo(response.data.user.userId);
                 if (emp) {
                     setEmployerProfileInfo(emp);
@@ -55,14 +57,18 @@ const EmployeJobs = () => {
         isEmployeSignin();
     }, []);
 
+    useEffect(() => {
+        setFilteredJobs(jobData);
+    }, [jobData]);
+
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 5;
 
     // Calculate the total number of pages
-    const totalPages = Math.ceil(jobData.length / rowsPerPage);
+    const totalPages = Math.ceil(filteredJobs.length / rowsPerPage);
 
     // Get the rows for the current page
-    const currentRows = jobData.slice(
+    const currentRows = filteredJobs.slice(
         (currentPage - 1) * rowsPerPage,
         currentPage * rowsPerPage
     );
@@ -70,6 +76,18 @@ const EmployeJobs = () => {
     // Handle page change
     const handlePageChange = (newPage) => {
         setCurrentPage(newPage);
+    };
+
+    // find job post
+    const findJobPostChange = (word) => {
+        if (word.length > 0) {
+            const filtered = jobData.filter((job) =>
+                job.title.toLowerCase().includes(word.toLowerCase())
+            );
+            setFilteredJobs(filtered);
+        } else {
+            setFilteredJobs(jobData);
+        }
     };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -158,9 +176,15 @@ const EmployeJobs = () => {
                                     Add new job
                                 </button>
                             </div>
+                            <div className="flex items-center justify-center mb-5">
+                                <div className='w-full md:w-96 bg-white border focus-within:border-[#14a800] rounded px-3 py-2 flex items-center'>
+                                    <i className='ri-search-line text-lg text-[#14a800] mr-2'></i>
+                                    <input onChange={(e) => findJobPostChange(e.target.value)} type="text" className='outline-none border-0 w-full' placeholder='Find job post...' />
+                                </div>
+                            </div>
                             {/* Pagination Controls */}
                             {
-                                totalPages !== 0
+                                filteredJobs.length !== 0
                                     ?
                                     <>
                                         <div className="overflow-x-auto">

@@ -6,12 +6,14 @@ const Conversation = ({ participantId, loggedInUser }) => {
     const url = "http://localhost:9171"; // API URL
 
     const [conversationList, setConversationList] = useState([]);
+    const [filteredConversationList, setFilteredConversationList] = useState([]);
     const [selectedUser, setSelectedUser] = useState({ name: '', image: '' });
 
     const fetchAllConversation = async () => {
         try {
             const response = await axios.post(`${url}/conversation/allConversations/${participantId}`);
             setConversationList(response.data);
+            setFilteredConversationList(response.data);
         } catch (err) {
             console.error(err);
         }
@@ -33,6 +35,21 @@ const Conversation = ({ participantId, loggedInUser }) => {
         }
     }, [participantId]);
 
+    const searchUser = (word) => {
+        if (word.trim() === '') {
+            // If search input is empty, reset to the full conversation list
+            setFilteredConversationList(conversationList);
+        } else {
+            // Filter conversation list based on participant name
+            const filteredList = conversationList.filter(conversation =>
+                conversation.participants.some(participant =>
+                    participant.userName.toLowerCase().includes(word.toLowerCase()) && participant.userId !== participantId
+                )
+            );
+            setFilteredConversationList(filteredList);
+        }
+    };
+
     useEffect(() => {
         scrollToBottom();
     }, [isOpenConversation]);
@@ -42,7 +59,7 @@ const Conversation = ({ participantId, loggedInUser }) => {
     const getAllMessages = async (chatId, user) => {
         setIsOpenConversation(true);
         setChatid(chatId);
-        if(!user.name){
+        if (!user.name) {
             setSelectedUser({ name: user.userName, image: user.userProfileImage });
         }
         try {
@@ -103,11 +120,19 @@ const Conversation = ({ participantId, loggedInUser }) => {
                             <i className="ri-close-fill"></i>
                         </button>
                     </div>
+                    <div className='p-2'>
+                        <div className="flex items-center mt-[50px] w-full">
+                            <div className='w-full bg-white border border-indigo-500 rounded p-2 flex items-center'>
+                                <i className='ri-search-line text-sm text-indigo-700 mr-2'></i>
+                                <input onChange={(e) => searchUser(e.target.value)} type="text" className='outline-none border-0 w-full text-sm' placeholder='Find user...' />
+                            </div>
+                        </div>
+                    </div>
                     {/* conversation */}
-                    <div className='mt-[50px]'>
-                        {conversationList.length > 0 ? (
-                            conversationList.map((conversation, index) => (
-                                <div key={index} className='border-b'>
+                    <div className=''>
+                        {filteredConversationList.length > 0 ? (
+                            filteredConversationList.map((conversation, index) => (
+                                <div key={index} className='border-t'>
                                     {conversation.participants
                                         .filter((ary) => ary.userId !== participantId) // Exclude the logged-in user's information
                                         .map((ary, j) => (
@@ -138,7 +163,7 @@ const Conversation = ({ participantId, loggedInUser }) => {
                                 </div>
                             ))
                         ) : (
-                            <div className='h-[285px] flex items-center justify-center'>
+                            <div className='h-[235px] flex items-center justify-center'>
                                 <h1 className='text-sm text-gray-600'>No any messages</h1>
                             </div>
                         )}
