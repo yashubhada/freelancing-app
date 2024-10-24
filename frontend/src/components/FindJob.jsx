@@ -15,6 +15,7 @@ const FindJob = () => {
     const [jobPosts, setJobPosts] = useState([]);
     const [filteredJobPosts, setFilteredJobPosts] = useState([]); // Filtered job posts state
     const [selectedJob, setSelectedJob] = useState(null); // Selected job state
+    const [loading, setLoading] = useState(true);
 
     const url = "http://localhost:9171"; // API URL
 
@@ -25,6 +26,8 @@ const FindJob = () => {
             setFilteredJobPosts(response.data); // Initially show all job posts
         } catch (err) {
             console.error(err.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -116,86 +119,109 @@ const FindJob = () => {
     return (
         <>
             <Navbar />
-
-            <section className='px-3 md:px-0'>
-                <div className='container mx-auto'>
-                    <h1 className='mt-10 font-medium text-lg md:text-3xl text-center text-[#14a800]'>Find the best Job</h1>
-                    <p className='mt-5 mb-10 font-medium text-base text-center text-gray-600'>Check out job post with the skills you need for your next job.</p>
-                </div>
-            </section>
-
-            {/* Searchbar */}
-            <section className='px-3 md:px-0'>
-                <div className='container mx-auto'>
-                    <div className='flex justify-center'>
-                        <div ref={searchBoxRef} className='flex items-center w-full md:w-[500px] border-2 border-gray-300 px-3 py-2 rounded-md relative focus-within:border-gray-500'>
-                            <p className='mr-2 text-lg text-[#14a800]'>
-                                <i className='ri-search-line'></i>
-                            </p>
-                            <input
-                                type='text'
-                                placeholder='Search job skill'
-                                className='outline-none w-full'
-                                value={searchWord} // Set input value to searchWord state
-                                onChange={handleSearchChange}
-                            />
-                            <ul className={`absolute top-[47px] left-0 bg-white w-full shadow max-h-[245px] overflow-y-auto ${showSkillSearch && 'hidden'}`}>
-                                {userSkill.map((skill, i) => (
-                                    <li
-                                        className='p-3 hover:bg-gray-50 cursor-pointer font-medium'
-                                        key={i}
-                                        onClick={() => handleSkillClick(skill)} // Handle skill selection
-                                    >
-                                        <i className='ri-search-line mr-2'></i>
-                                        {skill}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+            {
+                loading
+                    ?
+                    <div className='flex items-center justify-center mt-20'>
+                        <svg className="animate-spin h-8 w-8 text-[#14a800]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                            ></circle>
+                            <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                            ></path>
+                        </svg>
                     </div>
-                </div>
-            </section>
+                    :
+                    <>
+                        <section className='px-3 md:px-0'>
+                            <div className='container mx-auto'>
+                                <h1 className='mt-10 font-medium text-lg md:text-3xl text-center text-[#14a800]'>Find the best Job</h1>
+                                <p className='mt-5 mb-10 font-medium text-base text-center text-gray-600'>Check out job post with the skills you need for your next job.</p>
+                            </div>
+                        </section>
 
-            {/* job post */}
-            <section className='px-3 md:px-0'>
-                <div className='container mx-auto'>
-                    <h1 className='font-semibold text-xl md:text-3xl text-gray-800 mt-14 mb-10 text-center md:text-left'>
-                        Your profile matches this job
-                    </h1>
-                    <div className='grid md:grid-cols-2 gap-2'>
-                        {/* Left column for job cards */}
-                        <div className='space-y-5 overflow-y-auto max-h-[calc(100vh-4rem)]'>
-                            {
-                                filteredJobPosts.length > 0
-                                    ? filteredJobPosts.map((job) => (
-                                        <JobCard
-                                            key={job._id}
-                                            job={job}
-                                            isSelected={selectedJob && job._id === selectedJob._id}
-                                            onClick={() => handleJobClick(job)}
+                        {/* Searchbar */}
+                        <section className='px-3 md:px-0'>
+                            <div className='container mx-auto'>
+                                <div className='flex justify-center'>
+                                    <div ref={searchBoxRef} className='flex items-center w-full md:w-[500px] border-2 border-gray-300 px-3 py-2 rounded-md relative focus-within:border-gray-500'>
+                                        <p className='mr-2 text-lg text-[#14a800]'>
+                                            <i className='ri-search-line'></i>
+                                        </p>
+                                        <input
+                                            type='text'
+                                            placeholder='Search job skill'
+                                            className='outline-none w-full'
+                                            value={searchWord} // Set input value to searchWord state
+                                            onChange={handleSearchChange}
                                         />
-                                    ))
-                                    : jobPosts.map((job) => (
-                                        <JobCard
-                                            key={job._id}
-                                            job={job}
-                                            isSelected={selectedJob && job._id === selectedJob._id}
-                                            onClick={() => handleJobClick(job)}
-                                        />
-                                    ))
-                            }
-                        </div>
+                                        <ul className={`absolute top-[47px] left-0 bg-white w-full shadow max-h-[245px] overflow-y-auto ${showSkillSearch && 'hidden'}`}>
+                                            {userSkill.map((skill, i) => (
+                                                <li
+                                                    className='p-3 hover:bg-gray-50 cursor-pointer font-medium'
+                                                    key={i}
+                                                    onClick={() => handleSkillClick(skill)} // Handle skill selection
+                                                >
+                                                    <i className='ri-search-line mr-2'></i>
+                                                    {skill}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
 
-                        {/* Right column for single job card */}
-                        <div className={`${toggleShowSelectedJob ? 'block' : 'hidden'} fixed top-0 right-0 px-3 pt-5 h-screen bg-white overflow-y-hidden md:block md:px-0 md:pt-0 md:static md:overflow-y-auto md:max-h-[calc(100vh-4rem)] custom-scrollbar`}>
-                            <p className='md:hidden mb-5 text-2xl h-7 w-7 flex items-center justify-center bg-gray-300 rounded-full' onClick={() => setToggleShowSelectedJob(false)}><i className="ri-arrow-left-s-line"></i></p>
-                            {selectedJob && <SingleJobCard job={selectedJob} />}
-                        </div>
-                    </div>
-                </div>
-            </section>
+                        {/* job post */}
+                        <section className='px-3 md:px-0'>
+                            <div className='container mx-auto'>
+                                <h1 className='font-semibold text-xl md:text-3xl text-gray-800 mt-14 mb-10 text-center md:text-left'>
+                                    Your profile matches this job
+                                </h1>
+                                <div className='grid md:grid-cols-2 gap-2'>
+                                    {/* Left column for job cards */}
+                                    <div className='space-y-5 overflow-y-auto max-h-[calc(100vh-4rem)]'>
+                                        {
+                                            filteredJobPosts.length > 0
+                                                ? filteredJobPosts.map((job) => (
+                                                    <JobCard
+                                                        key={job._id}
+                                                        job={job}
+                                                        isSelected={selectedJob && job._id === selectedJob._id}
+                                                        onClick={() => handleJobClick(job)}
+                                                    />
+                                                ))
+                                                : jobPosts.map((job) => (
+                                                    <JobCard
+                                                        key={job._id}
+                                                        job={job}
+                                                        isSelected={selectedJob && job._id === selectedJob._id}
+                                                        onClick={() => handleJobClick(job)}
+                                                    />
+                                                ))
+                                        }
+                                    </div>
 
-            <Footer />
+                                    {/* Right column for single job card */}
+                                    <div className={`${toggleShowSelectedJob ? 'block' : 'hidden'} fixed top-0 right-0 px-3 pt-5 h-screen bg-white overflow-y-auto md:block md:px-0 md:pt-0 md:static md:overflow-y-auto md:max-h-[calc(100vh-4rem)]`}>
+                                        <p className='md:hidden mb-5 text-2xl h-7 w-7 flex items-center justify-center bg-gray-300 rounded-full' onClick={() => setToggleShowSelectedJob(false)}><i className="ri-arrow-left-s-line"></i></p>
+                                        {selectedJob && <SingleJobCard job={selectedJob} />}
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <Footer />
+                    </>
+            }
         </>
     );
 }
