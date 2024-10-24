@@ -15,7 +15,7 @@ const Signin = () => {
 
     const [userDetails, setUserDetails] = useState({ name: "", password: "" });
     const [btnLoading, setBtnLoading] = useState(false);
-    const url = "http://localhost:9171"; // API URL
+    const url = "https://proflex-13tx.onrender.com"; // API URL
 
     const handleSigninSubmit = async (e) => {
         setBtnLoading(true);

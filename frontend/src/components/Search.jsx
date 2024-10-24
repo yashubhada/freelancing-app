@@ -10,7 +10,7 @@ const Search = () => {
 
     const navigate = useNavigate();
 
-    const url = "http://localhost:9171"; // API URL
+    const url = "https://proflex-13tx.onrender.com"; // API URL
 
     const [jobberInfo, setJobberInfo] = useState([]);
     const [searchResult, setSearchResult] = useState([]);

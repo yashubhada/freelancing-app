@@ -12,7 +12,7 @@ const SignupForm = () => {
     const [userDetails, setUserDetails] = useState({ name: "", email: "", password: "" });
     const [btnLoading, setBtnLoading] = useState(false);
 
-    const url = "http://localhost:9171"; // API URL
+    const url = "https://proflex-13tx.onrender.com"; // API URL
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
