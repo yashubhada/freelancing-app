@@ -73,7 +73,7 @@ export const userSignin = async (req, res) => {
             // maxAge: 3600000, // 1 hour
 
             // live server coockie sent/recive
-            domain: 'https://proflex.netlify.app',
+            domain: 'proflex.netlify.app',
             secure: true,       //process.env.NODE_ENV === "production",
             sameSite: 'None',  // Allows cross-site cookies
             httpOnly: true,    // Ensures the cookie is accessible only by the web server
