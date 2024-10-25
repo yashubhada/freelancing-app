@@ -12,6 +12,7 @@ const Navbar = () => {
 
     const [isLogin, setIsLogin] = useState(false);
     const token = Cookies.get('token', { path: '/' });
+    console.log(token);
 
     const handleLogout = () => {
         if (token) {
@@ -22,7 +23,9 @@ const Navbar = () => {
     };
 
     useEffect(() => {
-        if (token) setIsLogin(true);
+        if (token) {
+            setIsLogin(true);
+        }
     }, [isLogin]);
 
     return (
