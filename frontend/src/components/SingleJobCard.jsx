@@ -18,9 +18,14 @@ const SingleJobCard = ({ job }) => {
     const userLoggedIn = () => {
         const cookieToken = Cookies.get('token');
         if (cookieToken) {
-            const decoded = jwtDecode(cookieToken);
-            setUserId(decoded.userId);
-            setIsLoggedIn(true);
+            try {
+                const decoded = jwtDecode(cookieToken);
+                setUserId(decoded.userId);
+                setIsLoggedIn(true);
+            } catch (err) {
+                console.error("Invalid token:", err);
+                setIsLoggedIn(false);
+            }
         }
     }
     useEffect(() => {
