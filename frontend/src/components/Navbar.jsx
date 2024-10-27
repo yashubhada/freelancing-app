@@ -11,8 +11,8 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     const [isLogin, setIsLogin] = useState(false);
-    const token = Cookies.get('token', { path: '/' });
-    console.log(token);
+    const token = Cookies.get("token");
+    console.log("Cookie token : ", token);
 
     const handleLogout = () => {
         if (token) {
