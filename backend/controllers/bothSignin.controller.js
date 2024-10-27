@@ -74,8 +74,8 @@ export const userSignin = async (req, res) => {
 
             // live server coockie sent/recive
             domain: 'proflex-13tx.onrender.com',
-            secure: true,       //process.env.NODE_ENV === "production",
-            sameSite: 'None',  // Allows cross-site cookies
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Lax',  // Allows cross-site cookies
             httpOnly: true,    // Ensures the cookie is accessible only by the web server
             path: '/',        // Ensures cookie is accessible across the site
             maxAge: 3600000,   // 1 hour
