@@ -73,7 +73,7 @@ export const userSignin = async (req, res) => {
             // maxAge: 3600000, // 1 hour
 
             // live server coockie sent/recive
-            domain: 'proflex-13tx.onrender.com',
+            //domain: 'proflex-13tx.onrender.com',
             secure: true,
             sameSite: 'None',  // Allows cross-site cookies
             httpOnly: true,    // Ensures the cookie is accessible only by the web server
