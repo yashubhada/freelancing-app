@@ -77,7 +77,7 @@ export const userSignin = async (req, res) => {
             path: '/',
             secure: true,
             sameSite: 'None',
-            httpOnly: true,
+            // httpOnly: true,
             maxAge: 3600000,   // 1 hour
         });
 
