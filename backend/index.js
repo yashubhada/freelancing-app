@@ -14,7 +14,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: 'https://proflex.netlify.app',  // frontend URL
+    origin: 'http://localhost:5173', //'https://proflex.netlify.app',  // frontend URL
     credentials: true,  // Allow cookies and credentials to be sent
 }));
 
