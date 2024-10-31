@@ -30,6 +30,12 @@ app.use('/jobPost', jobRouter);
 app.use('/conversation', conversationRouter);
 app.use('/notification', notificationRouter);
 
+// logout
+app.get('/logout', (req, res) => {
+    res.clearCookie('token', { path: '/', domain: 'proflex-13tx.onrender.com' });
+    res.status(200).send("Logged out successfully");
+});
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });

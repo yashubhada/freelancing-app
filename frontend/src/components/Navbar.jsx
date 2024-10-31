@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
+import axios from "axios";
 
 const Navbar = () => {
 
@@ -11,22 +12,36 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     const [isLogin, setIsLogin] = useState(false);
-    const token = Cookies.get('token', { path: '/' });
-    console.log("Cookie token : ", token);
+    const url = "https://proflex-13tx.onrender.com"; // API URL
 
-    const handleLogout = () => {
-        if (token) {
-            Cookies.remove('token', { path: '/' });
-            setIsLogin(false);
-            navigate("/signin");
+    const checkUserLogin = async () => {
+        try {
+            const response = await axios.get(`${url}/jobber/userTokenVerify`, {
+                withCredentials: true,
+            });
+            if (response.status === 200) {
+                setIsLogin(true);
+            }
+        } catch (error) {
+            console.error('Error fetching navbar:', error.response?.data || error.message);
+        }
+    }
+
+    const handleLogout = async () => {
+        if (isLogin) {
+            try {
+                await axios.get(`${url}/logout`, { withCredentials: true });
+                setIsLogin(false);
+                navigate("/signin");
+            } catch (error) {
+                console.error("Logout failed:", error);
+            }
         }
     };
 
     useEffect(() => {
-        if (token) {
-            setIsLogin(true);
-        }
-    }, [isLogin]);
+        checkUserLogin();
+    }, []);
 
     return (
         <>
