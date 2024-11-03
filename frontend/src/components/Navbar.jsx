@@ -12,7 +12,7 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     const [isLogin, setIsLogin] = useState(false);
-    const url = "https://proflex-13tx.onrender.com"; // API URL
+    const url = "http://localhost:9171"; // API URL
 
     const checkUserLogin = async () => {
         try {
@@ -29,14 +29,9 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         if (isLogin) {
-            try {
-                const response = await axios.get(`${url}/logout`, { withCredentials: true });
-                console.log(response);
-                setIsLogin(false);
-                navigate("/signin");
-            } catch (error) {
-                console.error("Logout failed:", error);
-            }
+            Cookies.remove('token', { path: '/', domain: 'localhost' });
+            setIsLogin(false);
+            navigate('/signin');
         }
     };
 

@@ -12,7 +12,7 @@ const EmployeProfile = () => {
     const { fetchEmployerInfo } = useContext(AppContext);
     const [EmployerProfileInfo, setEmployerProfileInfo] = useState({});
     const navigate = useNavigate();
-    const url = "https://proflex-13tx.onrender.com";
+    const url = "http://localhost:9171";
 
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(true);

@@ -21,7 +21,7 @@ const EmployeJobs = () => {
 
     const navigate = useNavigate();
 
-    const url = "https://proflex-13tx.onrender.com"; // API URL
+    const url = "http://localhost:9171"; // API URL
 
     const isEmployeSignin = async () => {
         try {

@@ -67,18 +67,18 @@ export const userSignin = async (req, res) => {
         // Store token in a cookie
         res.cookie('token', token, {
             // Local server coockie sent/recive
-            // httpOnly: true,      // True when cookie store sensitive data
-            // secure: process.env.NODE_ENV === 'production',
-            // sameSite: 'Strict',
-            // maxAge: 3600000, // 1 hour
+            httpOnly: true,      // True when cookie store sensitive data
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+            maxAge: 3600000, // 1 hour
 
             // live server coockie sent/recive
-            domain: 'proflex-13tx.onrender.com',
-            path: '/',
-            secure: true,
-            sameSite: 'None',
-            httpOnly: true,
-            maxAge: 3600000,   // 1 hour
+            // domain: 'http://localhost:9171',
+            // path: '/',
+            // secure: true,
+            // sameSite: 'None',
+            // httpOnly: true,
+            // maxAge: 3600000,   // 1 hour
         });
 
         return res.status(201).json({

@@ -22,6 +22,7 @@ const SingleJobCard = ({ job }) => {
                 const decoded = jwtDecode(cookieToken);
                 setUserId(decoded.userId);
                 setIsLoggedIn(true);
+                console.log(cookieToken);
             } catch (err) {
                 console.error("Invalid token:", err);
                 setIsLoggedIn(false);
@@ -45,7 +46,7 @@ const SingleJobCard = ({ job }) => {
         fetchInfo();
     }, [userId, fetchInfo]);
 
-    const url = "https://proflex-13tx.onrender.com"; // API URL
+    const url = "http://localhost:9171"; // API URL
     const [isOpenJobApplyModal, setIsOpenJobApplyModal] = useState(false);
     const [coverLetter, setCoverLetter] = useState(null);
 
