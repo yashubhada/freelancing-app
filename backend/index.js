@@ -30,6 +30,16 @@ app.use('/jobPost', jobRouter);
 app.use('/conversation', conversationRouter);
 app.use('/notification', notificationRouter);
 
+app.use('/logout', (req, res) => {
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: true, // Use `secure: false` for local development
+        sameSite: 'None',
+        path: '/',
+    });
+    res.status(200).json({ success: true, msg: "Logged out successfully" });
+});
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });

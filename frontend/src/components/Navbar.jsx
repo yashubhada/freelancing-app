@@ -15,6 +15,7 @@ const Navbar = () => {
     const url = "http://localhost:9171"; // API URL
 
     const checkUserLogin = async () => {
+        console.log("All Cookies:", document.cookie);
         try {
             const response = await axios.get(`${url}/jobber/userTokenVerify`, {
                 withCredentials: true,
@@ -29,14 +30,24 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         if (isLogin) {
-            Cookies.remove('token', { path: '/', domain: 'localhost' });
-            setIsLogin(false);
-            navigate('/signin');
+            try {
+                await axios.get(`${url}/logout`, { withCredentials: true });
+                setIsLogin(false);
+                navigate('/signin');
+            } catch (error) {
+                console.error("Error during logout:", error.response?.data || error.message);
+            }
         }
     };
 
+
     useEffect(() => {
         checkUserLogin();
+    }, []);
+
+    useEffect(() => {
+        const cookieVal = Cookies.get('token');
+        console.log(cookieVal);
     }, []);
 
     return (

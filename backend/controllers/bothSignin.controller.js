@@ -66,11 +66,13 @@ export const userSignin = async (req, res) => {
 
         // Store token in a cookie
         res.cookie('token', token, {
-            // Local server coockie sent/recive
-            httpOnly: true,      // True when cookie store sensitive data
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Strict',
-            maxAge: 3600000, // 1 hour
+            httpOnly: true, // For debugging, change to true in production
+            secure: true,   // Change to true in production with HTTPS
+            sameSite: 'None', // Important for cross-site requests
+            path: '/',
+            domain: 'localhost',
+            maxAge: 3600000  // 1 hour
+
 
             // live server coockie sent/recive
             // domain: 'http://localhost:9171',

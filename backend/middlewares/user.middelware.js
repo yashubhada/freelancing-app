@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const verifyToken = (req, res, next) => {
+    console.log("Cookies:", req.cookies);
     const token = req.cookies.token; // Get token from the cookie
 
     if (!token) {
@@ -11,7 +12,7 @@ export const verifyToken = (req, res, next) => {
             success: false,
             msg: "Unauthorized access, no token found",
         });
-    }
+    }   
 
     try {
         // Verify token
