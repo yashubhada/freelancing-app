@@ -42,9 +42,14 @@ const Search = () => {
     const [searchProfile, setSearchProfile] = useState({});
     const [isSearchProfileOpen, setIsSearchProfileOpen] = useState(false);
 
+    const token = localStorage.getItem('token');
+
     const openProfileModal = async (profile) => {
         try {
             const response = await axios.get(`${url}/jobber/userTokenVerify`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 withCredentials: true,
             });
 
@@ -89,6 +94,9 @@ const Search = () => {
     const openMessageBox = async (userProfile) => {
         try {
             const response = await axios.get(`${url}/jobber/userTokenVerify`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 withCredentials: true,
             });
 

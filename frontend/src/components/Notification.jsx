@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar';
-import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { formatDistanceToNow } from 'date-fns';
@@ -13,9 +12,9 @@ const Notification = () => {
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
-        const cookieToken = Cookies.get('token');
-        if (cookieToken) {
-            const decoded = jwtDecode(cookieToken);
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decoded = jwtDecode(token);
             setJobberId(decoded.userId);
         }
     }, []);

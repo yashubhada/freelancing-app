@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import { AppContext } from "../context/AppContext";
-import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import axios from "axios";
 
@@ -10,9 +9,9 @@ const JobPostForm = ({ onClose, isEmployeSignin }) => {
     const [employerId, setEmployerId] = useState();
 
     useEffect(() => {
-        const cookieToken = Cookies.get('token');
-        if (cookieToken) {
-            const decoded = jwtDecode(cookieToken);
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decoded = jwtDecode(token);
             setEmployerId(decoded.userId);
         }
     }, []);
@@ -134,6 +133,7 @@ const JobPostForm = ({ onClose, isEmployeSignin }) => {
 
 
     const handleSubimitNewJobPost = async (e) => {
+        console.log('state', state);
         e.preventDefault();
         setBtnLoading(true);
         try {
@@ -151,7 +151,7 @@ const JobPostForm = ({ onClose, isEmployeSignin }) => {
             onClose(); // props function
             isEmployeSignin(); // props function
         } catch (err) {
-            console.error(err.message);
+            console.error('job',err.message);
         } finally {
             setBtnLoading(false);
         }

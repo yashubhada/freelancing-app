@@ -11,7 +11,7 @@ import Conversation from './Conversation';
 const JobSeekerProfile = () => {
 
     document.title = "Profile | PROFLEX";
-    
+
     const { fetchJobberInfo, ItSkillsArray } = useContext(AppContext);
     const [JobberProfileInfo, setJobberProfileInfo] = useState([]);
     const navigate = useNavigate();
@@ -69,11 +69,18 @@ const JobSeekerProfile = () => {
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const token = localStorage.getItem('token');
+
     const isJobberSignin = async () => {
         try {
-            const response = await axios.get(`${url}/jobber/userTokenVerify`, {
-                withCredentials: true,
-            });
+            const response = await axios.get(`${url}/jobber/userTokenVerify`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    withCredentials: true,
+                }
+            );
             setUserId(response.data.user.userId);
             setJobberProfileInfo(await fetchJobberInfo(response.data.user.userId));
             if (response.data.user.role !== "JobSeeker") {

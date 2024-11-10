@@ -1,6 +1,5 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 
 const NavbarEmp = () => {
 
@@ -10,12 +9,12 @@ const NavbarEmp = () => {
 
     const navigate = useNavigate();
 
-    const token = Cookies.get('token', { path: '/' });
+    const token = localStorage.getItem('token');
 
     const handleLogout = () => {
         if (token) {
-            Cookies.remove('token', { path: '/' });
-            navigate("/signin");
+            localStorage.removeItem('token');
+            navigate('/signin');
         }
     };
 

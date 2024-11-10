@@ -18,9 +18,16 @@ const EmployeProfile = () => {
     const [loading, setLoading] = useState(true);
     const [loadingProfile, setLoadingProfile] = useState(true);
 
+    const token = localStorage.getItem('token');
+
     const isEmployeSignin = async () => {
         try {
-            const response = await axios.get(`${url}/employer/userTokenVerify`, { withCredentials: true });
+            const response = await axios.get(`${url}/employer/userTokenVerify`, { 
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                withCredentials: true 
+            });
             setUserId(response.data.user.userId);
             if (response.data.user.role !== "Employer") {
                 navigate('/signin');

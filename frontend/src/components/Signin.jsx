@@ -35,8 +35,9 @@ const Signin = () => {
                     }
                 }
             );
-
+            
             if (response.status === 201 && response.data.success) {
+                localStorage.setItem('token', response.data.token);
                 if (response.data.role === 'JobSeeker') {
                     navigate('/profile');
                 } else if (response.data.role === 'Employer') {

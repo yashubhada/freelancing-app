@@ -14,8 +14,8 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: 'http://localhost:5173',//'https://proflex.netlify.app',  // frontend URL
-    credentials: true,  // Allow cookies and credentials to be sent
+    origin: 'http://localhost:5173',
+    credentials: true,  
 }));
 
 dotenv.config();
@@ -29,16 +29,6 @@ app.use('/userSignin', bothSigninRouter);
 app.use('/jobPost', jobRouter);
 app.use('/conversation', conversationRouter);
 app.use('/notification', notificationRouter);
-
-app.use('/logout', (req, res) => {
-    res.clearCookie('token', {
-        httpOnly: true,
-        secure: true, // Use `secure: false` for local development
-        sameSite: 'None',
-        path: '/',
-    });
-    res.status(200).json({ success: true, msg: "Logged out successfully" });
-});
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

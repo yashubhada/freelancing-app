@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
 import axios from "axios";
 
 const Navbar = () => {
@@ -14,10 +13,14 @@ const Navbar = () => {
     const [isLogin, setIsLogin] = useState(false);
     const url = "http://localhost:9171"; // API URL
 
+    const token = localStorage.getItem('token');
+
     const checkUserLogin = async () => {
-        console.log("All Cookies:", document.cookie);
         try {
             const response = await axios.get(`${url}/jobber/userTokenVerify`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 withCredentials: true,
             });
             if (response.status === 200) {
@@ -30,24 +33,14 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         if (isLogin) {
-            try {
-                await axios.get(`${url}/logout`, { withCredentials: true });
-                setIsLogin(false);
-                navigate('/signin');
-            } catch (error) {
-                console.error("Error during logout:", error.response?.data || error.message);
-            }
+            localStorage.removeItem('token');
+            navigate('/signin');
         }
     };
 
 
     useEffect(() => {
         checkUserLogin();
-    }, []);
-
-    useEffect(() => {
-        const cookieVal = Cookies.get('token');
-        console.log(cookieVal);
     }, []);
 
     return (

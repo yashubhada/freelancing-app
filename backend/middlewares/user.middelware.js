@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const verifyToken = (req, res, next) => {
-    console.log("Cookies:", req.cookies);
-    const token = req.cookies.token; // Get token from the cookie
+    // const token = req.cookies.token; // Get token from the cookie
+    const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
         return res.status(401).json({

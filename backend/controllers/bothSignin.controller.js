@@ -68,25 +68,17 @@ export const userSignin = async (req, res) => {
         res.cookie('token', token, {
             httpOnly: true, // For debugging, change to true in production
             secure: true,   // Change to true in production with HTTPS
-            sameSite: 'None', // Important for cross-site requests
+            sameSite: 'None',   // Important for cross-site requests
             path: '/',
             domain: 'localhost',
             maxAge: 3600000  // 1 hour
-
-
-            // live server coockie sent/recive
-            // domain: 'http://localhost:9171',
-            // path: '/',
-            // secure: true,
-            // sameSite: 'None',
-            // httpOnly: true,
-            // maxAge: 3600000,   // 1 hour
         });
 
         return res.status(201).json({
             success: true,
             msg: "Signed in successfully",
             role: tokenData.role,
+            token
         });
 
     } catch (err) {

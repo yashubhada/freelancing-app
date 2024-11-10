@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react'
 
@@ -11,9 +10,9 @@ const ViewSingleApplicantModal = ({ applicants, job, openMessageBox, closeModal 
     const [employerId, setEmployerId] = useState();
 
     useEffect(() => {
-        const cookieToken = Cookies.get('token');
-        if (cookieToken) {
-            const decoded = jwtDecode(cookieToken);
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decoded = jwtDecode(token);
             setEmployerId(decoded.userId);
         }
     }, []);

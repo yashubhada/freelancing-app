@@ -23,9 +23,14 @@ const EmployeJobs = () => {
 
     const url = "http://localhost:9171"; // API URL
 
+    const token = localStorage.getItem('token');
+
     const isEmployeSignin = async () => {
         try {
             const response = await axios.get(`${url}/employer/userTokenVerify`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 withCredentials: true,
             });
             // console.log('Dashboard Data:', response.data);

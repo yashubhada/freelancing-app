@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { formatDistanceToNow } from 'date-fns';
 import { AppContext } from './context/AppContext';
-import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
@@ -16,17 +15,11 @@ const SingleJobCard = ({ job }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const userLoggedIn = () => {
-        const cookieToken = Cookies.get('token');
-        if (cookieToken) {
-            try {
-                const decoded = jwtDecode(cookieToken);
-                setUserId(decoded.userId);
-                setIsLoggedIn(true);
-                console.log(cookieToken);
-            } catch (err) {
-                console.error("Invalid token:", err);
-                setIsLoggedIn(false);
-            }
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decoded = jwtDecode(token);
+            setUserId(decoded.userId);
+            setIsLoggedIn(true);
         }
     }
     useEffect(() => {

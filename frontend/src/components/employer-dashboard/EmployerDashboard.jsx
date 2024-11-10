@@ -16,9 +16,14 @@ const EmployerDashboard = () => {
     const [totalJobApplication, setTotalJobApplication] = useState(0);
     const [totalRecentApplications, setTotalRecentApplications] = useState(0);
 
+    const token = localStorage.getItem('token');
+
     const isEmployeSignin = async () => {
         try {
             const response = await axios.get(`${url}/employer/userTokenVerify`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 withCredentials: true,
             });
             // console.log('Dashboard Data:', response.data);
