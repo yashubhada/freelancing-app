@@ -19,7 +19,7 @@ const Notification = () => {
         }
     }, []);
 
-    const url = "http://localhost:9171"; // API URL
+    const url = "https://proflex-13tx.onrender.com"; // API URL
 
     const fetchAllNotification = async () => {
         try {

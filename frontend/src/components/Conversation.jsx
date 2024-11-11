@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const Conversation = ({ participantId, loggedInUser }) => {
 
-    const url = "http://localhost:9171"; // API URL
+    const url = "https://proflex-13tx.onrender.com"; // API URL
 
     const [conversationList, setConversationList] = useState([]);
     const [filteredConversationList, setFilteredConversationList] = useState([]);

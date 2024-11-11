@@ -5,7 +5,7 @@ export const AppContext = createContext(null);
 
 export const AppContextProvider = (props) => {
 
-    const url = "http://localhost:9171"; // API URL
+    const url = "https://proflex-13tx.onrender.com"; // API URL
 
     // const [EmployerProfileInfo, setEmployerProfileInfo] = useState({});
 

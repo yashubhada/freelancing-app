@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 
 const ViewSingleApplicantModal = ({ applicants, job, openMessageBox, closeModal }) => {
 
-    const url = "http://localhost:9171"; // API URL
+    const url = "https://proflex-13tx.onrender.com"; // API URL
 
     const [msgAvailable, setMsgAvailable] = useState(false);
     const [employerId, setEmployerId] = useState();

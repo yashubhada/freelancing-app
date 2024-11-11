@@ -17,7 +17,7 @@ const FindJob = () => {
     const [selectedJob, setSelectedJob] = useState(null); // Selected job state
     const [loading, setLoading] = useState(true);
 
-    const url = "http://localhost:9171"; // API URL
+    const url = "https://proflex-13tx.onrender.com"; // API URL
 
     const fetchAllJobPost = async () => {
         try {

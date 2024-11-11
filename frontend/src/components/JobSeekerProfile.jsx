@@ -65,7 +65,7 @@ const JobSeekerProfile = () => {
         'MSc Web Development - Master of Science in Web Development'
     ], []);
 
-    const url = "http://localhost:9171"; // API URL
+    const url = "https://proflex-13tx.onrender.com"; // API URL
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(true);
 

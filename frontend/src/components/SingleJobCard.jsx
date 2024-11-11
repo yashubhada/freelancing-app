@@ -39,7 +39,7 @@ const SingleJobCard = ({ job }) => {
         fetchInfo();
     }, [userId, fetchInfo]);
 
-    const url = "http://localhost:9171"; // API URL
+    const url = "https://proflex-13tx.onrender.com"; // API URL
     const [isOpenJobApplyModal, setIsOpenJobApplyModal] = useState(false);
     const [coverLetter, setCoverLetter] = useState(null);
 

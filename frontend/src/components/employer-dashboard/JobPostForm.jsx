@@ -16,7 +16,7 @@ const JobPostForm = ({ onClose, isEmployeSignin }) => {
         }
     }, []);
 
-    const url = "http://localhost:9171"; // API URL
+    const url = "https://proflex-13tx.onrender.com"; // API URL
 
     const { ItSkillsArray } = useContext(AppContext);
     const [newRequirement, setNewRequirement] = useState("");
