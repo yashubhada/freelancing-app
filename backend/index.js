@@ -12,7 +12,7 @@ import notificationRouter from './routes/notification.route.js';
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://proflex.netlify.app',
     credentials: true,  
 }));
 
