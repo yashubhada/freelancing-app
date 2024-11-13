@@ -105,7 +105,7 @@ const Conversation = ({ participantId, loggedInUser }) => {
             </section>
             {
                 showMessages &&
-                <section className='z-10 w-[250px] rounded-t-md fixed right-1 border shadow-sm bottom-0 bg-white overflow-y-auto max-h-[337px]'>
+                <section className='z-10 w-[250px] rounded-t-md fixed right-1 border shadow-sm bottom-0 bg-white overflow-y-auto max-h-[350px]'>
                     <div className='flex justify-between items-center p-2 border-b-2 fixed bg-white w-[248px]'>
                         <div className='flex items-center'>
                             <div className='w-8 h-8 relative'>
